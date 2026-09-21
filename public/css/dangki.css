@@ -1,0 +1,211 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --xanh-dam: #075985;
+  --xanh-sang: #1677a8;
+  --chu-dam: #172033;
+  --chu-nhe: #667085;
+  --vien: #dbe5eb;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--chu-dam);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    linear-gradient(rgba(236, 247, 250, 0.84), rgba(245, 247, 251, 0.94)),
+    url("../image/background_KTV - Copy.jpg") center / cover fixed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.khung-xac-thuc {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 32px 18px;
+}
+
+.the-xac-thuc {
+  width: min(100%, 470px);
+  padding: 30px 34px 28px;
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 24px 65px rgba(25, 66, 87, 0.16);
+  backdrop-filter: blur(14px);
+}
+
+.logo-xac-thuc {
+  display: grid;
+  place-items: center;
+  width: 116px;
+  height: 72px;
+  margin: 0 auto 22px;
+  padding: 6px;
+  border: 1px solid #d8e9ef;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff, #eaf8fb);
+  box-shadow: 0 10px 22px rgba(22, 119, 168, 0.12);
+}
+
+.logo-xac-thuc img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.noi-dung-xac-thuc {
+  text-align: center;
+}
+
+.nhan-xac-thuc {
+  margin: 0 0 8px;
+  color: var(--xanh-sang);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.noi-dung-xac-thuc h1 {
+  margin: 0;
+  font-size: clamp(1.7rem, 4vw, 2.2rem);
+}
+
+.mo-ta-xac-thuc {
+  margin: 10px auto 25px;
+  color: var(--chu-nhe);
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+.bieu-mau-xac-thuc {
+  display: grid;
+  gap: 16px;
+  text-align: left;
+}
+
+.nhom-truong {
+  display: grid;
+  gap: 7px;
+}
+
+.nhom-truong label {
+  color: #344054;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.nhom-truong input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--vien);
+  border-radius: 12px;
+  outline: 0;
+  color: var(--chu-dam);
+  background: #fbfdfe;
+  font: inherit;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.nhom-truong input:focus {
+  border-color: #65b4cc;
+  box-shadow: 0 0 0 4px rgba(22, 119, 168, 0.1);
+}
+
+.tuy-chon-form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ghi-nho {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--chu-nhe);
+  font-size: 0.8rem;
+}
+
+.ghi-nho input {
+  accent-color: var(--xanh-dam);
+}
+
+.tuy-chon-form a,
+.doi-form a {
+  color: var(--xanh-dam);
+  font-weight: 700;
+}
+
+.nut-xac-thuc {
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--xanh-sang), var(--xanh-dam));
+  box-shadow: 0 12px 22px rgba(7, 89, 133, 0.2);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.nut-xac-thuc:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 26px rgba(7, 89, 133, 0.27);
+}
+
+.doi-form {
+  margin: 22px 0 12px;
+  color: var(--chu-nhe);
+  font-size: 0.88rem;
+}
+
+.ve-trang-chu {
+  color: #7b8794;
+  font-size: 0.84rem;
+}
+
+.ve-trang-chu:hover,
+.doi-form a:hover,
+.tuy-chon-form a:hover {
+  text-decoration: underline;
+}
+
+.dieu-khoan {
+  margin-top: -2px;
+}
+
+@media (max-width: 480px) {
+  .khung-xac-thuc {
+    padding: 18px 12px;
+  }
+
+  .the-xac-thuc {
+    padding: 25px 20px 24px;
+    border-radius: 22px;
+  }
+
+  .tuy-chon-form {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

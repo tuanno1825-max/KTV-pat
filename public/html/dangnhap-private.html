@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập nội bộ | Karaoke Together</title>
+    <link rel="stylesheet" href="../css/staff.css" />
+    <script src="../js/dang-nhap-noi-bo.js" defer></script>
+  </head>
+  <body>
+    <main class="khung-noi-bo">
+      <section class="the-noi-bo" aria-labelledby="tieu-de-noi-bo">
+        <a class="logo-noi-bo" href="/" aria-label="Về trang chủ">
+          <img src="../image/logo.png" alt="Karaoke Together" />
+        </a>
+
+        <p class="nhan-noi-bo">KARAOKE TOGETHER</p>
+        <h1 id="tieu-de-noi-bo">Đăng nhập nội bộ</h1>
+        <p class="mo-ta-noi-bo">
+          Dành cho quản trị viên và nhân viên hệ thống.
+        </p>
+
+        <form class="bieu-mau-noi-bo" id="bieu-mau-noi-bo">
+          <fieldset class="chon-vai-tro">
+            <legend>Chọn vai trò</legend>
+            <label class="o-vai-tro">
+              <input type="radio" name="vai-tro" value="admin" checked />
+              <span>Admin</span>
+            </label>
+            <label class="o-vai-tro">
+              <input type="radio" name="vai-tro" value="nhanvien" />
+              <span>Nhân viên</span>
+            </label>
+          </fieldset>
+
+          <div class="nhom-noi-bo">
+            <label for="tai-khoan-noi-bo">Tài khoản</label>
+            <input
+              id="tai-khoan-noi-bo"
+              type="text"
+              placeholder="Nhập tên tài khoản"
+            />
+          </div>
+
+          <div class="nhom-noi-bo">
+            <label for="mat-khau-noi-bo">Mật khẩu</label>
+            <input
+              id="mat-khau-noi-bo"
+              type="password"
+              placeholder="Nhập mật khẩu"
+            />
+          </div>
+
+          <div class="tuy-chon-noi-bo">
+            <label><input type="checkbox" /> Ghi nhớ đăng nhập</label>
+            <a href="#quen-mat-khau">Quên mật khẩu?</a>
+          </div>
+
+          <button class="nut-dang-nhap-noi-bo" type="submit">Đăng nhập</button>
+        </form>
+
+        <a class="ve-trang-chu-noi-bo" href="/">← Về trang chủ</a>
+      </section>
+    </main>
+  </body>
+</html>

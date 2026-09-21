@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý quán | Karaoke Together</title>
+    <link rel="stylesheet" href="../css/admin.css" />
+    <script src="../js/quan-ly-quan.js?v=3" defer></script>
+  </head>
+  <body>
+    <header class="dau-quan-tri">
+      <div class="thanh-dau-quan-tri">
+        <div>
+          <p class="nhan-quan-tri">KARAOKE TOGETHER</p>
+          <h1>Quản lý danh sách quán</h1>
+          <span>Quản trị thông tin các cơ sở karaoke</span>
+        </div>
+        <a class="nut-thoat" href="/">Về trang chủ</a>
+      </div>
+    </header>
+
+    <main class="khung-quan-tri">
+      <section class="khoi-quan-tri" aria-labelledby="tieu-de-thong-tin-quan">
+        <div class="tieu-de-khoi">
+          <span class="vach-tieu-de"></span>
+          <h2 id="tieu-de-thong-tin-quan">Thông tin quán</h2>
+        </div>
+
+        <form class="bieu-mau-quan">
+          <div class="nhom-truong-quan">
+            <label for="ma-quan">Mã quán</label>
+            <input
+              id="ma-quan"
+              type="text"
+              placeholder="Tự động tạo"
+              readonly
+            />
+          </div>
+
+          <div class="nhom-truong-quan truong-rong">
+            <label for="ten-quan">Tên quán</label>
+            <input id="ten-quan" type="text" placeholder="Nhập tên quán" />
+          </div>
+
+          <div class="nhom-truong-quan">
+            <label for="so-dien-thoai-quan">Số điện thoại</label>
+            <input
+              id="so-dien-thoai-quan"
+              type="tel"
+              placeholder="Nhập số điện thoại"
+            />
+          </div>
+
+          <div class="nhom-truong-quan truong-rong">
+            <label for="dia-chi-quan">Địa chỉ chi tiết</label>
+            <input
+              id="dia-chi-quan"
+              type="text"
+              placeholder="Số nhà, tên đường"
+            />
+          </div>
+
+          <div class="nhom-truong-quan">
+            <label for="quan-huyen">Khu vực</label>
+            <select id="quan-huyen">
+              <option value="">Quận cũ</option>
+              <option>Cầu Giấy</option>
+              <option>Ba Đình</option>
+              <option>Bắc Từ Liêm</option>
+              <option>Hai Bà Trưng</option>
+              <option>Hà Đông</option>
+              <option>Đống Đa</option>
+              <option>Hoàn Kiếm</option>
+              <option>Thanh Xuân</option>
+            </select>
+          </div>
+
+          <div class="nhom-truong-quan">
+            <label for="chiet-khau">Chiết khấu (%)</label>
+            <input
+              id="chiet-khau"
+              type="number"
+              min="0"
+              max="100"
+              placeholder="0"
+            />
+          </div>
+
+          <div class="nhom-truong-quan truong-rong">
+            <label for="trang-thai-quan">Trạng thái</label>
+            <select id="trang-thai-quan">
+              <option>Đang hoạt động</option>
+              <option>Tạm ngưng</option>
+            </select>
+          </div>
+
+          <div class="nhom-nut-quan">
+            <button class="nut nut-them" type="button">Thêm</button>
+            <button class="nut nut-sua" type="button">Sửa</button>
+            <button class="nut nut-xoa" type="button">Xóa</button>
+            <button class="nut nut-lam-moi" type="reset">Làm mới</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="khoi-quan-tri" aria-labelledby="tieu-de-tim-quan">
+        <div class="tieu-de-khoi">
+          <span class="vach-tieu-de"></span>
+          <h2 id="tieu-de-tim-quan">Tìm kiếm</h2>
+        </div>
+
+        <div class="bo-loc-quan">
+          <div class="nhom-truong-quan">
+            <label for="loc-quan-huyen">Quận cũ</label>
+            <select id="loc-quan-huyen">
+              <option>Tất cả</option>
+              <option>Cầu Giấy</option>
+              <option>Ba Đình</option>
+              <option>Đống Đa</option>
+              <option>Thanh Xuân</option>
+              <option>Bắc Từ Liêm</option>
+              <option>Hai Bà Trưng</option>
+              <option>Hà Đông</option>
+              <option>Hoàn Kiếm</option>
+            </select>
+          </div>
+          <div class="nhom-truong-quan">
+            <label for="loc-trang-thai">Trạng thái</label>
+            <select id="loc-trang-thai">
+              <option>Tất cả</option>
+              <option>Đang hoạt động</option>
+              <option>Tạm ngưng</option>
+            </select>
+          </div>
+          <div class="nhom-truong-quan truong-rong">
+            <label for="tu-khoa-quan">Từ khóa</label>
+            <input
+              id="tu-khoa-quan"
+              type="search"
+              placeholder="Tên quán hoặc số điện thoại"
+            />
+          </div>
+        </div>
+
+        <div class="nhom-nut-tim">
+          <button class="nut nut-tim" type="button">Tìm kiếm</button>
+          <button class="nut nut-hien-thi" type="button">
+            Hiển thị tất cả
+          </button>
+        </div>
+      </section>
+
+      <section
+        class="khoi-quan-tri khoi-bang"
+        aria-labelledby="tieu-de-danh-sach-quan"
+      >
+        <div class="tieu-de-khoi">
+          <span class="vach-tieu-de"></span>
+          <h2 id="tieu-de-danh-sach-quan">Danh sách quán</h2>
+        </div>
+
+        <div class="khung-bang">
+          <table>
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Mã quán</th>
+                <th>Tên quán</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+                <th>Khu vực</th>
+                <th>Chiết khấu</th>
+                <th>Trạng thái</th>
+                <th>Chức năng</th>
+              </tr>
+            </thead>
+            <tbody id="table-dsquan"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

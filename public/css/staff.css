@@ -1,0 +1,239 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --xanh-dam: #075985;
+  --xanh-sang: #1677a8;
+  --chu-dam: #172033;
+  --chu-nhe: #667085;
+  --vien: #dbe5eb;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--chu-dam);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    linear-gradient(rgba(232, 245, 249, 0.88), rgba(245, 247, 251, 0.95)),
+    url("../image/background_KTV - Copy.jpg") center / cover fixed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.khung-noi-bo {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 28px 16px;
+}
+
+.the-noi-bo {
+  width: min(100%, 470px);
+  padding: 30px 34px 28px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 24px 65px rgba(25, 66, 87, 0.16);
+  backdrop-filter: blur(14px);
+  text-align: center;
+}
+
+.logo-noi-bo {
+  display: grid;
+  place-items: center;
+  width: 116px;
+  height: 72px;
+  margin: 0 auto 20px;
+  padding: 6px;
+  border: 1px solid #d8e9ef;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff, #eaf8fb);
+  box-shadow: 0 10px 22px rgba(22, 119, 168, 0.12);
+}
+
+.logo-noi-bo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.nhan-noi-bo {
+  margin: 0 0 7px;
+  color: var(--xanh-sang);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+}
+
+.the-noi-bo h1 {
+  margin: 0;
+  font-size: clamp(1.7rem, 4vw, 2.2rem);
+}
+
+.mo-ta-noi-bo {
+  margin: 10px auto 24px;
+  color: var(--chu-nhe);
+  font-size: 0.93rem;
+}
+
+.bieu-mau-noi-bo {
+  display: grid;
+  gap: 16px;
+  text-align: left;
+}
+
+.thong-bao-noi-bo {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #f0b8b8;
+  border-radius: 10px;
+  color: #a33a3a;
+  background: #fff2f2;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.chon-vai-tro {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chon-vai-tro legend {
+  width: 100%;
+  margin-bottom: 8px;
+  color: #344054;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.o-vai-tro {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--vien);
+  border-radius: 12px;
+  color: #344054;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.o-vai-tro:has(input:checked) {
+  border-color: #65b4cc;
+  color: var(--xanh-dam);
+  background: #eef9fc;
+}
+
+.o-vai-tro:has(input[value="admin"]:checked) {
+  border-color: #d6b15c;
+  color: #795900;
+  background: #fff8e6;
+  box-shadow: inset 0 0 0 1px rgba(214, 177, 92, 0.18);
+}
+
+.o-vai-tro input,
+.tuy-chon-noi-bo input {
+  accent-color: var(--xanh-dam);
+}
+
+.nhom-noi-bo {
+  display: grid;
+  gap: 7px;
+}
+
+.nhom-noi-bo label {
+  color: #344054;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.nhom-noi-bo input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--vien);
+  border-radius: 12px;
+  outline: 0;
+  color: var(--chu-dam);
+  background: #fbfdfe;
+  font: inherit;
+}
+
+.nhom-noi-bo input:focus {
+  border-color: #65b4cc;
+  box-shadow: 0 0 0 4px rgba(22, 119, 168, 0.1);
+}
+
+.tuy-chon-noi-bo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--chu-nhe);
+  font-size: 0.8rem;
+}
+
+.tuy-chon-noi-bo a {
+  color: var(--xanh-dam);
+  font-weight: 700;
+}
+
+.nut-dang-nhap-noi-bo {
+  min-height: 48px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--xanh-sang), var(--xanh-dam));
+  box-shadow: 0 12px 22px rgba(7, 89, 133, 0.2);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.nut-dang-nhap-noi-bo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 26px rgba(7, 89, 133, 0.27);
+}
+
+.ve-trang-chu-noi-bo {
+  display: inline-block;
+  margin-top: 22px;
+  color: #7b8794;
+  font-size: 0.84rem;
+}
+
+.ve-trang-chu-noi-bo:hover,
+.tuy-chon-noi-bo a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .the-noi-bo {
+    padding: 25px 20px 24px;
+  }
+
+  .chon-vai-tro,
+  .tuy-chon-noi-bo {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
