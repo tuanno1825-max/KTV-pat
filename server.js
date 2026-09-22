@@ -9,8 +9,7 @@ const adminRoutes = require("./routes/admin-routes");
 // Khoi tao ung dung Express
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/admin";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware: cho phep server doc du lieu JSON tu frontend
 app.use(express.json());
@@ -38,13 +37,29 @@ app.get("/dangnhap-private", (req, res) => {
 // Su dung router quan ly quan cho cac API
 app.use("/api", adminRoutes);
 
-// Ket noi database admin. Local dung MongoDB may; hosting dung MONGODB_URI.
-mongoose
-  .connect(MONGODB_URI)
-  .then(() => console.log("Đã kết nối MongoDB thành công"))
-  .catch((error) => console.error("Lỗi kết nối MongoDB:", error));
+async function khoiDongMayChu() {
+  if (!MONGODB_URI) {
+    throw new Error(
+      "Thiếu biến môi trường MONGODB_URI. Hãy thêm MongoDB connection string trong Render.",
+    );
+  }
 
-// Khoi dong server theo cong cua moi truong
-app.listen(PORT, () => {
-  console.log(`Server đang chạy tại cổng ${PORT}`);
+  await mongoose.connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 10000,
+  });
+  console.log(
+    `Đã kết nối MongoDB thành công: database ${mongoose.connection.name}, collection tài khoản TK-admin`,
+  );
+
+  app.listen(PORT, () => {
+    console.log(`Server đang chạy tại cổng ${PORT}`);
+  });
+}
+
+khoiDongMayChu().catch((error) => {
+  console.error(
+    "Không thể khởi động server hoặc kết nối MongoDB:",
+    error.message,
+  );
+  process.exitCode = 1;
 });
