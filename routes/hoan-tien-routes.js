@@ -92,6 +92,8 @@ router.get("/vip-trang-thai", async (req, res) => {
       vip,
       timThayTaiKhoan: Boolean(nguoiDung),
       trangThai: nguoiDung?.vipTrangThai || "Chưa đăng ký",
+      vipTrangThaiTrongDatabase: nguoiDung?.vipTrangThai ?? null,
+      taiKhoanId: nguoiDung?._id?.toString() || null,
       vipHetHan: nguoiDung?.vipHetHan || null,
       emailTaiKhoan: nguoiDung?.email || null,
       database: NguoiDung.db.name,
