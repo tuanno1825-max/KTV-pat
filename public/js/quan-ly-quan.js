@@ -178,6 +178,7 @@ async function themQuan() {
       const maQuan = await layMaQuanMoi();
       if (!maQuan) throw new Error("Chưa lấy được mã quán tự động.");
     }
+    if (!window.confirm(`Thêm quán “${document.querySelector("#ten-quan").value.trim()}” vào hệ thống?`)) return;
 
     const phanHoi = await fetch(API_QUAN, {
       method: "POST",
@@ -203,6 +204,7 @@ async function suaQuan() {
     hienThiThongBao("Hãy chọn một quán trong bảng để sửa.", true);
     return;
   }
+  if (!window.confirm(`Lưu các thay đổi cho quán “${document.querySelector("#ten-quan").value.trim()}”?`)) return;
 
   try {
     const phanHoi = await fetch(`${API_QUAN}/${maQuanDangChon}`, {
@@ -225,7 +227,7 @@ async function xoaQuan(id) {
     hienThiThongBao("Chỉ Admin mới được thực hiện thao tác này.", true);
     return;
   }
-  if (!window.confirm("Bạn có chắc muốn xóa quán này không?")) return;
+  if (!window.confirm(`Xóa quán “${document.querySelector("#ten-quan").value.trim() || "đã chọn"}” khỏi hệ thống? Thao tác này không thể hoàn tác.`)) return;
 
   try {
     const phanHoi = await fetch(`${API_QUAN}/${id}`, { method: "DELETE" });

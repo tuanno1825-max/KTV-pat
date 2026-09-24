@@ -1273,6 +1273,59 @@ h2,
   font-size: 0.72rem;
 }
 
+/* Khung thông báo trong menu tài khoản */
+.menu-tai-khoan-noi-dung {
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 1fr);
+  width: min(330px, calc(100vw - 32px));
+  padding: 8px;
+}
+.nut-menu-thong-bao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 46px;
+  padding: 11px 13px;
+  color: #173c50;
+  background: #edf6f7;
+  font-size: 0.96rem;
+}
+.nut-menu-thong-bao:hover { background: #e2f0f1; }
+.danh-sach-thong-bao {
+  box-sizing: border-box;
+  width: 100%;
+  max-height: min(360px, 60vh);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 2px 12px;
+  color: #344054;
+  border: 1px solid #e4edf0;
+  border-radius: 0 0 11px 11px;
+  background: #fff;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+.muc-thong-bao {
+  padding: 12px 3px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid #e9eff2;
+}
+.muc-thong-bao:last-child { border-bottom: 0; }
+.muc-thong-bao.chua-doc {
+  margin: 0 -8px;
+  padding-right: 11px;
+  padding-left: 11px;
+  color: #075985;
+  background: #f0f8fa;
+  font-weight: 650;
+}
+.thoi-gian-thong-bao {
+  margin-top: 5px;
+  color: #718096;
+  font-size: 0.76rem;
+  font-weight: 400;
+}
+
 .uu-dai-vip {
   padding: 76px 28px;
   color: #edf7ff;

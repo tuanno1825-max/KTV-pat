@@ -49,21 +49,6 @@ async function khoiTaoUuDaiVip() {
     trangThai.textContent = `Tài khoản ${phien.email} chưa đăng ký VIP.`;
     const vungNangCap = document.querySelector("#yeu-cau-nang-cap-vip");
     vungNangCap.hidden = false;
-    document.querySelector("#nut-nang-cap-vip").addEventListener("click", async (event) => {
-      const nut = event.currentTarget;
-      nut.disabled = true;
-      const thongBao = document.querySelector("#thong-bao-nang-cap-vip");
-      try {
-        const ketQuaNangCap = await fetch("/api/hoan-tien/nang-cap-vip", { method: "POST", credentials: "same-origin" });
-        const phanHoiNangCap = await ketQuaNangCap.json();
-        if (!ketQuaNangCap.ok) throw new Error(phanHoiNangCap.message || "Không thể nâng cấp VIP.");
-        if (!phanHoiNangCap.paymentUrl) throw new Error("Máy chủ chưa trả về liên kết thanh toán.");
-        window.location.assign(phanHoiNangCap.paymentUrl);
-      } catch (error) {
-        thongBao.textContent = error.message;
-        nut.disabled = false;
-      }
-    });
     return;
   }
   trangThai.textContent = `Tài khoản ${phien.email} là thành viên VIP · Mức hoàn 5–20% do nhân viên xét duyệt.`;

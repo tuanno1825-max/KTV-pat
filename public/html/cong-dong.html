@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Cộng đồng Karaoke Together - Nơi giao lưu, rủ hát, bắt kèo và chia sẻ review quán karaoke chân thực nhất."
+    />
+    <title>Cộng đồng & Diễn đàn | Karaoke Together</title>
+    <link rel="stylesheet" href="../css/datphong.css" />
+    <link rel="stylesheet" href="../css/cong-dong.css" />
+    <script src="../js/an-tai-khoan-khach.js?v=6" defer></script>
+    <script src="../js/cong-dong.js?v=1" defer></script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="thanh-dau">
+      <div class="khung-dau">
+        <a class="logo-kara" href="/" aria-label="Về trang chủ">
+          <img src="../image/logo.png" alt="Karaoke Together" />
+        </a>
+
+        <nav class="menu-ngang" aria-label="Điều hướng chính">
+          <a href="/">Trang chủ</a>
+          <a href="/html/datphong.html">Đặt phòng</a>
+          <a href="/html/uu-dai-vip.html">Ưu đãi VIP</a>
+          <a class="dang-chon" href="/html/cong-dong.html">Cộng đồng</a>
+          <a href="/html/lien-he-hop-tac.html">Liên hệ</a>
+        </nav>
+
+        <div class="tai-khoan">
+          <a class="nut-dang-nhap" href="/html/dangnhap.html">Đăng nhập</a>
+          <a class="nut-dang-ky" href="/html/dangki.html">Đăng ký</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Banner -->
+    <section class="banner-cong-dong">
+      <div class="khung-banner">
+        <div class="banner-chu">
+          <span class="banner-tag">KARAOKE SOCIAL HUB</span>
+          <h1>Cộng Đồng Karaoke Together</h1>
+          <p>
+            Không gian giao lưu, rủ bạn bắt kèo đi hát, chia sẻ kinh nghiệm và
+            review quán KTV chân thực.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nội dung chính: Bố cục 3 cột -->
+    <main class="khung-dien-dan">
+      <!-- Cột Trái: Hồ sơ cá nhân & Phân loại chủ đề -->
+      <aside class="cot-trai">
+        <div class="the-sidebar" id="widget-ho-so">
+          <div style="text-align: center; color: #64748b; padding: 12px 0">
+            Đang tải hồ sơ...
+          </div>
+        </div>
+
+        <div class="the-sidebar">
+          <h2 class="tieu-de-sidebar">Chủ đề thảo luận</h2>
+          <div class="danh-sach-chu-de">
+            <button
+              class="nut-chu-de dang-chon"
+              type="button"
+              data-chu-de="Tất cả"
+            >
+              <span class="icon">🔥</span> Tất cả bài viết
+            </button>
+            <button
+              class="nut-chu-de"
+              type="button"
+              data-chu-de="Rủ hát / Bắt kèo"
+            >
+              <span class="icon">🍻</span> Rủ hát / Bắt kèo
+            </button>
+            <button class="nut-chu-de" type="button" data-chu-de="Review quán">
+              <span class="icon">⭐</span> Review quán KTV
+            </button>
+            <button class="nut-chu-de" type="button" data-chu-de="Giao lưu">
+              <span class="icon">🎤</span> Giao lưu âm nhạc
+            </button>
+            <button
+              class="nut-chu-de"
+              type="button"
+              data-chu-de="Hỏi đáp & Kinh nghiệm"
+            >
+              <span class="icon">❓</span> Hỏi đáp & Kinh nghiệm
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Cột Giữa: Đăng bài & Feed bài viết -->
+      <section class="cot-giua">
+        <!-- Khung Đăng bài viết mới -->
+        <div class="khung-tao-bai-viet">
+          <form id="form-tao-bai">
+            <div class="dau-tao-bai">
+              <input
+                type="text"
+                id="tieu-de-moi"
+                class="o-nhap-tieu-de"
+                placeholder="Tiêu đề: Tìm bạn song ca / Review quán hay / Kèo tối nay..."
+                required
+                maxlength="180"
+              />
+            </div>
+
+            <textarea
+              id="noi-dung-moi"
+              class="o-nhap-noi-dung"
+              placeholder="Chia sẻ cảm nhận hoặc mô tả kèo của bạn: thời gian, địa điểm, số người, gu âm nhạc (Pop, Rock, Bolero)..."
+              required
+              maxlength="3000"
+            ></textarea>
+
+            <div class="chan-tao-bai">
+              <div class="nhom-tuy-chon-dang">
+                <select id="chu-de-moi" aria-label="Chọn chủ đề bài viết">
+                  <option value="Giao lưu">🎤 Giao lưu âm nhạc</option>
+                  <option value="Rủ hát / Bắt kèo">🍻 Rủ hát / Bắt kèo</option>
+                  <option value="Review quán">⭐ Review quán</option>
+                  <option value="Hỏi đáp & Kinh nghiệm">
+                    ❓ Hỏi đáp & Kinh nghiệm
+                  </option>
+                </select>
+
+                <select
+                  id="quan-lien-quan-chon"
+                  aria-label="Gắn tag quán liên quan"
+                >
+                  <option value="">-- Gắn tag quán (tùy chọn) --</option>
+                </select>
+              </div>
+
+              <button type="submit" class="nut-dang-bai">Đăng bài ngay</button>
+            </div>
+            <div
+              id="thong-bao-dang"
+              class="thong-bao-dang-bai"
+              role="status"
+            ></div>
+          </form>
+        </div>
+
+        <!-- Thanh công cụ lọc bài viết -->
+        <div class="thanh-loc-feed">
+          <div class="tab-loc">
+            <button
+              type="button"
+              class="nut-tab-feed dang-chon"
+              data-sap-xep="moi-nhat"
+            >
+              Mới nhất
+            </button>
+            <button type="button" class="nut-tab-feed" data-sap-xep="noi-bat">
+              Nổi bật 🔥
+            </button>
+          </div>
+
+          <div class="o-tim-feed">
+            <span aria-hidden="true">🔍</span>
+            <input
+              type="search"
+              id="o-tim-kiem-bai"
+              placeholder="Tìm bài viết..."
+            />
+          </div>
+        </div>
+
+        <!-- Feed danh sách bài viết -->
+        <div id="feed-danh-sach" class="danh-sach-bai-viet">
+          <!-- Các bài viết sẽ được đổ vào đây -->
+        </div>
+      </section>
+
+      <!-- Cột Phải: Top Quán Hot & Quy tắc -->
+      <aside class="cot-phai">
+        <div class="the-sidebar">
+          <h2 class="tieu-de-sidebar">Quán KTV được yêu thích</h2>
+          <div id="widget-quan-hot" class="danh-sach-quan-hot">
+            <!-- Load top quán có sao cao -->
+          </div>
+        </div>
+
+        <div class="the-sidebar">
+          <h2 class="tieu-de-sidebar">Văn hóa cộng đồng</h2>
+          <ul class="danh-sach-quy-tac">
+            <li>Lịch sự, tôn trọng mọi thành viên.</li>
+            <li>Rủ hát giao lưu lành mạnh, minh bạch chia bill.</li>
+            <li>Review trung thực trải nghiệm thực tế.</li>
+            <li>Không spam, quảng cáo trái phép.</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="chan-trang">
+      <p>
+        <strong>Karaoke Together</strong> · Hát cùng nhau, vui trọn khoảnh khắc.
+      </p>
+      <a href="/#lien-he">Liên hệ hỗ trợ</a>
+    </footer>
+  </body>
+</html>

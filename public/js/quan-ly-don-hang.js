@@ -7,6 +7,15 @@ const noiThongKeTrangThai = document.querySelector("#thong-ke-trang-thai");
 const theGioCaoDiem = document.querySelector("#gio-cao-diem");
 let danhSachQuan = [];
 
+fetch("/api/quyen-noi-bo", { credentials: "same-origin", cache: "no-store" })
+  .then((response) => response.ok ? response.json() : null)
+  .then((quyen) => {
+    if (quyen?.vaiTro === "admin") {
+      document.querySelector("#tab-quan-ly-tai-khoan")?.removeAttribute("hidden");
+    }
+  })
+  .catch(() => {});
+
 async function taiThongKe() {
   try {
     const phanHoi = await fetch("/api/don-hang/thong-ke");
@@ -63,13 +72,14 @@ async function taiDonHang() {
         taoO(String(index + 1)), taoO(don.maDon),
         taoO(`${don.xungHo} ${don.tenKhach} · ${don.tenQuan}${don.maDonGoc ? ` (từ đơn ${don.maDonGoc})` : ""}`),
         taoO(new Date(don.thoiGianDat).toLocaleString("vi-VN")),
+        taoO(don.thoiGianCheckIn || "—"),
         taoO(don.soDienThoai),
       );
       const oTrangThai = taoO("");
       const nhan = document.createElement("span");
       const lopTrangThai = don.trangThai === "Đặt phòng thành công"
         ? "dat-phong-thanh-cong"
-        : don.trangThai === "Đặt phòng thất bại"
+        : ["Đặt phòng thất bại", "Khách không đến"].includes(don.trangThai)
           ? "de-xuat-quan-moi"
         : don.trangThai === "Khách đã chấp nhận đề xuất"
           ? "dat-phong-thanh-cong"
@@ -91,16 +101,18 @@ async function taiDonHang() {
           confirmed: "Đã xác nhận",
           success: "Đặt phòng thành công",
           failed: "Đặt phòng thất bại",
+          noshow: "Khách không đến",
         };
         const nut = document.createElement("button");
         nut.type = "button";
         nut.className = "nut-bang nut-bang-xac-nhan";
         nut.textContent = nhanNut;
         nut.addEventListener("click", async () => {
+          if (!window.confirm(`Cập nhật đơn ${don.maDon} thành “${cacTrangThai[maTrangThai]}”?`)) return;
           nut.disabled = true;
           const trangThaiHienThi = cacTrangThai[maTrangThai];
           nhan.textContent = trangThaiHienThi;
-          nhan.className = `nhan-trang-thai ${maTrangThai === "success" ? "dat-phong-thanh-cong" : maTrangThai === "failed" ? "de-xuat-quan-moi" : "da-xac-nhan"}`;
+          nhan.className = `nhan-trang-thai ${maTrangThai === "success" ? "dat-phong-thanh-cong" : ["failed", "noshow"].includes(maTrangThai) ? "de-xuat-quan-moi" : "da-xac-nhan"}`;
           try {
             const capNhat = await fetch(`/api/don-hang/${don._id}`, {
               method: "PATCH", headers: { "Content-Type": "application/json" },
@@ -121,6 +133,10 @@ async function taiDonHang() {
       } else if (don.trangThai === "Đã xác nhận") {
         taoNutCapNhat("Đặt phòng thành công", "success");
         taoNutCapNhat("Đặt phòng thất bại", "failed");
+      } else if (don.trangThai === "Đặt phòng thành công") {
+        taoNutCapNhat("Khách không đến", "noshow");
+      } else if (don.trangThai === "Khách không đến") {
+        oThaoTac.textContent = "Đã ghi nhận khách không đến";
       } else if (["Đặt phòng thất bại", "Khách từ chối đề xuất"].includes(don.trangThai) && !don.daHuy) {
         const chonQuan = document.createElement("select");
         chonQuan.setAttribute("aria-label", "Chọn quán để đề xuất cho khách");
@@ -136,6 +152,8 @@ async function taiDonHang() {
         nutDeXuat.disabled = true;
         chonQuan.addEventListener("change", () => { nutDeXuat.disabled = !chonQuan.value; });
         nutDeXuat.addEventListener("click", async () => {
+          const tenQuan = chonQuan.selectedOptions[0]?.textContent || "quán đã chọn";
+          if (!window.confirm(`Gửi đề xuất “${tenQuan}” cho khách ở đơn ${don.maDon}?`)) return;
           nutDeXuat.disabled = true;
           nhan.textContent = "Đề xuất quán mới";
           nhan.className = "nhan-trang-thai de-xuat-quan-moi";
@@ -165,14 +183,14 @@ async function taiDonHang() {
     if (!donHangs.length) {
       const dong = document.createElement("tr");
       const o = taoO("Chưa có đơn hàng phù hợp.");
-      o.colSpan = 7;
+      o.colSpan = 8;
       dong.append(o);
       bangDonHang.append(dong);
     }
   } catch (error) {
     const dong = document.createElement("tr");
     const o = taoO(error.message);
-    o.colSpan = 7;
+    o.colSpan = 8;
     dong.append(o);
     bangDonHang.append(dong);
   }

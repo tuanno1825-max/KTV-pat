@@ -30,17 +30,24 @@ function moTaPhanHoiKhach(don) {
   if (don.trangThai === "Đặt phòng thất bại") {
     return "Rất tiếc, quán chưa thể xác nhận đặt phòng. Nhân viên đang tìm quán phù hợp để đề xuất cho bạn.";
   }
-  if (don.trangThai === "Đã xác nhận") return "Yêu cầu đã được xác nhận. Vui lòng đợi ít phút để cộng tác viên liên hệ.";
-  if (don.trangThai === "Khách đã chấp nhận đề xuất") return `Bạn đã chấp nhận quán đề xuất. Mã đơn mới: ${don.maDonTiepTheo}.`;
-  if (don.trangThai === "Khách từ chối đề xuất") return "Bạn đã bỏ qua quán được đề xuất. Nhân viên sẽ tìm phương án khác nếu có.";
-  if (don.trangThai === "Khách đã hủy đặt phòng") return "Bạn đã hủy đặt phòng.";
+  if (don.trangThai === "Đã xác nhận")
+    return "Yêu cầu đã được xác nhận. Vui lòng đợi ít phút để cộng tác viên liên hệ.";
+  if (don.trangThai === "Khách đã chấp nhận đề xuất")
+    return `Bạn đã chấp nhận quán đề xuất. Mã đơn mới: ${don.maDonTiepTheo}.`;
+  if (don.trangThai === "Khách từ chối đề xuất")
+    return "Bạn đã bỏ qua quán được đề xuất. Nhân viên sẽ tìm phương án khác nếu có.";
+  if (don.trangThai === "Khách đã hủy đặt phòng")
+    return "Bạn đã hủy đặt phòng.";
   return `Yêu cầu ${don.maDon} đang chờ nhân viên xử lý. Trang sẽ tự cập nhật khi có phản hồi.`;
 }
 
 async function capNhatPhanHoiKhach() {
   if (!maDonDangTheoDoi) return;
   try {
-    const qs = new URLSearchParams({ maDon: maDonDangTheoDoi, soDienThoai: soDienThoaiTheoDoi });
+    const qs = new URLSearchParams({
+      maDon: maDonDangTheoDoi,
+      soDienThoai: soDienThoaiTheoDoi,
+    });
     const response = await fetch(`/api/don-hang/tra-cuu?${qs}`);
     if (!response.ok) return;
     const don = await response.json();
@@ -60,12 +67,19 @@ async function capNhatPhanHoiKhach() {
             try {
               choHuyKhiRoiTrang = false;
               const phanHoi = await fetch("/api/don-hang/phan-hoi", {
-                method: "POST", headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ maDon: maDonDangTheoDoi, soDienThoai: soDienThoaiTheoDoi, ...duLieu }),
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  maDon: maDonDangTheoDoi,
+                  soDienThoai: soDienThoaiTheoDoi,
+                  ...duLieu,
+                }),
               });
               const ketQua = await phanHoi.json();
-              if (!phanHoi.ok) throw new Error(ketQua.message || "Không thể gửi phản hồi.");
-              if (duLieu.chapNhan && ketQua.maDonMoi) maDonDangTheoDoi = ketQua.maDonMoi;
+              if (!phanHoi.ok)
+                throw new Error(ketQua.message || "Không thể gửi phản hồi.");
+              if (duLieu.chapNhan && ketQua.maDonMoi)
+                maDonDangTheoDoi = ketQua.maDonMoi;
               thongBaoDatPhong.textContent = duLieu.chapNhan
                 ? `${ketQua.message} Mã đơn mới: ${ketQua.maDonMoi}.`
                 : ketQua.message;
@@ -85,7 +99,12 @@ async function capNhatPhanHoiKhach() {
         taoNutPhanHoi("Hủy đặt phòng", { chapNhan: false, hanhDong: "huy" });
       }
     }
-    if (["Đặt phòng thành công", "Khách đã chấp nhận đề xuất"].includes(don.trangThai) && boDemTheoDoi) {
+    if (
+      ["Đặt phòng thành công", "Khách đã chấp nhận đề xuất"].includes(
+        don.trangThai,
+      ) &&
+      boDemTheoDoi
+    ) {
       clearInterval(boDemTheoDoi);
       boDemTheoDoi = null;
     }
@@ -94,11 +113,16 @@ async function capNhatPhanHoiKhach() {
 
 window.addEventListener("pagehide", () => {
   if (!choHuyKhiRoiTrang || !maDonDangTheoDoi || !soDienThoaiTheoDoi) return;
-  const payload = new Blob([JSON.stringify({
-    maDon: maDonDangTheoDoi,
-    soDienThoai: soDienThoaiTheoDoi,
-    hanhDong: "huy",
-  })], { type: "application/json" });
+  const payload = new Blob(
+    [
+      JSON.stringify({
+        maDon: maDonDangTheoDoi,
+        soDienThoai: soDienThoaiTheoDoi,
+        hanhDong: "huy",
+      }),
+    ],
+    { type: "application/json" },
+  );
   navigator.sendBeacon("/api/don-hang/phan-hoi", payload);
 });
 
@@ -117,6 +141,13 @@ function taoTheQuan(quan) {
       <span class="nhan-trang-thai">${quan.trangThai || "Đang hoạt động"}</span>
     </div>
     <h3>${quan.ten}</h3>
+    <div class="hang-danh-gia">
+      <span class="sao-danh-gia">★ ${quan.diemTrungBinh ? Number(quan.diemTrungBinh).toFixed(1) : "5.0"}</span>
+      <span class="so-luot-danh-gia">(${Number(quan.soDanhGia || 0)} đánh giá)</span>
+      <button type="button" class="nut-mo-danh-gia" data-ma-quan="${quan.maQuan}" data-ten-quan="${quan.ten}">
+        ⭐ Xem đánh giá
+      </button>
+    </div>
     <p class="dia-chi">${quan.diaChi}</p>
     <div class="chi-tiet-quan">
       <div><span>Giá phòng / giờ</span><strong>${dinhDangTien(quan.giaMin)} - ${dinhDangTien(quan.giaMax)}</strong></div>
@@ -202,7 +233,12 @@ boLoc.addEventListener("submit", (suKien) => {
 oTuKhoa.addEventListener("input", hienThiDanhSach);
 oKhuVuc.addEventListener("change", hienThiDanhSach);
 noiDanhSach.addEventListener("click", (suKien) => {
-  const nutDatPhong = suKien.target.closest("[data-ten-quan]");
+  const nutDanhGia = suKien.target.closest(".nut-mo-danh-gia");
+  if (nutDanhGia) {
+    moModalDanhGia(nutDanhGia.dataset.maQuan, nutDanhGia.dataset.tenQuan);
+    return;
+  }
+  const nutDatPhong = suKien.target.closest(".nut-dat-phong");
   if (nutDatPhong) moBieuMau(nutDatPhong.dataset.tenQuan);
 });
 document.querySelector("#dong-bieu-mau").addEventListener("click", dongBieuMau);
@@ -233,14 +269,16 @@ bieuMauDatPhong.addEventListener("submit", async (suKien) => {
       }),
     });
     const ketQua = await phanHoi.json();
-    if (!phanHoi.ok) throw new Error(ketQua.message || "Không thể gửi yêu cầu.");
+    if (!phanHoi.ok)
+      throw new Error(ketQua.message || "Không thể gửi yêu cầu.");
     maDonDangTheoDoi = ketQua.maDon;
     soDienThoaiTheoDoi = bieuMauDatPhong.elements.soDienThoai.value.trim();
     thongBaoDatPhong.textContent = `${ketQua.message} Mã đơn: ${ketQua.maDon}. Đang chờ nhân viên phản hồi...`;
     bieuMauDatPhong.reset();
     boDemTheoDoi = setInterval(capNhatPhanHoiKhach, 5000);
   } catch (error) {
-    thongBaoDatPhong.textContent = error.message || "Không thể gửi yêu cầu, vui lòng thử lại.";
+    thongBaoDatPhong.textContent =
+      error.message || "Không thể gửi yêu cầu, vui lòng thử lại.";
   } finally {
     nutGui.disabled = false;
   }
@@ -253,3 +291,235 @@ nutXoaLoc.addEventListener("click", () => {
 });
 
 taiDanhSachQuan();
+
+// --- LOGIC ĐÁNH GIÁ VÀ NHẬN XÉT QUÁN ---
+const lopPhuDanhGia = document.querySelector("#lop-phu-danh-gia");
+const dongModalDanhGiaBtn = document.querySelector("#dong-modal-danh-gia");
+const tenQuanDanhGiaEl = document.querySelector("#ten-quan-danh-gia");
+const diemSoToEl = document.querySelector("#diem-so-to");
+const saoLonHienThiEl = document.querySelector("#sao-lon-hien-thi");
+const tongLuotDanhGiaEl = document.querySelector("#tong-luot-danh-gia");
+const cotPhanBoSaoEl = document.querySelector("#cot-phan-bo-sao");
+const diemAmThanhEl = document.querySelector("#diem-am-thanh");
+const diemAnhSangEl = document.querySelector("#diem-anh-sang");
+const diemPhucVuEl = document.querySelector("#diem-phuc-vu");
+const diemGiaCaEl = document.querySelector("#diem-gia-ca");
+const bieuMauDanhGia = document.querySelector("#bieu-mau-danh-gia");
+const saoChonTuongTacEl = document.querySelector("#sao-chon-tuong-tac");
+const chuSoSaoChonEl = document.querySelector("#chu-so-sao-chon");
+const thongBaoDanhGiaEl = document.querySelector("#thong-bao-danh-gia");
+const danhSachNhanXetEl = document.querySelector("#danh-sach-nhan-xet");
+const demNhanXetEl = document.querySelector("#dem-nhan-xet");
+
+let maQuanDangXemDanhGia = "";
+let tenQuanDangXemDanhGia = "";
+let soSaoChonHienTai = 5;
+
+const moTaSao = {
+  1: "1 sao (Tệ)",
+  2: "2 sao (Chưa hài lòng)",
+  3: "3 sao (Bình thường)",
+  4: "4 sao (Hài lòng)",
+  5: "5 sao (Tuyệt vời)",
+};
+
+function capNhatGiaoDienChonSao(so) {
+  soSaoChonHienTai = so;
+  if (chuSoSaoChonEl) chuSoSaoChonEl.textContent = moTaSao[so] || `${so} sao`;
+  if (saoChonTuongTacEl) {
+    saoChonTuongTacEl.querySelectorAll(".sao-item").forEach((el) => {
+      const val = Number(el.dataset.sao);
+      el.classList.toggle("sang", val <= so);
+    });
+  }
+}
+
+saoChonTuongTacEl?.addEventListener("click", (e) => {
+  const item = e.target.closest(".sao-item");
+  if (item) {
+    capNhatGiaoDienChonSao(Number(item.dataset.sao));
+  }
+});
+
+function taoSaoText(diem) {
+  const d = Math.round(Number(diem) || 5);
+  return (
+    "★".repeat(Math.max(1, Math.min(5, d))) +
+    "☆".repeat(Math.max(0, 5 - Math.max(1, Math.min(5, d))))
+  );
+}
+
+async function moModalDanhGia(maQuan, tenQuan) {
+  maQuanDangXemDanhGia = maQuan;
+  tenQuanDangXemDanhGia = tenQuan;
+  if (tenQuanDanhGiaEl) tenQuanDanhGiaEl.textContent = tenQuan;
+  if (thongBaoDanhGiaEl) {
+    thongBaoDanhGiaEl.textContent = "";
+    thongBaoDanhGiaEl.style.color = "";
+  }
+  capNhatGiaoDienChonSao(5);
+  if (bieuMauDanhGia) bieuMauDanhGia.reset();
+
+  if (lopPhuDanhGia) lopPhuDanhGia.hidden = false;
+  document.body.classList.add("khoa-cuon");
+
+  if (danhSachNhanXetEl) {
+    danhSachNhanXetEl.innerHTML = `<div style="text-align: center; color: #64748b; padding: 20px;">Đang tải đánh giá...</div>`;
+  }
+
+  await taiDuLieuDanhGia();
+}
+
+function dongModalDanhGia() {
+  if (lopPhuDanhGia) lopPhuDanhGia.hidden = true;
+  document.body.classList.remove("khoa-cuon");
+}
+
+async function taiDuLieuDanhGia() {
+  try {
+    const res = await fetch(`/api/quan/${maQuanDangXemDanhGia}/danh-gia`);
+    if (!res.ok) throw new Error("Không thể tải đánh giá");
+    const { danhSach, thongKe } = await res.json();
+
+    const dtb = thongKe.diemTrungBinh
+      ? thongKe.diemTrungBinh.toFixed(1)
+      : "5.0";
+    if (diemSoToEl) diemSoToEl.textContent = dtb;
+    if (saoLonHienThiEl) saoLonHienThiEl.textContent = taoSaoText(dtb);
+    if (tongLuotDanhGiaEl)
+      tongLuotDanhGiaEl.textContent = `${thongKe.tongDanhGia} đánh giá`;
+    if (demNhanXetEl) demNhanXetEl.textContent = String(danhSach.length);
+
+    if (diemAmThanhEl)
+      diemAmThanhEl.textContent = thongKe.diemChiTiet?.amThanh
+        ? thongKe.diemChiTiet.amThanh.toFixed(1)
+        : dtb;
+    if (diemAnhSangEl)
+      diemAnhSangEl.textContent = thongKe.diemChiTiet?.anhSang
+        ? thongKe.diemChiTiet.anhSang.toFixed(1)
+        : dtb;
+    if (diemPhucVuEl)
+      diemPhucVuEl.textContent = thongKe.diemChiTiet?.phucVu
+        ? thongKe.diemChiTiet.phucVu.toFixed(1)
+        : dtb;
+    if (diemGiaCaEl)
+      diemGiaCaEl.textContent = thongKe.diemChiTiet?.giaCa
+        ? thongKe.diemChiTiet.giaCa.toFixed(1)
+        : dtb;
+
+    if (cotPhanBoSaoEl) {
+      cotPhanBoSaoEl.innerHTML = "";
+      [5, 4, 3, 2, 1].forEach((sao) => {
+        const soLuong = thongKe.phanBoSao?.[sao] || 0;
+        const phanTram =
+          thongKe.tongDanhGia > 0 ? (soLuong / thongKe.tongDanhGia) * 100 : 0;
+        const row = document.createElement("div");
+        row.className = "dong-phan-bo";
+        row.innerHTML = `
+          <span>${sao} ★</span>
+          <div class="thanh-phan-bo-nen">
+            <div class="thanh-phan-bo-chay" style="width: ${phanTram}%"></div>
+          </div>
+          <span>${soLuong}</span>
+        `;
+        cotPhanBoSaoEl.append(row);
+      });
+    }
+
+    if (danhSachNhanXetEl) {
+      danhSachNhanXetEl.innerHTML = "";
+      if (danhSach.length === 0) {
+        danhSachNhanXetEl.innerHTML = `
+          <div style="text-align: center; color: #64748b; padding: 24px; background: #f8fafc; border-radius: 10px;">
+            Chưa có đánh giá nào cho quán này. Hãy là người đầu tiên chia sẻ cảm nhận nhé!
+          </div>
+        `;
+        return;
+      }
+
+      danhSach.forEach((dg) => {
+        const item = document.createElement("article");
+        item.className = "the-nhan-xet-item";
+        const chuCaiDau = (dg.tenKhach || "K").charAt(0).toUpperCase();
+        const ngay = new Date(dg.createdAt).toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        const huyHieuDat = dg.daTungDatPhong
+          ? `<span class="huy-hieu-dat-phong" title="Khách đã từng đặt phòng thành công qua hệ thống">✓ Đã trải nghiệm thực tế</span>`
+          : "";
+
+        item.innerHTML = `
+          <div class="hang-dau-nhan-xet">
+            <div class="khach-nhan-xet">
+              <div class="avatar-chu-cai">${chuCaiDau}</div>
+              <div>
+                <div class="ten-khach-danh-gia">${dg.tenKhach} ${huyHieuDat}</div>
+                <time class="ngay-danh-gia">${ngay}</time>
+              </div>
+            </div>
+            <div class="sao-nhan-xet-khach">${"★".repeat(dg.soSao)}${"☆".repeat(5 - dg.soSao)}</div>
+          </div>
+          <p class="noi-dung-nhan-xet-khach">${dg.noiDung}</p>
+        `;
+        danhSachNhanXetEl.append(item);
+      });
+    }
+  } catch (err) {
+    if (danhSachNhanXetEl) {
+      danhSachNhanXetEl.innerHTML = `<div style="color: #ef4444; text-align: center;">Không thể tải danh sách nhận xét.</div>`;
+    }
+  }
+}
+
+bieuMauDanhGia?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nutGui = bieuMauDanhGia.querySelector(".nut-gui-danh-gia");
+  const noiDung = document.querySelector("#noi-dung-danh-gia").value.trim();
+  const tieuChi = {
+    amThanh: Number(document.querySelector("#tc-am-thanh").value),
+    anhSang: Number(document.querySelector("#tc-anh-sang").value),
+    phucVu: Number(document.querySelector("#tc-phuc-vu").value),
+    giaCa: Number(document.querySelector("#tc-gia-ca").value),
+  };
+
+  nutGui.disabled = true;
+  thongBaoDanhGiaEl.style.color = "#075c69";
+  thongBaoDanhGiaEl.textContent = "Đang gửi đánh giá...";
+
+  try {
+    const res = await fetch(`/api/quan/${maQuanDangXemDanhGia}/danh-gia`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        soSao: soSaoChonHienTai,
+        noiDung,
+        tieuChi,
+      }),
+    });
+    const ketQua = await res.json();
+    if (!res.ok) throw new Error(ketQua.message || "Gửi đánh giá thất bại.");
+
+    thongBaoDanhGiaEl.style.color = "#059669";
+    thongBaoDanhGiaEl.textContent = ketQua.message;
+    document.querySelector("#noi-dung-danh-gia").value = "";
+
+    await taiDuLieuDanhGia();
+    await taiDanhSachQuan();
+  } catch (error) {
+    thongBaoDanhGiaEl.style.color = "#dc2626";
+    thongBaoDanhGiaEl.textContent = error.message;
+  } finally {
+    nutGui.disabled = false;
+  }
+});
+
+dongModalDanhGiaBtn?.addEventListener("click", dongModalDanhGia);
+lopPhuDanhGia?.addEventListener("click", (e) => {
+  if (e.target === lopPhuDanhGia) dongModalDanhGia();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && lopPhuDanhGia && !lopPhuDanhGia.hidden)
+    dongModalDanhGia();
+});

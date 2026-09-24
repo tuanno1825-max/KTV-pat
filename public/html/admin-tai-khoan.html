@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý tài khoản khách | Karaoke Together</title>
+    <link rel="stylesheet" href="../css/admin.css" />
+    <link rel="stylesheet" href="../css/admin-tai-khoan.css" />
+    <script src="../js/quan-ly-tai-khoan.js?v=5" defer></script>
+  </head>
+  <body>
+    <header class="dau-quan-tri">
+      <div class="thanh-dau-quan-tri">
+        <div>
+          <p class="nhan-quan-tri">KARAOKE TOGETHER / QUẢN TRỊ</p>
+          <h1>Quản lý tài khoản khách</h1>
+          <span>Theo dõi hoạt động đặt phòng và quyền hội viên</span>
+        </div>
+        <nav class="cntqlad" aria-label="Chức năng quản trị">
+          <a class="nut-thoat" href="/">Trang chủ</a>
+          <a class="nut-thoat" href="/quan-ly-don-hang">Quản lý đơn</a>
+          <a class="nut-thoat" href="/admin">Quản lý quán</a>
+        </nav>
+      </div>
+    </header>
+    <main class="khung-quan-tri khung-tai-khoan-admin">
+      <section class="khoi-quan-tri">
+        <div class="tieu-de-khoi">
+          <span class="vach-tieu-de"></span>
+          <div><h2>Danh sách khách hàng</h2><p>Tìm khách, xem thống kê và quản lý quyền VIP.</p></div>
+        </div>
+        <div class="bo-loc-tai-khoan">
+          <label class="truong-tim-kiem" for="tu-khoa">Tìm theo tên hoặc email</label>
+          <input id="tu-khoa" type="search" placeholder="Ví dụ: ten@email.com" />
+          <button class="nut nut-tim" id="tim-kiem" type="button">Tìm kiếm</button>
+        </div>
+        <p id="thong-bao" class="thong-bao-tai-khoan" role="status" aria-live="polite"></p>
+        <div class="bang-wrap">
+          <table class="bang-tai-khoan">
+            <thead><tr><th>Khách hàng</th><th>Điểm</th><th>VIP</th><th>Tổng đơn</th><th>Thành công</th><th>Không đến</th><th>Đã hủy</th><th>Chờ xử lý</th><th>Thất bại</th><th>Thao tác</th></tr></thead>
+            <tbody id="danh-sach"><tr><td colspan="10">Đang tải danh sách...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+      <section class="khoi-quan-tri">
+        <div class="tieu-de-khoi"><span class="vach-tieu-de"></span><div><h2>Lịch sử đặt phòng</h2><p id="lich-su-mo-ta">Chọn “Lịch sử” tại một khách hàng để xem các đơn.</p></div></div>
+        <div id="lich-su" class="lich-su"></div>
+      </section>
+    </main>
+  </body>
+</html>

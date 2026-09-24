@@ -10,7 +10,7 @@
     <title>Đặt phòng | Karaoke Together</title>
     <link rel="stylesheet" href="../css/datphong.css" />
     <script src="../js/an-tai-khoan-khach.js?v=5" defer></script>
-    <script src="../js/datphong.js?v=7" defer></script>
+    <script src="../js/datphong.js?v=9" defer></script>
   </head>
   <body>
     <header class="thanh-dau">
@@ -22,8 +22,9 @@
         <nav class="menu-ngang" aria-label="Điều hướng chính">
           <a href="/">Trang chủ</a>
           <a class="dang-chon" href="datphong.html">Đặt phòng</a>
-          <a href="/#dich-vu">Ưu đãi</a>
-          <a href="/#lien-he">Liên hệ</a>
+          <a href="/html/uu-dai-vip.html">Ưu đãi</a>
+          <a href="/html/cong-dong.html">Cộng đồng</a>
+          <a href="/html/lien-he-hop-tac.html">Liên hệ</a>
         </nav>
 
         <div class="tai-khoan">
@@ -154,9 +155,9 @@
           </div>
 
           <div class="nhom-truong-form">
-            <label for="thoi-gian-check-in">Thời gian check-in</label>
+            <label for="thoi-gian-check-in">Giờ đến dự kiến</label>
             <select id="thoi-gian-check-in" name="thoiGianCheckIn" required>
-              <option value="">Chọn giờ đến</option>
+              <option value="">Chọn giờ đến dự kiến</option>
               <option value="10:00">10:00 - 12:00</option>
               <option value="12:00">12:00 - 14:00</option>
               <option value="14:00">14:00 - 16:00</option>
@@ -187,6 +188,152 @@
           role="status"
         ></p>
         <div id="phan-hoi-de-xuat" class="phan-hoi-de-xuat"></div>
+      </section>
+    </div>
+
+    <!-- Modal Đánh giá sao và Nhận xét quán -->
+    <div class="lop-phu" id="lop-phu-danh-gia" hidden>
+      <section
+        class="hop-danh-gia-quan"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tieu-de-hop-danh-gia"
+      >
+        <button
+          class="nut-dong"
+          id="dong-modal-danh-gia"
+          type="button"
+          aria-label="Đóng đánh giá"
+        >
+          ×
+        </button>
+        <p class="nhan-nho">ĐÁNH GIÁ & TRẢI NGHIỆM THỰC TẾ</p>
+        <h2 id="tieu-de-hop-danh-gia">
+          Đánh giá quán <span id="ten-quan-danh-gia"></span>
+        </h2>
+
+        <!-- Khung thống kê điểm sao -->
+        <div class="khung-thong-ke-danh-gia">
+          <div class="cot-diem-to">
+            <span class="con-so-diem-to" id="diem-so-to">5.0</span>
+            <div class="sao-lon" id="sao-lon-hien-thi">★★★★★</div>
+            <span class="so-luot-danh-gia" id="tong-luot-danh-gia"
+              >0 đánh giá</span
+            >
+          </div>
+
+          <div class="cot-phan-bo-sao" id="cot-phan-bo-sao">
+            <!-- Tỷ lệ phân bố 5 sao, 4 sao... -->
+          </div>
+
+          <div class="cot-tieu-chi-nho">
+            <div class="dong-tieu-chi">
+              <span>Âm thanh:</span><strong id="diem-am-thanh">5.0</strong>
+            </div>
+            <div class="dong-tieu-chi">
+              <span>Ánh sáng:</span><strong id="diem-anh-sang">5.0</strong>
+            </div>
+            <div class="dong-tieu-chi">
+              <span>Phục vụ:</span><strong id="diem-phuc-vu">5.0</strong>
+            </div>
+            <div class="dong-tieu-chi">
+              <span>Giá cả:</span><strong id="diem-gia-ca">5.0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Khung viết đánh giá mới -->
+        <div class="khung-gui-danh-gia">
+          <h3>Viết cảm nhận của bạn về quán</h3>
+          <form id="bieu-mau-danh-gia">
+            <div class="hang-chon-sao">
+              <span>Đánh giá chung:</span>
+              <div
+                class="sao-chon-tuong-tac"
+                id="sao-chon-tuong-tac"
+                title="Chọn số sao"
+              >
+                <span class="sao-item sang" data-sao="1">★</span>
+                <span class="sao-item sang" data-sao="2">★</span>
+                <span class="sao-item sang" data-sao="3">★</span>
+                <span class="sao-item sang" data-sao="4">★</span>
+                <span class="sao-item sang" data-sao="5">★</span>
+              </div>
+              <strong id="chu-so-sao-chon">5 sao (Tuyệt vời)</strong>
+            </div>
+
+            <div class="nhom-tieu-chi-danh-gia">
+              <div class="muc-tieu-chi-chon">
+                <label for="tc-am-thanh">Âm thanh:</label>
+                <select id="tc-am-thanh">
+                  <option value="5">5 sao - Cực hay, bass căng</option>
+                  <option value="4">4 sao - Hay, rõ lời</option>
+                  <option value="3">3 sao - Tạm ổn</option>
+                  <option value="2">2 sao - Hú rè</option>
+                  <option value="1">1 sao - Kém</option>
+                </select>
+              </div>
+              <div class="muc-tieu-chi-chon">
+                <label for="tc-anh-sang">Ánh sáng:</label>
+                <select id="tc-anh-sang">
+                  <option value="5">5 sao - Đẹp, hiện đại, laser đỉnh</option>
+                  <option value="4">4 sao - Đẹp, ấm cúng</option>
+                  <option value="3">3 sao - Bình thường</option>
+                  <option value="2">2 sao - Tối hoặc chói</option>
+                  <option value="1">1 sao - Hỏng đèn</option>
+                </select>
+              </div>
+              <div class="muc-tieu-chi-chon">
+                <label for="tc-phuc-vu">Phục vụ:</label>
+                <select id="tc-phuc-vu">
+                  <option value="5">5 sao - Nhiệt tình, chu đáo</option>
+                  <option value="4">4 sao - Thân thiện</option>
+                  <option value="3">3 sao - Bình thường</option>
+                  <option value="2">2 sao - Chậm chạp</option>
+                  <option value="1">1 sao - Thái độ không tốt</option>
+                </select>
+              </div>
+              <div class="muc-tieu-chi-chon">
+                <label for="tc-gia-ca">Giá cả:</label>
+                <select id="tc-gia-ca">
+                  <option value="5">5 sao - Rất hợp lý</option>
+                  <option value="4">4 sao - Đúng giá niêm yết</option>
+                  <option value="3">3 sao - Tạm chấp nhận</option>
+                  <option value="2">2 sao - Hơi đắt</option>
+                  <option value="1">1 sao - Quá đắt</option>
+                </select>
+              </div>
+            </div>
+
+            <textarea
+              id="noi-dung-danh-gia"
+              class="o-nhan-xet-danh-gia"
+              placeholder="Chia sẻ trải nghiệm chi tiết về không gian, phòng hát, phục vụ để cộng đồng cùng tham khảo..."
+              required
+              maxlength="1000"
+            ></textarea>
+
+            <div class="hang-nut-danh-gia">
+              <span class="nhan-thuong-diem"
+                >Đánh giá giúp cộng đồng lựa chọn quán tốt hơn.</span
+              >
+              <button type="submit" class="nut-gui-danh-gia">
+                Gửi đánh giá
+              </button>
+            </div>
+            <div
+              id="thong-bao-danh-gia"
+              class="thong-bao-danh-gia"
+              role="status"
+            ></div>
+          </form>
+        </div>
+
+        <!-- Danh sách nhận xét từ khách hàng -->
+        <h3>Nhận xét từ khách hàng (<span id="dem-nhan-xet">0</span>)</h3>
+        <div id="danh-sach-nhan-xet" class="danh-sach-nhan-xet-quan">
+          <!-- Các nhận xét sẽ được load vào đây -->
+        </div>
       </section>
     </div>
 

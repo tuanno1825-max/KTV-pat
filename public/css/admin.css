@@ -3,19 +3,19 @@
 }
 
 :root {
-  --cam-quan-tri: #d88908;
-  --cam-dam: #b96700;
-  --hong-bang: #d91b8c;
-  --chu-dam: #463f3a;
-  --chu-nhe: #6f6a66;
-  --vien: #e2e2e2;
+  --cam-quan-tri: #087e8b;
+  --cam-dam: #075c69;
+  --hong-bang: #087e8b;
+  --chu-dam: #173447;
+  --chu-nhe: #607789;
+  --vien: #dce8ed;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   color: var(--chu-dam);
-  background: #f4f4f4;
+  background: #f2f7f9;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -31,8 +31,8 @@ button {
 
 .dau-quan-tri {
   color: #fff;
-  background: linear-gradient(135deg, var(--cam-quan-tri), #e59b13);
-  box-shadow: 0 3px 12px rgba(139, 82, 0, 0.2);
+  background: linear-gradient(120deg, #123047, #087e8b);
+  box-shadow: 0 8px 24px rgba(18, 48, 71, 0.16);
   width: 100%;
 }
 
@@ -60,6 +60,8 @@ button {
   gap: 10px; /* Khoảng cách vừa vặn giữa 2 nút */
   align-items: center;
   flex-shrink: 0; /* Giúp cụm 2 nút không bị bóp méo khi màn hình nhỏ */
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .nhan-quan-tri {
@@ -83,7 +85,7 @@ button {
 .nut-thoat {
   padding: 9px 15px;
   border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 8px;
+  border-radius: 999px;
   color: #fff;
   font-size: 0.84rem;
   transition: background 0.2s ease;
@@ -91,7 +93,7 @@ button {
 .qldh11 {
   padding: 9px 15px;
   border: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 8px;
+  border-radius: 999px;
   color: #fff;
   font-size: 0.84rem;
   transition: background 0.2s ease;
@@ -103,8 +105,8 @@ button {
 
 .khung-quan-tri {
   max-width: 1440px;
-  margin: 0 auto;
-  padding: 16px 20px 36px;
+  margin: 28px auto;
+  padding: 0 24px 40px;
 }
 
 .thong-bao-quan {
@@ -140,10 +142,10 @@ button {
 .khoi-quan-tri {
   margin-bottom: 16px;
   padding: 14px 15px 16px;
-  border: 1px solid #e8e8e8;
-  border-radius: 7px;
+  border: 1px solid #e1eaf0;
+  border-radius: 14px;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 26px rgba(18, 48, 71, 0.06);
 }
 
 .tieu-de-khoi {
@@ -156,12 +158,13 @@ button {
 .vach-tieu-de {
   width: 4px;
   height: 23px;
-  background: #987d70;
+  border-radius: 999px;
+  background: #0d9488;
 }
 
 .tieu-de-khoi h2 {
   margin: 0;
-  color: #6d5a50;
+  color: #123047;
   font-size: 1.25rem;
 }
 
@@ -275,23 +278,23 @@ table {
 th,
 td {
   padding: 9px 8px;
-  border: 1px solid #f0d5e7;
+  border: 1px solid #e2ebef;
   text-align: center;
   white-space: nowrap;
 }
 
 th {
-  color: #fff;
-  background: var(--hong-bang);
+  color: #3e5c6e;
+  background: #eef5f7;
   font-weight: 800;
 }
 
 tbody tr:nth-child(even) {
-  background: #fff8fc;
+  background: #f8fbfc;
 }
 
 tbody tr:hover {
-  background: #fff1f9;
+  background: #eef8f8;
 }
 
 .nhan-trang-thai {

@@ -1,0 +1,30 @@
+.khung-tai-khoan-admin { max-width: 1500px; }
+.khung-tai-khoan-admin .khoi-quan-tri { padding: 22px; border-radius: 16px; }
+.khung-tai-khoan-admin .tieu-de-khoi { align-items: flex-start; }
+.khung-tai-khoan-admin .tieu-de-khoi h2 { margin: 0; color: #123047; }
+.khung-tai-khoan-admin .tieu-de-khoi p { margin: 5px 0 0; color: #718096; font-size: .9rem; }
+.khung-tai-khoan-admin .vach-tieu-de { flex: 0 0 4px; height: 42px; border-radius: 99px; background: #0d9488; }
+.bo-loc-tai-khoan { display: grid; grid-template-columns: minmax(220px, 1fr) auto; gap: 8px 12px; align-items: end; max-width: 620px; margin: 20px 0 10px; }
+.truong-tim-kiem { grid-column: 1 / -1; color: #52677a; font-size: .82rem; font-weight: 700; }
+.bo-loc-tai-khoan input { min-height: 42px; padding: 9px 12px; border: 1px solid #d4e0e8; border-radius: 9px; outline: 0; }
+.bo-loc-tai-khoan input:focus { border-color: #0d9488; box-shadow: 0 0 0 3px #0d94881c; }
+.bo-loc-tai-khoan .nut { min-height: 42px; padding: 8px 18px; border-radius: 9px; }
+.thong-bao-tai-khoan { min-height: 22px; color: #567084; font-size: .85rem; }
+.bang-wrap { overflow: auto; border: 1px solid #e1eaf0; border-radius: 12px; }
+.bang-tai-khoan { min-width: 1120px; width: 100%; border-collapse: collapse; font-size: .83rem; }
+.bang-tai-khoan th, .bang-tai-khoan td { padding: 12px 10px; border-bottom: 1px solid #e7eef2; text-align: left; white-space: nowrap; }
+.bang-tai-khoan th { position: sticky; top: 0; color: #476174; background: #f2f7f9; font-size: .76rem; letter-spacing: .035em; text-transform: uppercase; }
+.bang-tai-khoan tbody tr:hover { background: #f7fbfc; }
+.bang-tai-khoan td:first-child { white-space: normal; min-width: 220px; line-height: 1.5; }
+.bang-tai-khoan td:first-child small { display: block; margin-top: 4px; color: #b54708; }
+.nut-hanh-dong { margin: 2px; padding: 8px 10px; border: 1px solid #c9dbe1; border-radius: 8px; color: #175a68; background: #fff; font-size: .78rem; font-weight: 700; transition: .18s ease; }
+.nut-hanh-dong:hover { border-color: #0d9488; color: #fff; background: #0d9488; }
+.nut-hanh-dong[data-act="thu-hoi-vip"] { border-color: #f3c4bd; color: #b42318; }
+.nut-hanh-dong[data-act="xoa-tai-khoan"] { border-color: #f3c4bd; color: #b42318; }
+.nut-hanh-dong[data-act="thu-hoi-vip"]:hover { color: #fff; background: #b42318; }
+.nut-hanh-dong[data-act="xoa-tai-khoan"]:hover { color: #fff; background: #b42318; }
+.lich-su { overflow: auto; }
+.lich-su:empty { display: none; }
+.the-vip { display: inline-flex; padding: 4px 9px; border-radius: 99px; color: #8a5b00; background: #fff3ce; font-size: .76rem; font-weight: 800; }
+.the-thuong { color: #637789; }
+@media (max-width: 600px) { .khung-tai-khoan-admin .khoi-quan-tri { padding: 16px; } .bo-loc-tai-khoan { grid-template-columns: 1fr; } .bo-loc-tai-khoan .nut { width: 100%; } }
