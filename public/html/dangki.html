@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đăng ký | Karaoke Together</title>
     <link rel="stylesheet" href="../css/dangki.css" />
+    <script src="../js/xac-thuc-khach.js" defer></script>
   </head>
   <body>
     <main class="khung-xac-thuc">
@@ -20,17 +21,21 @@
             Đăng ký để đặt phòng nhanh hơn và quản lý những buổi hát của bạn.
           </p>
 
-          <form class="bieu-mau-xac-thuc">
+          <form class="bieu-mau-xac-thuc" id="form-dang-ky" data-che-do="dang-ky">
+            <p class="thong-bao-xac-thuc" role="status" aria-live="polite"></p>
             <div class="nhom-truong">
               <label for="ho-ten">Họ và tên</label>
-              <input id="ho-ten" type="text" placeholder="Nhập họ và tên" />
+              <input id="ho-ten" name="hoTen" type="text" autocomplete="name" maxlength="100" required placeholder="Nhập họ và tên" />
             </div>
 
             <div class="nhom-truong">
               <label for="email-dang-ky">Email</label>
               <input
                 id="email-dang-ky"
+                name="email"
                 type="email"
+                autocomplete="email"
+                required
                 placeholder="you@example.com"
               />
             </div>
@@ -39,7 +44,12 @@
               <label for="mat-khau-dang-ky">Mật khẩu</label>
               <input
                 id="mat-khau-dang-ky"
+                name="matKhau"
                 type="password"
+                minlength="6"
+                maxlength="128"
+                autocomplete="new-password"
+                required
                 placeholder="Tối thiểu 6 ký tự"
               />
             </div>
@@ -48,13 +58,18 @@
               <label for="xac-nhan-mat-khau">Xác nhận mật khẩu</label>
               <input
                 id="xac-nhan-mat-khau"
+                name="xacNhanMatKhau"
                 type="password"
+                minlength="6"
+                maxlength="128"
+                autocomplete="new-password"
+                required
                 placeholder="Nhập lại mật khẩu"
               />
             </div>
 
             <label class="ghi-nho dieu-khoan"
-              ><input type="checkbox" /> Tôi đồng ý với điều khoản sử
+              ><input name="dongYDieuKhoan" type="checkbox" required /> Tôi đồng ý với điều khoản sử
               dụng</label
             >
             <button class="nut-xac-thuc" type="submit">Tạo tài khoản</button>

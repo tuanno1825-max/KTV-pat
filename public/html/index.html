@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KTV - Karaoke Online</title>
     <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/bang-chuyen-quan.js?v=1" defer></script>
   </head>
   <body>
     <header>
@@ -33,21 +34,8 @@
 
           <div class="thanh-menu">
             <ul class="menu-ngang">
-              <li><a href="#trang-chu">Trang chủ</a></li>
-
-              <li>
-                <a href="#dat-phong">Đặt phòng</a>
-                <ul class="menu-con">
-                  <li><a href="#">Cầu Giấy</a></li>
-                  <li><a href="#">Ba Đình</a></li>
-                  <li><a href="#">Bắc Từ Liêm</a></li>
-                  <li><a href="#">Hai Bà Trưng</a></li>
-                  <li><a href="#">Hà Đông</a></li>
-                  <li><a href="#">Đống Đa</a></li>
-                  <li><a href="#">Hoàn Kiếm</a></li>
-                  <li><a href="#">Thanh Xuân</a></li>
-                </ul>
-              </li>
+              <li><a href="/">Trang chủ</a></li>
+              <li><a href="/html/datphong.html">Đặt phòng</a></li>
               <li><a href="#dich-vu">Ưu đãi</a></li>
               <li><a href="#lien-he">Liên hệ</a></li>
             </ul>
@@ -81,7 +69,7 @@
             </p>
 
             <div class="nut-hanh-dong">
-              <a class="nut-chinh" href="#dat-phong">Đặt phòng ngay</a>
+              <a class="nut-chinh" href="/html/datphong.html">Đặt phòng ngay</a>
               <a class="nut-phu" href="#dich-vu">Khám phá phòng</a>
             </div>
 
@@ -104,21 +92,48 @@
           <div class="the-phong-banner">
             <div class="nhan-phong">Các quán nổi bật</div>
             <div class="khung-phong-banner">
-              <div class="sang-phong"></div>
-              <div class="bang-dieu-khien">
-                <span class="dot dot-mot"></span>
-                <span class="dot dot-hai"></span>
-                <span class="dot dot-ba"></span>
+              <div class="marquee-phong" aria-label="Hình ảnh các quán karaoke nổi bật">
+                <figure class="anh-quan-banner">
+                  <img src="/image/level.webp" alt="Không gian Karaoke Level" />
+                  <figcaption>Karaoke Level</figcaption>
+                </figure>
+                <figure class="anh-quan-banner">
+                  <img src="/image/hoanggia.jfif" alt="Không gian Karaoke Hoàng Gia" />
+                  <figcaption>Karaoke Hoàng Gia</figcaption>
+                </figure>
+                <figure class="anh-quan-banner">
+                  <img src="/image/icool.jfif" alt="Không gian Karaoke iCool" />
+                  <figcaption>Karaoke iCool</figcaption>
+                </figure>
+                <figure class="anh-quan-banner" aria-hidden="true">
+                  <img src="/image/level.webp" alt="" />
+                  <figcaption>Karaoke Level</figcaption>
+                </figure>
+                <figure class="anh-quan-banner" aria-hidden="true">
+                  <img src="/image/hoanggia.jfif" alt="" />
+                  <figcaption>Karaoke Hoàng Gia</figcaption>
+                </figure>
+                <figure class="anh-quan-banner" aria-hidden="true">
+                  <img src="/image/icool.jfif" alt="" />
+                  <figcaption>Karaoke iCool</figcaption>
+                </figure>
+              </div>
+              <button class="nut-chuyen-anh nut-anh-truoc" type="button" aria-label="Xem quán trước">‹</button>
+              <button class="nut-chuyen-anh nut-anh-sau" type="button" aria-label="Xem quán tiếp theo">›</button>
+              <div class="cac-cham-anh" aria-label="Chọn quán nổi bật">
+                <button type="button" aria-label="Karaoke Level" aria-current="true"></button>
+                <button type="button" aria-label="Karaoke Hoàng Gia" aria-current="false"></button>
+                <button type="button" aria-label="Karaoke iCool" aria-current="false"></button>
               </div>
             </div>
             <div class="tong-hop-dat-phong">
               <div>
                 <span>Quán</span>
-                <strong>Idol vip club</strong>
+                <strong id="ten-quan-noi-bat">Karaoke Level</strong>
               </div>
               <div>
-                <span>Giá trung bình</span>
-                <strong>399k / giờ</strong>
+                <span>Giá phòng / giờ</span>
+                <strong id="gia-quan-noi-bat">Liên hệ để biết giá</strong>
               </div>
             </div>
           </div>
@@ -264,7 +279,7 @@
           <p>Email: mokingthern@gmail.com</p>
           <div class="mang-xa-hoi">
             <span
-              ><a href="#"
+              ><a href="https://www.facebook.com/profile.php?id=100083227877334"
                 ><img
                   src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/3840px-Facebook_f_logo_%282019%29.svg.png?"
                   alt=" Facebook" /></a
@@ -281,9 +296,7 @@
 
       <div class="admin">
         <p>&copy; 2026 Karaoke Together. Bản quyền thuộc về Phạm Anh Tuấn.</p>
-        <a class="lien-nhan-vien" href="/dangnhap-private"
-          >Manager</a
-        >
+        <a class="lien-nhan-vien" href="/html/dangnhap-private.html">Manager</a>
       </div>
     </footer>
   </body>

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Tìm kiếm và chọn quán karaoke phù hợp để đặt phòng."
+    />
+    <title>Đặt phòng | Karaoke Together</title>
+    <link rel="stylesheet" href="../css/datphong.css" />
+    <script src="../js/datphong.js?v=7" defer></script>
+  </head>
+  <body>
+    <header class="thanh-dau">
+      <div class="khung-dau">
+        <a class="logo-kara" href="/" aria-label="Về trang chủ">
+          <img src="../image/logo.png" alt="Karaoke Together" />
+        </a>
+
+        <nav class="menu-ngang" aria-label="Điều hướng chính">
+          <a href="/">Trang chủ</a>
+          <a class="dang-chon" href="datphong.html">Đặt phòng</a>
+          <a href="/#dich-vu">Ưu đãi</a>
+          <a href="/#lien-he">Liên hệ</a>
+        </nav>
+
+        <div class="tai-khoan">
+          <a href="dangnhap.html">Đăng nhập</a>
+          <a class="nut-dang-ky" href="dangki.html">Đăng ký</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="khu-vuc-tim-kiem" aria-labelledby="tieu-de-trang">
+        <div class="loi-gioi-thieu">
+          <p class="nhan-nho">KARAOKE TOGETHER / ĐẶT PHÒNG</p>
+          <h1 id="tieu-de-trang">Tìm một nơi thật vui để hát</h1>
+          <p>
+            Khám phá những quán karaoke phù hợp với nhóm của bạn và bắt đầu buổi
+            tiệc âm nhạc ngay hôm nay.
+          </p>
+        </div>
+
+        <form class="bo-loc" id="bo-loc-quan" role="search">
+          <div class="truong-tim-kiem">
+            <label for="tu-khoa">Bạn muốn tìm quán nào?</label>
+            <div class="o-tim-kiem">
+              <span aria-hidden="true">⌕</span>
+              <input
+                id="tu-khoa"
+                type="search"
+                placeholder="Tên quán hoặc địa chỉ..."
+                autocomplete="off"
+              />
+            </div>
+          </div>
+
+          <div class="truong-tim-kiem truong-khu-vuc">
+            <label for="khu-vuc">Khu vực</label>
+            <select id="khu-vuc">
+              <option value="tat-ca">Tất cả quận</option>
+              <option value="Ba Đình">Ba Đình</option>
+              <option value="Cầu Giấy">Cầu Giấy</option>
+              <option value="Đống Đa">Đống Đa</option>
+              <option value="Hai Bà Trưng">Hai Bà Trưng</option>
+              <option value="Hoàn Kiếm">Hoàn Kiếm</option>
+              <option value="Thanh Xuân">Thanh Xuân</option>
+            </select>
+          </div>
+
+          <button class="nut-tim" type="submit">Tìm quán</button>
+        </form>
+      </section>
+
+      <section class="danh-sach-khu-vuc" aria-labelledby="tieu-de-danh-sach">
+        <div class="dau-danh-sach">
+          <div>
+            <p class="nhan-nho">GỢI Ý CHO BẠN</p>
+            <h2 id="tieu-de-danh-sach">Danh sách các quán</h2>
+          </div>
+          <p class="so-luong" id="so-luong-quan" aria-live="polite"></p>
+        </div>
+
+        <div class="luoi-quan" id="danh-sach-quan"></div>
+        <div class="khong-co-ket-qua" id="khong-co-ket-qua" hidden>
+          <span aria-hidden="true">⌕</span>
+          <h3>Chưa tìm thấy quán phù hợp</h3>
+          <p>Hãy thử một từ khóa khác hoặc chọn lại khu vực.</p>
+          <button class="nut-xoa-loc" id="xoa-loc" type="button">
+            Xóa bộ lọc
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <div class="lop-phu" id="lop-phu-dat-phong" hidden>
+      <section
+        class="hop-dat-phong"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tieu-de-dat-phong"
+      >
+        <button
+          class="nut-dong"
+          id="dong-bieu-mau"
+          type="button"
+          aria-label="Đóng biểu mẫu"
+        >
+          ×
+        </button>
+        <p class="nhan-nho">THÔNG TIN ĐẶT PHÒNG</p>
+        <h2 id="tieu-de-dat-phong">
+          Đặt phòng tại <span id="ten-quan-chon"></span>
+        </h2>
+        <p class="mo-ta-bieu-mau">
+          Điền thông tin để quán chuẩn bị phòng cho bạn.
+        </p>
+
+        <p class="gia-quan-chon" id="gia-quan-chon"></p>
+        <form class="bieu-mau-dat-phong" id="bieu-mau-dat-phong">
+          <div class="nhom-truong-form nhom-rong">
+            <label for="so-dien-thoai-nguoi-dat">Số điện thoại người đặt</label>
+            <input
+              id="so-dien-thoai-nguoi-dat"
+              type="tel"
+              placeholder="Nhập số điện thoại"
+              required
+              pattern="[0-9+ ()-]{9,15}"
+              name="soDienThoai"
+            />
+          </div>
+
+          <div class="nhom-truong-form">
+            <label for="xung-ho">Xưng hô</label>
+            <select id="xung-ho" name="xungHo" required>
+              <option value="">Chọn xưng hô</option>
+              <option value="Anh">Anh</option>
+              <option value="Chị">Chị</option>
+            </select>
+          </div>
+
+          <div class="nhom-truong-form">
+            <label for="ten-nguoi-dat">Tên người đặt</label>
+            <input
+              id="ten-nguoi-dat"
+              name="tenKhach"
+              type="text"
+              placeholder="Nhập họ tên"
+              required
+            />
+          </div>
+
+          <div class="nhom-truong-form">
+            <label for="thoi-gian-check-in">Thời gian check-in</label>
+            <select id="thoi-gian-check-in" name="thoiGianCheckIn" required>
+              <option value="">Chọn giờ đến</option>
+              <option value="10:00">10:00 - 12:00</option>
+              <option value="12:00">12:00 - 14:00</option>
+              <option value="14:00">14:00 - 16:00</option>
+              <option value="16:00">16:00 - 18:00</option>
+              <option value="18:00">18:00 - 20:00</option>
+              <option value="20:00">20:00 - 22:00</option>
+              <option value="22:00">22:00 - 00:00</option>
+            </select>
+          </div>
+
+          <div class="nhom-truong-form">
+            <label for="so-nguoi">Phòng dành cho</label>
+            <select id="so-nguoi" name="soNguoi" required>
+              <option value="">Số lượng người</option>
+              <option value="2-4">2 - 4 người</option>
+              <option value="5-8">5 - 8 người</option>
+              <option value="9-12">9 - 12 người</option>
+              <option value="13-20">13 - 20 người</option>
+              <option value="20+">Trên 20 người</option>
+            </select>
+          </div>
+
+          <button class="nut-xac-nhan" type="submit">Xác nhận đặt phòng</button>
+        </form>
+        <p
+          class="thong-bao-dat-phong"
+          id="thong-bao-dat-phong"
+          role="status"
+        ></p>
+        <div id="phan-hoi-de-xuat" class="phan-hoi-de-xuat"></div>
+      </section>
+    </div>
+
+    <footer class="chan-trang">
+      <p>
+        <strong>Karaoke Together</strong> · Hát cùng nhau, vui trọn khoảnh khắc.
+      </p>
+      <a href="/#lien-he">Liên hệ hỗ trợ</a>
+    </footer>
+  </body>
+</html>

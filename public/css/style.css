@@ -150,29 +150,6 @@ h2 {
   text-shadow: 0 0 20px rgba(105, 224, 255, 0.35);
 }
 
-.menu-con {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 0;
-  display: none;
-  min-width: 180px;
-  padding: 12px 10px;
-  list-style: none;
-  margin: 0;
-  border-radius: 14px;
-  background: rgba(9, 13, 26, 0.96);
-  border: 1px solid rgba(105, 224, 255, 0.2);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
-}
-
-.menu-ngang li:hover > .menu-con {
-  display: block;
-}
-
-.menu-con li {
-  margin: 4px 0;
-}
-
 .banner {
   max-width: 1280px;
   margin: 0 auto;
@@ -829,12 +806,6 @@ h2,
   background: #eef8fc;
 }
 
-.menu-con {
-  background: rgba(255, 255, 255, 0.98);
-  border-color: #dce8ef;
-  box-shadow: 0 16px 34px rgba(24, 39, 75, 0.14);
-}
-
 .banner-noi-dung {
   background:
     linear-gradient(
@@ -902,6 +873,117 @@ h2,
 .khung-phong-banner {
   background: linear-gradient(180deg, #bde8f2, #e7f5f7);
   border-color: #b4dce5;
+}
+
+.khung-phong-banner {
+  isolation: isolate;
+}
+
+.marquee-phong {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  width: 600%;
+  transition: transform 650ms ease;
+}
+
+.anh-quan-banner {
+  position: relative;
+  flex: 0 0 calc(100% / 6);
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.anh-quan-banner::after {
+  position: absolute;
+  inset: 45% 0 0;
+  background: linear-gradient(transparent, rgba(8, 17, 31, 0.72));
+  content: "";
+}
+
+.anh-quan-banner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.anh-quan-banner figcaption {
+  position: absolute;
+  z-index: 1;
+  right: 20px;
+  bottom: 18px;
+  left: 20px;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 750;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.nut-chuyen-anh {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(12, 27, 39, 0.55);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 160ms ease;
+}
+
+.nut-chuyen-anh:hover {
+  background: rgba(12, 27, 39, 0.85);
+}
+
+.nut-anh-truoc {
+  left: 14px;
+}
+
+.nut-anh-sau {
+  right: 14px;
+}
+
+.cac-cham-anh {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 14px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cac-cham-anh button {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.cac-cham-anh button[aria-current="true"] {
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-phong {
+    transition: none;
+  }
 }
 
 .sang-phong {

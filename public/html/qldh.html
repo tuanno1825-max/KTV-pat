@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý đơn hàng - Karaoke Together</title>
+    <link rel="stylesheet" href="/css/qldh.css" />
+    <!-- File CSS chung hoặc CSS riêng của bạn -->
+  </head>
+  <body>
+    <!-- Phần đầu trang (Header đồng bộ với trang Admin) -->
+    <header class="dau-quan-tri">
+      <div class="thanh-dau-quan-tri">
+        <div>
+          <p class="nhan-quan-tri">KARAOKE TOGETHER</p>
+          <h1>Quản lý đơn hàng</h1>
+          <span>Xác nhận và theo dõi các lịch đặt phòng</span>
+        </div>
+        <div class="cntqlad">
+          <a class="nut-thoat" href="/">Về trang chủ</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Khung nội dung chính -->
+    <main class="khung-quan-tri">
+      <!-- Khu vực bộ lọc và tìm kiếm -->
+      <section class="khung-tim-kiem">
+        <div class="nhom-tim-kiem">
+          <input
+            type="text"
+            id="tu-khoa-don"
+            placeholder="Nhập tên khách hoặc mã đơn..."
+          />
+          <select id="loc-trang-thai-don">
+            <option value="Tất cả">Tất cả trạng thái</option>
+            <option value="Đang chờ xử lý">Đang chờ xử lý</option>
+            <option value="Đã xác nhận">Đã xác nhận</option>
+            <option value="Đặt phòng thành công">Đặt phòng thành công</option>
+            <option value="Đặt phòng thất bại">Đặt phòng thất bại</option>
+            <option value="Đề xuất quán mới">Đề xuất quán mới</option>
+            <option value="Khách đã chấp nhận đề xuất">Khách đã chấp nhận đề xuất</option>
+            <option value="Khách từ chối đề xuất">Khách từ chối đề xuất</option>
+          </select>
+          <button type="button" class="nut-chung nut-tim-don">Tìm kiếm</button>
+          <button type="button" class="nut-chung nut-hien-thi-don">
+            Làm mới
+          </button>
+        </div>
+      </section>
+
+      <!-- Bảng danh sách đơn hàng -->
+      <section class="khung-thong-ke" aria-labelledby="tieu-de-thong-ke">
+        <div class="dau-thong-ke">
+          <div>
+            <h2 id="tieu-de-thong-ke">Thống kê đơn hàng</h2>
+            <p>Tổng hợp theo trạng thái và giờ khách gửi yêu cầu</p>
+          </div>
+          <div id="gio-cao-diem" class="the-gio-cao-diem">Đang tải thống kê...</div>
+        </div>
+        <div id="thong-ke-trang-thai" class="luoi-thong-ke" aria-live="polite"></div>
+        <h3 class="tieu-de-khung-gio">Số đơn theo khung giờ đặt</h3>
+        <div id="thong-ke-khung-gio" class="luoi-khung-gio" aria-live="polite"></div>
+      </section>
+
+      <section class="khung-bang">
+        <table class="bang-du-lieu">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã đơn</th>
+              <th>Tên khách hàng</th>
+              <th>Thời gian đặt</th>
+              <th>Số điện thoại</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="table-ds-don-hang">
+            <!-- Dữ liệu đơn hàng sẽ được JavaScript tự động đổ vào đây -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+    <!-- File JavaScript xử lý logic cho trang quản lý đơn hàng -->
+    <script src="/js/quan-ly-don-hang.js?v=9"></script>
+  </body>
+</html>

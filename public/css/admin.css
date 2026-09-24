@@ -33,18 +33,33 @@ button {
   color: #fff;
   background: linear-gradient(135deg, var(--cam-quan-tri), #e59b13);
   box-shadow: 0 3px 12px rgba(139, 82, 0, 0.2);
+  width: 100%;
 }
 
 .thanh-dau-quan-tri {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* Đẩy khối chữ sang trái, khối nút sang phải */
   gap: 24px;
   max-width: 1440px;
   min-height: 98px;
   margin: 0 auto;
   padding: 14px 28px;
-  text-align: center;
+  text-align: left; /* Đổi về căn trái cho chữ ngay ngắn */
+}
+
+/* Khối chứa tiêu đề bên trái */
+.thanh-dau-quan-tri > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Căn lề trái cho cụm chữ Karaoke Together, Tiêu đề và Mô tả */
+}
+
+.cntqlad {
+  display: flex;
+  gap: 10px; /* Khoảng cách vừa vặn giữa 2 nút */
+  align-items: center;
+  flex-shrink: 0; /* Giúp cụm 2 nút không bị bóp méo khi màn hình nhỏ */
 }
 
 .nhan-quan-tri {
@@ -66,6 +81,14 @@ button {
 }
 
 .nut-thoat {
+  padding: 9px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.84rem;
+  transition: background 0.2s ease;
+}
+.qldh11 {
   padding: 9px 15px;
   border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 8px;

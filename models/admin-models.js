@@ -6,6 +6,20 @@ const QuanSchema = new mongoose.Schema(
     soDienThoai: { type: String, required: true, trim: true },
     diaChiChiTiet: { type: String, required: true, trim: true },
     khuVuc: { type: String, required: true, trim: true },
+    anhQuan: { type: String, trim: true, default: "" },
+    giaMin: { type: Number, required: true, min: 0, default: 0 },
+    giaMax: {
+      type: Number,
+      required: true,
+      min: 0,
+      default: 0,
+      validate: {
+        validator(value) {
+          return value >= (this.giaMin ?? 0);
+        },
+        message: "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu.",
+      },
+    },
     chietKhau: { type: Number, required: true, min: 0, max: 100 },
     trangThai: {
       type: String,

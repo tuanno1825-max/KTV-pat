@@ -1,0 +1,211 @@
+const bangDonHang = document.querySelector("#table-ds-don-hang");
+const oTuKhoaDon = document.querySelector("#tu-khoa-don");
+const oLocTrangThai = document.querySelector("#loc-trang-thai-don");
+const nutTimDon = document.querySelector(".nut-tim-don");
+const nutLamMoi = document.querySelector(".nut-hien-thi-don");
+const noiThongKeTrangThai = document.querySelector("#thong-ke-trang-thai");
+const noiThongKeKhungGio = document.querySelector("#thong-ke-khung-gio");
+const theGioCaoDiem = document.querySelector("#gio-cao-diem");
+let danhSachQuan = [];
+
+async function taiThongKe() {
+  try {
+    const phanHoi = await fetch("/api/don-hang/thong-ke");
+    const thongKe = await phanHoi.json();
+    if (!phanHoi.ok) throw new Error(thongKe.message || "Không thể tải thống kê.");
+
+    const soDonTheoTrangThai = new Map(thongKe.theoTrangThai.map((muc) => [muc._id, muc.soLuong]));
+    noiThongKeTrangThai.replaceChildren();
+    [...oLocTrangThai.options]
+      .filter((muc) => muc.value && muc.value !== "Tất cả")
+      .forEach((muc) => {
+        const the = document.createElement("article");
+        the.className = "the-thong-ke";
+        const ten = document.createElement("span");
+        ten.textContent = muc.value;
+        const soLuong = document.createElement("strong");
+        soLuong.textContent = soDonTheoTrangThai.get(muc.value) || 0;
+        the.append(ten, soLuong);
+        noiThongKeTrangThai.append(the);
+      });
+
+    const soDonTheoGio = new Map(thongKe.theoGio.map((muc) => [muc._id, muc.soLuong]));
+    const gioNhieuDonNhat = Math.max(0, ...soDonTheoGio.values());
+    const cacGioCaoDiem = [...soDonTheoGio.entries()]
+      .filter(([, soLuong]) => soLuong === gioNhieuDonNhat && soLuong > 0)
+      .map(([gio]) => `${String(gio).padStart(2, "0")}:00–${String((gio + 1) % 24).padStart(2, "0")}:00`);
+    const tiLeCaoDiem = thongKe.tongDon ? (gioNhieuDonNhat / thongKe.tongDon) * 100 : 0;
+    theGioCaoDiem.textContent = thongKe.tongDon
+      ? `Cao điểm: ${cacGioCaoDiem.join(", ")} · ${gioNhieuDonNhat} đơn (${tiLeCaoDiem.toLocaleString("vi-VN", { maximumFractionDigits: 1 })}% tổng đơn)`
+      : "Chưa có đơn hàng để thống kê";
+
+    noiThongKeKhungGio.replaceChildren();
+    for (let gio = 0; gio < 24; gio += 1) {
+      const soLuong = soDonTheoGio.get(gio) || 0;
+      const oGio = document.createElement("div");
+      oGio.className = `o-khung-gio${soLuong > 0 && soLuong === gioNhieuDonNhat ? " gio-cao-diem" : ""}`;
+      const nhanGio = document.createElement("span");
+      nhanGio.textContent = `${String(gio).padStart(2, "0")}:00`;
+      const soDon = document.createElement("strong");
+      soDon.textContent = `${soLuong} đơn`;
+      oGio.append(nhanGio, soDon);
+      noiThongKeKhungGio.append(oGio);
+    }
+  } catch (error) {
+    theGioCaoDiem.textContent = error.message;
+  }
+}
+
+function taoO(text) {
+  const o = document.createElement("td");
+  o.textContent = text;
+  return o;
+}
+
+async function taiDonHang() {
+  taiThongKe();
+  bangDonHang.replaceChildren();
+  const thamSo = new URLSearchParams({ tuKhoa: oTuKhoaDon.value.trim(), trangThai: oLocTrangThai.value });
+  try {
+    const phanHoi = await fetch(`/api/don-hang?${thamSo}`);
+    if (phanHoi.status === 401) {
+      window.location.href = "/html/dangnhap-private.html";
+      return;
+    }
+    const donHangs = await phanHoi.json();
+    if (!phanHoi.ok) throw new Error(donHangs.message || "Không thể tải danh sách đơn.");
+
+    if (!Array.isArray(donHangs)) throw new Error("Dữ liệu đơn hàng từ máy chủ không hợp lệ.");
+    donHangs.forEach((don, index) => {
+      const dong = document.createElement("tr");
+      dong.append(
+        taoO(String(index + 1)), taoO(don.maDon),
+        taoO(`${don.xungHo} ${don.tenKhach} · ${don.tenQuan}${don.maDonGoc ? ` (từ đơn ${don.maDonGoc})` : ""}`),
+        taoO(new Date(don.thoiGianDat).toLocaleString("vi-VN")),
+        taoO(don.soDienThoai),
+      );
+      const oTrangThai = taoO("");
+      const nhan = document.createElement("span");
+      const lopTrangThai = don.trangThai === "Đặt phòng thành công"
+        ? "dat-phong-thanh-cong"
+        : don.trangThai === "Đặt phòng thất bại"
+          ? "de-xuat-quan-moi"
+        : don.trangThai === "Khách đã chấp nhận đề xuất"
+          ? "dat-phong-thanh-cong"
+        : don.trangThai === "Khách từ chối đề xuất"
+          ? "de-xuat-quan-moi"
+        : don.trangThai === "Đề xuất quán mới"
+          ? "de-xuat-quan-moi"
+          : don.trangThai === "Đã xác nhận"
+            ? "da-xac-nhan"
+            : "dang-cho-xu-ly";
+      nhan.className = `nhan-trang-thai ${lopTrangThai}`;
+      nhan.textContent = don.trangThai;
+      oTrangThai.append(nhan);
+      dong.append(oTrangThai);
+
+      const oThaoTac = taoO("");
+      const taoNutCapNhat = (nhanNut, maTrangThai, duLieu = {}) => {
+        const cacTrangThai = {
+          confirmed: "Đã xác nhận",
+          success: "Đặt phòng thành công",
+          failed: "Đặt phòng thất bại",
+        };
+        const nut = document.createElement("button");
+        nut.type = "button";
+        nut.className = "nut-bang nut-bang-xac-nhan";
+        nut.textContent = nhanNut;
+        nut.addEventListener("click", async () => {
+          nut.disabled = true;
+          const trangThaiHienThi = cacTrangThai[maTrangThai];
+          nhan.textContent = trangThaiHienThi;
+          nhan.className = `nhan-trang-thai ${maTrangThai === "success" ? "dat-phong-thanh-cong" : maTrangThai === "failed" ? "de-xuat-quan-moi" : "da-xac-nhan"}`;
+          try {
+            const capNhat = await fetch(`/api/don-hang/${don._id}`, {
+              method: "PATCH", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ trangThai: trangThaiHienThi, ...duLieu }),
+            });
+            const ketQua = await capNhat.json();
+            if (!capNhat.ok) throw new Error(ketQua.message || "Không thể cập nhật trạng thái đơn.");
+            await taiDonHang();
+          } catch (error) {
+            alert(error.message);
+            await taiDonHang();
+          }
+        });
+        oThaoTac.append(nut);
+      };
+      if (don.trangThai === "Đang chờ xử lý") {
+        taoNutCapNhat("Xác nhận", "confirmed");
+      } else if (don.trangThai === "Đã xác nhận") {
+        taoNutCapNhat("Đặt phòng thành công", "success");
+        taoNutCapNhat("Đặt phòng thất bại", "failed");
+      } else if (["Đặt phòng thất bại", "Khách từ chối đề xuất"].includes(don.trangThai) && !don.daHuy) {
+        const chonQuan = document.createElement("select");
+        chonQuan.setAttribute("aria-label", "Chọn quán để đề xuất cho khách");
+        chonQuan.append(new Option("Chọn quán đề xuất", ""));
+        danhSachQuan
+        .filter((quan) => quan.trangThai === "Đang hoạt động" && quan.maQuan !== don.maQuan)
+          .forEach((quan) => chonQuan.append(new Option(quan.ten, quan.maQuan)));
+        oThaoTac.append(chonQuan);
+        const nutDeXuat = document.createElement("button");
+        nutDeXuat.type = "button";
+        nutDeXuat.className = "nut-bang nut-bang-de-xuat";
+        nutDeXuat.textContent = "Đề xuất quán mới";
+        nutDeXuat.disabled = true;
+        chonQuan.addEventListener("change", () => { nutDeXuat.disabled = !chonQuan.value; });
+        nutDeXuat.addEventListener("click", async () => {
+          nutDeXuat.disabled = true;
+          nhan.textContent = "Đề xuất quán mới";
+          nhan.className = "nhan-trang-thai de-xuat-quan-moi";
+          try {
+            const capNhat = await fetch(`/api/don-hang/${don._id}`, {
+              method: "PATCH", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ trangThai: "Đề xuất quán mới", maQuanDeXuat: chonQuan.value }),
+            });
+            const ketQua = await capNhat.json();
+            if (!capNhat.ok) throw new Error(ketQua.message || "Không thể gửi đề xuất.");
+            await taiDonHang();
+          } catch (error) { alert(error.message); await taiDonHang(); }
+        });
+        oThaoTac.append(nutDeXuat);
+      } else if (don.trangThai === "Đề xuất quán mới") {
+        oThaoTac.textContent = `Đã đề xuất: ${don.tenQuanDeXuat}`;
+      } else if (don.daHuy) {
+        oThaoTac.textContent = "Khách đã hủy đặt phòng";
+      } else if (don.trangThai === "Khách đã chấp nhận đề xuất") {
+        oThaoTac.textContent = `Khách chấp nhận · Đơn tiếp theo: ${don.maDonTiepTheo}`;
+      } else {
+        oThaoTac.textContent = "Hoàn tất";
+      }
+      dong.append(oThaoTac);
+      bangDonHang.append(dong);
+    });
+    if (!donHangs.length) {
+      const dong = document.createElement("tr");
+      const o = taoO("Chưa có đơn hàng phù hợp.");
+      o.colSpan = 7;
+      dong.append(o);
+      bangDonHang.append(dong);
+    }
+  } catch (error) {
+    const dong = document.createElement("tr");
+    const o = taoO(error.message);
+    o.colSpan = 7;
+    dong.append(o);
+    bangDonHang.append(dong);
+  }
+}
+
+fetch("/api/quan-cong-khai")
+  .then((response) => response.ok ? response.json() : [])
+  .then((quan) => { danhSachQuan = Array.isArray(quan) ? quan : []; })
+  .catch(() => { danhSachQuan = []; })
+  .finally(taiDonHang);
+
+nutTimDon.addEventListener("click", taiDonHang);
+nutLamMoi.addEventListener("click", taiDonHang);
+oTuKhoaDon.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") taiDonHang();
+});
+oLocTrangThai.addEventListener("change", taiDonHang);

@@ -29,6 +29,7 @@ bieuMauNoiBo.addEventListener("submit", async (suKien) => {
     });
     const ketQua = await phanHoi.json();
     if (!phanHoi.ok) throw new Error(ketQua.message);
+
     window.location.href = "/admin";
   } catch (error) {
     hienThiLoi(error.message || "Đăng nhập không thành công.");

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Đăng nhập | Karaoke Together</title>
     <link rel="stylesheet" href="../css/dangnhap.css" />
+    <script src="../js/xac-thuc-khach.js" defer></script>
   </head>
   <body>
     <main class="khung-xac-thuc">
@@ -20,13 +21,17 @@
             Đăng nhập để tiếp tục đặt phòng và tận hưởng những giờ hát vui vẻ.
           </p>
 
-          <form class="bieu-mau-xac-thuc">
+          <form class="bieu-mau-xac-thuc" id="form-dang-nhap" data-che-do="dang-nhap">
+            <p class="thong-bao-xac-thuc" role="status" aria-live="polite"></p>
             <div class="nhom-truong">
-              <label for="email-dang-nhap">Email hoặc số điện thoại</label>
+              <label for="email-dang-nhap">Email</label>
               <input
                 id="email-dang-nhap"
-                type="text"
-                placeholder="Nhập email hoặc số điện thoại"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                placeholder="Nhập email"
               />
             </div>
 
@@ -34,7 +39,10 @@
               <label for="mat-khau-dang-nhap">Mật khẩu</label>
               <input
                 id="mat-khau-dang-nhap"
+                name="matKhau"
                 type="password"
+                autocomplete="current-password"
+                required
                 placeholder="Nhập mật khẩu"
               />
             </div>

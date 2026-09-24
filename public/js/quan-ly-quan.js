@@ -51,7 +51,10 @@ function layDuLieuForm() {
     soDienThoai: document.querySelector("#so-dien-thoai-quan").value.trim(),
     diaChiChiTiet: document.querySelector("#dia-chi-quan").value.trim(),
     quanHuyen: document.querySelector("#quan-huyen").value,
+    anhQuan: document.querySelector("#anh-quan").value.trim(),
     chietKhau: Number(document.querySelector("#chiet-khau").value || 0),
+    giaMin: Number(document.querySelector("#gia-min").value),
+    giaMax: Number(document.querySelector("#gia-max").value),
     trangThai: document.querySelector("#trang-thai-quan").value,
   };
 }
@@ -62,7 +65,10 @@ function dienDuLieuForm(quan) {
   document.querySelector("#so-dien-thoai-quan").value = quan.soDienThoai || "";
   document.querySelector("#dia-chi-quan").value = quan.diaChiChiTiet || "";
   document.querySelector("#quan-huyen").value = quan.quanHuyen || "";
+  document.querySelector("#anh-quan").value = quan.anhQuan || "";
   document.querySelector("#chiet-khau").value = quan.chietKhau ?? 0;
+  document.querySelector("#gia-min").value = quan.giaMin ?? 0;
+  document.querySelector("#gia-max").value = quan.giaMax ?? 0;
   document.querySelector("#trang-thai-quan").value =
     quan.trangThai || "Đang hoạt động";
   maQuanDangChon = quan._id;
@@ -73,6 +79,10 @@ function lamMoiForm() {
   bieuMau.reset();
   maQuanDangChon = null;
   layMaQuanMoi();
+}
+
+function dinhDangTien(gia) {
+  return `${Number(gia || 0).toLocaleString("vi-VN")} ₫`;
 }
 
 function taoO(text) {
@@ -87,7 +97,7 @@ function hienThiBang(danhSach) {
   if (!danhSach.length) {
     const dongTrong = document.createElement("tr");
     const oTrong = taoO("Chưa có dữ liệu quán");
-    oTrong.colSpan = 9;
+    oTrong.colSpan = 11;
     dongTrong.append(oTrong);
     bangDanhSach.append(dongTrong);
     return;
@@ -104,6 +114,8 @@ function hienThiBang(danhSach) {
       taoO(quan.diaChiChiTiet),
       taoO(quan.quanHuyen),
       taoO(`${quan.chietKhau}%`),
+      taoO(dinhDangTien(quan.giaMin)),
+      taoO(dinhDangTien(quan.giaMax)),
     );
 
     const oTrangThai = document.createElement("td");
