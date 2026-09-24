@@ -82,6 +82,30 @@ select {
   font-size: 0.9rem;
   font-weight: 700;
 }
+.tai-khoan[hidden] {
+  display: none;
+}
+.menu-tai-khoan { position: relative; }
+.nut-avatar {
+  display: grid; width: 44px; height: 44px; padding: 9px; place-items: center;
+  color: var(--xanh-dam); background: #e8f5f5; border: 1px solid var(--vien);
+  border-radius: 50%; cursor: pointer;
+}
+.nut-avatar svg { width: 100%; fill: none; stroke: currentColor; stroke-linecap: round; stroke-width: 1.8; }
+.menu-tai-khoan-noi-dung {
+  position: absolute; top: calc(100% + 10px); right: 0; z-index: 20; display: none;
+  width: 210px; padding: 7px; background: #fff; border: 1px solid var(--vien);
+  border-radius: 12px; box-shadow: 0 14px 34px #102a3a24;
+}
+.menu-tai-khoan:hover .menu-tai-khoan-noi-dung,
+.menu-tai-khoan:focus-within .menu-tai-khoan-noi-dung,
+.menu-tai-khoan.dang-mo .menu-tai-khoan-noi-dung { display: grid; }
+.menu-tai-khoan-noi-dung a, .nut-menu-dang-xuat, .nut-menu-thong-bao {
+  padding: 11px 12px; color: #263746; text-align: left; background: transparent;
+  border: 0; border-radius: 8px; font: inherit; font-size: 0.9rem; cursor: pointer;
+}
+.menu-tai-khoan-noi-dung a:hover, .nut-menu-dang-xuat:hover, .nut-menu-thong-bao:hover { background: #eef7f8; }
+.nut-menu-dang-xuat { color: #b42318; }
 .nut-dang-ky {
   padding: 10px 16px;
   color: #fff;

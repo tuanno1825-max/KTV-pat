@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Đăng ký gói Karaoke Together VIP và gửi yêu cầu hoàn tiền sau buổi hát." />
+    <title>Ưu đãi VIP | Karaoke Together</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/an-tai-khoan-khach.js?v=6" defer></script>
+    <script src="../js/uu-dai-vip.js?v=4" defer></script>
+  </head>
+  <body>
+    <header>
+      <nav class="thanh-dau">
+        <div class="khung-dau">
+          <div class="hang-thuong-hieu">
+            <a class="logo-kara" href="/" aria-label="Trang chủ"><img src="../image/logo.png" alt="Karaoke Together" /></a>
+            <div class="tieu-de-trang">
+              <p>KARAOKE TOGETHER</p>
+              <h1>Ưu đãi VIP</h1>
+              <span>Gói trải nghiệm 100.000đ / tháng</span>
+            </div>
+            <div class="tai-khoan">
+              <a class="nut-tai-khoan nut-dang-nhap" href="/html/dangnhap.html">Đăng nhập</a>
+              <a class="nut-tai-khoan nut-dang-ky" href="/html/dangki.html">Đăng ký</a>
+            </div>
+          </div>
+          <div class="thanh-menu">
+            <ul class="menu-ngang">
+              <li><a href="/">Trang chủ</a></li>
+              <li><a href="/html/datphong.html">Đặt phòng</a></li>
+              <li><a href="/html/tai-khoan.html#goi-vip">Quản lý gói VIP</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="uu-dai-vip" id="uu-dai">
+        <div class="uu-dai-vip-noi-dung">
+          <div class="tieu-de-uu-dai">
+            <p class="nhan-banner">KARAOKE TOGETHER VIP</p>
+            <h2>Hát vui hơn, nhận hoàn tiền 5–20%</h2>
+            <p>Nâng cấp tài khoản VIP để gửi yêu cầu hoàn tiền cho đơn hát thành công. Nhân viên kiểm tra hóa đơn, quyết định mức hoàn và phản hồi trong mục Thông báo.</p>
+          </div>
+          <div class="the-uu-dai-vip">
+            <p id="trang-thai-vip">Đang kiểm tra tài khoản...</p>
+            <div id="yeu-cau-vip-dang-xuat" hidden>
+              <p>Vui lòng <a href="/html/dangnhap.html">đăng nhập</a> để đăng ký VIP và gửi yêu cầu hoàn tiền.</p>
+            </div>
+            <div id="yeu-cau-nang-cap-vip" hidden>
+              <p>Vui lòng mua gói trải nghiệm VIP 100.000đ/tháng để sử dụng dịch vụ này.</p>
+              <button class="nut-gui-hoan-tien" id="nut-nang-cap-vip" type="button">Mua gói trải nghiệm VIP · 100.000đ/tháng</button>
+              <p id="thong-bao-nang-cap-vip" role="status" aria-live="polite"></p>
+            </div>
+            <form id="form-hoan-tien" hidden>
+              <label for="don-hoan-tien">Đơn đặt phòng đã hoàn tất</label>
+              <select id="don-hoan-tien" name="maDon" required>
+                <option value="">Đang tải đơn đủ điều kiện...</option>
+              </select>
+              <label for="hoa-don-hoan-tien">Ảnh hóa đơn (JPG, PNG hoặc WEBP, tối đa 5 MB)</label>
+              <input id="hoa-don-hoan-tien" name="hoaDon" type="file" accept="image/jpeg,image/png,image/webp" required />
+              <label for="ngan-hang-hoan-tien">Ngân hàng</label>
+              <input id="ngan-hang-hoan-tien" name="nganHang" maxlength="100" required />
+              <label for="so-tai-khoan-hoan-tien">Số tài khoản</label>
+              <input id="so-tai-khoan-hoan-tien" name="soTaiKhoan" inputmode="numeric" maxlength="40" required />
+              <label for="ten-thu-huong-hoan-tien">Tên người thụ hưởng</label>
+              <input id="ten-thu-huong-hoan-tien" name="tenThuHuong" maxlength="100" required />
+              <button class="nut-gui-hoan-tien" type="submit">Gửi yêu cầu hoàn tiền</button>
+              <p id="thong-bao-hoan-tien" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

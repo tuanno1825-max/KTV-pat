@@ -88,6 +88,36 @@ body {
   padding: 0 28px;
 }
 
+.khung-yeu-cau-hoan-tien {
+  margin: 22px 0;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #f0d7b5;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.dau-yeu-cau-hoan-tien { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.dau-yeu-cau-hoan-tien h2 { margin: 0 0 6px; }
+.dau-yeu-cau-hoan-tien p { margin: 0 0 14px; color: #667085; }
+.dau-yeu-cau-hoan-tien button,
+.nut-quyet-dinh-hoan-tien,
+.link-hoa-don-hoan-tien {
+  display: inline-block; padding: 9px 12px; color: #fff; background: #9a5b13;
+  border: 0; border-radius: 6px; text-decoration: none; font: inherit; cursor: pointer;
+}
+.link-hoa-don-hoan-tien { margin-right: 6px; background: #175cd3; }
+.nut-quyet-dinh-hoan-tien.tu-choi { background: #b42318; }
+.nut-quyet-dinh-hoan-tien:disabled { opacity: .55; cursor: wait; }
+.o-phan-tram-hoan { width: 112px; min-height: 36px; padding: 7px; border: 1px solid #d0d5dd; border-radius: 6px; }
+.hang-yeu-cau-hoan-tien { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 16px 0; border-top: 1px solid #eaecf0; }
+.chi-tiet-hoan-tien { line-height: 1.65; overflow-wrap: anywhere; }
+.thao-tac-hoan-tien { display: flex; align-items: flex-start; gap: 8px; }
+@media (max-width: 700px) {
+  .dau-yeu-cau-hoan-tien, .hang-yeu-cau-hoan-tien { display: block; }
+  .dau-yeu-cau-hoan-tien button { margin-bottom: 12px; }
+  .thao-tac-hoan-tien { margin-top: 10px; }
+}
+
 /* --- KHU VỰC TÌM KIẾM & BỘ LỌC --- */
 .khung-tim-kiem {
   background: #fff;

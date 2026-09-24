@@ -7,7 +7,11 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 // Import router quan ly quan tu file routes
-const adminRoutes = require("./routes/admin-routes");
+const xacThucRoutes = require("./routes/xac-thuc-routes");
+const quanRoutes = require("./routes/quan-routes");
+const donHangRoutes = require("./routes/don-hang-routes");
+const hoanTienRoutes = require("./routes/hoan-tien-routes");
+const { yeuCauDangNhap } = require("./middleware/xac-thuc-noi-bo");
 
 // Khoi tao ung dung Express
 const app = express();
@@ -15,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware: cho phep server doc du lieu JSON tu frontend
-app.use(express.json());
+app.use(express.json({ limit: "8mb" }));
 
 // Phuc vu cac file HTML, CSS, JS trong thu muc public
 app.use(express.static(path.join(__dirname, "public")));
@@ -28,18 +32,21 @@ app.get("/", (req, res) => {
 });
 
 // Duong dan ngan cho cac trang quan tri va tai khoan
-app.get("/admin", adminRoutes.yeuCauDangNhap, (req, res) => {
+app.get("/admin", yeuCauDangNhap, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "admin.html"));
 });
 //Đường dẫn trang quản lý đơn hàng cho Nhân viên
-app.get("/quan-ly-don-hang", adminRoutes.yeuCauDangNhap, (req, res) => {
+app.get("/quan-ly-don-hang", yeuCauDangNhap, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "qldh.html"));
 });
 app.get("/dangnhap", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "dangnhap.html"));
 });
 // Su dung router quan ly quan cho cac API
-app.use("/api", adminRoutes);
+app.use("/api", xacThucRoutes);
+app.use("/api", quanRoutes);
+app.use("/api", donHangRoutes);
+app.use("/api/hoan-tien", hoanTienRoutes);
 
 async function khoiDongMayChu() {
   app.listen(PORT, () => {

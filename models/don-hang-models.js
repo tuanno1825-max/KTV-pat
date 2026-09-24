@@ -6,6 +6,7 @@ const DonHangSchema = new mongoose.Schema(
     maQuan: { type: String, required: true, trim: true },
     tenQuan: { type: String, required: true, trim: true },
     tenKhach: { type: String, required: true, trim: true },
+    emailKhach: { type: String, default: "", trim: true, lowercase: true },
     xungHo: { type: String, required: true, enum: ["Anh", "Chị"] },
     soDienThoai: { type: String, required: true, trim: true },
     thoiGianCheckIn: { type: String, required: true },

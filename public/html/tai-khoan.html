@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý gói VIP | Karaoke Together</title>
+    <link rel="stylesheet" href="../css/datphong.css" />
+    <script src="../js/an-tai-khoan-khach.js?v=6" defer></script>
+    <script src="../js/tai-khoan-khach.js?v=5" defer></script>
+    <style>
+      .quan-ly-tai-khoan { width: min(620px, calc(100% - 32px)); margin: 72px auto; padding: 32px; background: #fff; border: 1px solid #dce8eb; border-radius: 18px; box-shadow: 0 18px 48px #17333d14; }
+      .quan-ly-tai-khoan h1 { margin-top: 0; color: #075c69; }
+      .thong-tin-tai-khoan { padding: 16px; background: #f4f8fa; border-radius: 10px; }
+      .muc-tai-khoan { margin-top: 28px; padding-top: 18px; border-top: 1px solid #dce8eb; }
+      .muc-tai-khoan h2 { color: #075c69; }
+      .bang-lich-su { width: 100%; border-collapse: collapse; text-align: left; }
+      .bang-lich-su th, .bang-lich-su td { padding: 10px 6px; border-bottom: 1px solid #dce8eb; }
+      .nut-nang-cap-vip { display: inline-block; margin-top: 8px; padding: 10px 14px; color: #fff; background: #087e8b; border-radius: 8px; font-weight: 700; }
+      .nut-dang-xuat { margin-top: 20px; padding: 11px 18px; color: #fff; background: #b42318; border: 0; border-radius: 9px; cursor: pointer; font-weight: 700; }
+      #thong-bao { min-height: 1.5em; }
+      @media (max-width: 520px) { .quan-ly-tai-khoan { margin: 32px auto; padding: 22px; } }
+    </style>
+  </head>
+  <body>
+    <header class="thanh-dau">
+      <div class="khung-dau">
+        <a class="logo-kara" href="/" aria-label="Trang chủ"><img src="../image/logo.png" alt="Karaoke Together" /></a>
+        <nav class="menu-ngang" aria-label="Điều hướng chính">
+          <a href="/">Trang chủ</a>
+          <a href="/html/datphong.html">Đặt phòng</a>
+          <a href="/html/uu-dai-vip.html">Ưu đãi VIP</a>
+        </nav>
+        <div class="tai-khoan">
+          <a href="/html/dangnhap.html">Đăng nhập</a>
+          <a class="nut-dang-ky" href="/html/dangki.html">Đăng ký</a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="quan-ly-tai-khoan">
+        <p class="nhan-nho">KARAOKE TOGETHER / HỘI VIÊN</p>
+        <h1>Quản lý gói VIP</h1>
+        <div class="thong-tin-tai-khoan">Email: <strong id="email-tai-khoan">Đang tải...</strong></div>
+        <section class="muc-tai-khoan" id="goi-vip">
+          <h2>Gói hội viên</h2>
+          <p id="trang-thai-goi-vip">Đang tải trạng thái gói...</p>
+          <div id="yeu-cau-dang-ky-vip" hidden>
+            <p>Tài khoản thường cần đăng ký gói VIP 100.000đ/tháng để sử dụng dịch vụ hoàn tiền.</p>
+            <a class="nut-nang-cap-vip" href="/html/uu-dai-vip.html">Đăng ký gói VIP</a>
+          </div>
+        </section>
+        <section class="muc-tai-khoan" id="yeu-cau-hoan-tien">
+          <h2>Các yêu cầu hoàn tiền</h2>
+          <div id="noi-dung-yeu-cau-hoan-tien">Đang tải yêu cầu...</div>
+        </section>
+        <section class="muc-tai-khoan" id="lich-su">
+          <h2>Lịch sử đơn đặt</h2>
+          <div id="noi-dung-lich-su">Đang tải lịch sử...</div>
+        </section>
+        <p id="thong-bao" role="status" aria-live="polite"></p>
+        <button class="nut-dang-xuat" id="nut-dang-xuat" type="button">Đăng xuất</button>
+      </section>
+    </main>
+  </body>
+</html>
