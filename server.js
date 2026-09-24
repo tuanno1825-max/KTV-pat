@@ -1,3 +1,4 @@
+﻿// $env:MONGODB_URI="mongodb://127.0.0.1:27017/admin"
 require("dotenv").config();
 
 // Import cac thu vien can thiet cho ung dung Express
@@ -46,15 +47,22 @@ async function khoiDongMayChu() {
   });
 
   if (!MONGODB_URI) {
-    console.warn("Thiếu MONGODB_URI; trang web vẫn chạy nhưng các chức năng cần MongoDB sẽ không hoạt động.");
+    console.warn(
+      "Thiếu MONGODB_URI; trang web vẫn chạy nhưng các chức năng cần MongoDB sẽ không hoạt động.",
+    );
     return;
   }
 
   try {
     await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 10000 });
-    console.log(`Đã kết nối MongoDB thành công: database ${mongoose.connection.name}`);
+    console.log(
+      `Đã kết nối MongoDB thành công: database ${mongoose.connection.name}`,
+    );
   } catch (error) {
-    console.error("Không kết nối được MongoDB; trang web vẫn chạy nhưng các chức năng cần dữ liệu sẽ tạm thời không hoạt động:", error.message);
+    console.error(
+      "Không kết nối được MongoDB; trang web vẫn chạy nhưng các chức năng cần dữ liệu sẽ tạm thời không hoạt động:",
+      error.message,
+    );
   }
 }
 

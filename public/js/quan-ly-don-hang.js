@@ -4,7 +4,6 @@ const oLocTrangThai = document.querySelector("#loc-trang-thai-don");
 const nutTimDon = document.querySelector(".nut-tim-don");
 const nutLamMoi = document.querySelector(".nut-hien-thi-don");
 const noiThongKeTrangThai = document.querySelector("#thong-ke-trang-thai");
-const noiThongKeKhungGio = document.querySelector("#thong-ke-khung-gio");
 const theGioCaoDiem = document.querySelector("#gio-cao-diem");
 let danhSachQuan = [];
 
@@ -13,6 +12,11 @@ async function taiThongKe() {
     const phanHoi = await fetch("/api/don-hang/thong-ke");
     const thongKe = await phanHoi.json();
     if (!phanHoi.ok) throw new Error(thongKe.message || "Không thể tải thống kê.");
+
+    const gioCaoDiem = thongKe.gioCaoDiem;
+    theGioCaoDiem.textContent = gioCaoDiem
+      ? `Khung giờ cao điểm: ${String(gioCaoDiem.gio).padStart(2, "0")}:00–${String((gioCaoDiem.gio + 1) % 24).padStart(2, "0")}:00 · ${gioCaoDiem.soLuong} đơn`
+      : "Chưa có đơn hàng để xác định khung giờ cao điểm";
 
     const soDonTheoTrangThai = new Map(thongKe.theoTrangThai.map((muc) => [muc._id, muc.soLuong]));
     noiThongKeTrangThai.replaceChildren();
@@ -28,34 +32,11 @@ async function taiThongKe() {
         the.append(ten, soLuong);
         noiThongKeTrangThai.append(the);
       });
-
-    const soDonTheoGio = new Map(thongKe.theoGio.map((muc) => [muc._id, muc.soLuong]));
-    const gioNhieuDonNhat = Math.max(0, ...soDonTheoGio.values());
-    const cacGioCaoDiem = [...soDonTheoGio.entries()]
-      .filter(([, soLuong]) => soLuong === gioNhieuDonNhat && soLuong > 0)
-      .map(([gio]) => `${String(gio).padStart(2, "0")}:00–${String((gio + 1) % 24).padStart(2, "0")}:00`);
-    const tiLeCaoDiem = thongKe.tongDon ? (gioNhieuDonNhat / thongKe.tongDon) * 100 : 0;
-    theGioCaoDiem.textContent = thongKe.tongDon
-      ? `Cao điểm: ${cacGioCaoDiem.join(", ")} · ${gioNhieuDonNhat} đơn (${tiLeCaoDiem.toLocaleString("vi-VN", { maximumFractionDigits: 1 })}% tổng đơn)`
-      : "Chưa có đơn hàng để thống kê";
-
-    noiThongKeKhungGio.replaceChildren();
-    for (let gio = 0; gio < 24; gio += 1) {
-      const soLuong = soDonTheoGio.get(gio) || 0;
-      const oGio = document.createElement("div");
-      oGio.className = `o-khung-gio${soLuong > 0 && soLuong === gioNhieuDonNhat ? " gio-cao-diem" : ""}`;
-      const nhanGio = document.createElement("span");
-      nhanGio.textContent = `${String(gio).padStart(2, "0")}:00`;
-      const soDon = document.createElement("strong");
-      soDon.textContent = `${soLuong} đơn`;
-      oGio.append(nhanGio, soDon);
-      noiThongKeKhungGio.append(oGio);
-    }
   } catch (error) {
+    noiThongKeTrangThai.textContent = error.message;
     theGioCaoDiem.textContent = error.message;
   }
 }
-
 function taoO(text) {
   const o = document.createElement("td");
   o.textContent = text;

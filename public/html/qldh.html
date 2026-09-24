@@ -25,6 +25,22 @@
     <!-- Khung nội dung chính -->
     <main class="khung-quan-tri">
       <!-- Khu vực bộ lọc và tìm kiếm -->
+
+
+      <!-- Bảng danh sách đơn hàng -->
+      <section class="khung-thong-ke" aria-labelledby="tieu-de-thong-ke">
+        <div class="dau-thong-ke">
+          <div>
+            <h2 id="tieu-de-thong-ke">Thống kê đơn hàng</h2>
+            <p>Tổng hợp số đơn theo trạng thái</p>
+          </div>
+          <div id="gio-cao-diem" class="the-gio-cao-diem" aria-live="polite">
+            Đang tải khung giờ cao điểm...
+          </div>
+        </div>
+        <div id="thong-ke-trang-thai" class="luoi-thong-ke" aria-live="polite"></div>
+      </section>
+
       <section class="khung-tim-kiem">
         <div class="nhom-tim-kiem">
           <input
@@ -49,20 +65,6 @@
         </div>
       </section>
 
-      <!-- Bảng danh sách đơn hàng -->
-      <section class="khung-thong-ke" aria-labelledby="tieu-de-thong-ke">
-        <div class="dau-thong-ke">
-          <div>
-            <h2 id="tieu-de-thong-ke">Thống kê đơn hàng</h2>
-            <p>Tổng hợp theo trạng thái và giờ khách gửi yêu cầu</p>
-          </div>
-          <div id="gio-cao-diem" class="the-gio-cao-diem">Đang tải thống kê...</div>
-        </div>
-        <div id="thong-ke-trang-thai" class="luoi-thong-ke" aria-live="polite"></div>
-        <h3 class="tieu-de-khung-gio">Số đơn theo khung giờ đặt</h3>
-        <div id="thong-ke-khung-gio" class="luoi-khung-gio" aria-live="polite"></div>
-      </section>
-
       <section class="khung-bang">
         <table class="bang-du-lieu">
           <thead>
@@ -84,6 +86,6 @@
     </main>
 
     <!-- File JavaScript xử lý logic cho trang quản lý đơn hàng -->
-    <script src="/js/quan-ly-don-hang.js?v=9"></script>
+    <script src="/js/quan-ly-don-hang.js?v=11"></script>
   </body>
 </html>

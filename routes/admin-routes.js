@@ -323,10 +323,14 @@ router.get("/don-hang/thong-ke", yeuCauDangNhap, async (req, res) => {
             { $group: { _id: "$trangThai", soLuong: { $sum: 1 } } },
           ],
           theoGio: [
-            { $group: {
-              _id: { $hour: { date: "$thoiGianDat", timezone: "Asia/Bangkok" } },
-              soLuong: { $sum: 1 },
-            } },
+            {
+              $group: {
+                _id: { $hour: { date: "$thoiGianDat", timezone: "Asia/Bangkok" } },
+                soLuong: { $sum: 1 },
+              },
+            },
+            { $sort: { soLuong: -1, _id: 1 } },
+            { $limit: 1 },
           ],
           tong: [{ $count: "soLuong" }],
         },
@@ -336,7 +340,9 @@ router.get("/don-hang/thong-ke", yeuCauDangNhap, async (req, res) => {
     res.json({
       tongDon: ketQua.tong?.[0]?.soLuong || 0,
       theoTrangThai: ketQua.theoTrangThai || [],
-      theoGio: ketQua.theoGio || [],
+      gioCaoDiem: ketQua.theoGio?.[0]
+        ? { gio: ketQua.theoGio[0]._id, soLuong: ketQua.theoGio[0].soLuong }
+        : null,
     });
   } catch (error) {
     res.status(500).json({ message: "Không thể tải thống kê đơn hàng." });
