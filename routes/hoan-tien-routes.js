@@ -66,8 +66,20 @@ function layPhienKhach(req, res) {
   return phien;
 }
 
+function layTrangThaiVip(nguoiDung) {
+  if (!nguoiDung) return null;
+  const truongTrangThai = Object.entries(nguoiDung).find(([tenTruong]) =>
+    tenTruong
+      .normalize("NFKC")
+      .replace(/[\u200B-\u200D\uFEFF]/g, "")
+      .replace(/\s+/g, "")
+      .toLowerCase() === "viptrangthai",
+  );
+  return truongTrangThai?.[1] ?? null;
+}
+
 function dangLaVip(nguoiDung) {
-  const trangThai = String(nguoiDung?.vipTrangThai || "").trim().toUpperCase();
+  const trangThai = String(layTrangThaiVip(nguoiDung) || "").trim().toUpperCase();
   const hetHan = nguoiDung?.vipHetHan ? new Date(nguoiDung.vipHetHan) : null;
   return trangThai === "VIP" && (!hetHan || hetHan > new Date());
 }
@@ -88,11 +100,13 @@ router.get("/vip-trang-thai", async (req, res) => {
     }
 
     const vip = dangLaVip(nguoiDung);
+    const vipTrangThaiTrongDatabase = layTrangThaiVip(nguoiDung);
     res.json({
       vip,
       timThayTaiKhoan: Boolean(nguoiDung),
-      trangThai: nguoiDung?.vipTrangThai || "Chưa đăng ký",
-      vipTrangThaiTrongDatabase: nguoiDung?.vipTrangThai ?? null,
+      trangThai: vipTrangThaiTrongDatabase || "Chưa đăng ký",
+      vipTrangThaiTrongDatabase,
+      cacTruongLienQuanVip: Object.keys(nguoiDung || {}).filter((tenTruong) => /vip/i.test(tenTruong)),
       taiKhoanId: nguoiDung?._id?.toString() || null,
       vipHetHan: nguoiDung?.vipHetHan || null,
       emailTaiKhoan: nguoiDung?.email || null,
