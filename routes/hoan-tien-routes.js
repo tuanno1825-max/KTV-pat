@@ -77,15 +77,14 @@ router.get("/vip-trang-thai", async (req, res) => {
   if (!phien) return;
   try {
     const email = String(phien.taiKhoan || "").trim().toLowerCase();
-    const truongCanDoc = "email vipTrangThai vipHetHan";
-    let nguoiDung = await NguoiDung.findOne({ email }).select(truongCanDoc).lean();
+    let nguoiDung = await NguoiDung.collection.findOne({ email });
 
     // Hỗ trợ tài khoản được sửa trực tiếp trên Atlas có email viết hoa hoặc dư khoảng trắng.
     if (!nguoiDung && email) {
       const emailAnToan = email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      nguoiDung = await NguoiDung.findOne({
+      nguoiDung = await NguoiDung.collection.findOne({
         email: { $regex: `^\\s*${emailAnToan}\\s*$`, $options: "i" },
-      }).select(truongCanDoc).lean();
+      });
     }
 
     const vip = dangLaVip(nguoiDung);
@@ -94,6 +93,9 @@ router.get("/vip-trang-thai", async (req, res) => {
       timThayTaiKhoan: Boolean(nguoiDung),
       trangThai: nguoiDung?.vipTrangThai || "Chưa đăng ký",
       vipHetHan: nguoiDung?.vipHetHan || null,
+      emailTaiKhoan: nguoiDung?.email || null,
+      database: NguoiDung.db.name,
+      collection: NguoiDung.collection.name,
     });
   } catch {
     res.status(500).json({ message: "Không thể kiểm tra trạng thái VIP." });
