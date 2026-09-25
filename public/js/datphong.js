@@ -154,6 +154,7 @@ function taoTheQuan(quan) {
   the.className = "the-quan";
   const chietKhau = Number(quan.chietKhau ?? 0);
   const mucGiamTrucTiep = chietKhau >= 15 ? chietKhau / 2 : null;
+  const quanDangHoatDong = quan.trangThai === "Đang hoạt động";
   const dinhDangTien = (gia) => `${Number(gia || 0).toLocaleString("vi-VN")} ₫`;
   const noiDungAnh = quan.anhQuan
     ? `<img src="../image/${quan.anhQuan}" alt="Ảnh ${quan.ten}" />`
@@ -178,7 +179,7 @@ function taoTheQuan(quan) {
       <div><span>Giá phòng / giờ</span><strong>${dinhDangTien(quan.giaMin)} - ${dinhDangTien(quan.giaMax)}</strong></div>
       ${mucGiamTrucTiep === null ? "" : `<div><span>Giảm giá trực tiếp</span><strong>${mucGiamTrucTiep}%</strong></div>`}
     </div>
-    <button class="nut-dat-phong" type="button" data-ten-quan="${quan.ten}">Chọn quán này <span aria-hidden="true">→</span></button>
+    <button class="nut-dat-phong" type="button" data-ten-quan="${quan.ten}" ${quanDangHoatDong ? "" : "disabled"}>${quanDangHoatDong ? "Chọn quán này" : "Quán tạm ngưng"} <span aria-hidden="true">→</span></button>
   `;
   return the;
 }

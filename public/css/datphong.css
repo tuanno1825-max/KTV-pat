@@ -449,6 +449,11 @@ select {
   color: #fff;
   background: var(--xanh);
 }
+.nut-dat-phong:disabled {
+  color: var(--chu-phu);
+  background: #edf1f2;
+  cursor: not-allowed;
+}
 .khong-co-ket-qua {
   padding: 60px 20px;
   text-align: center;
