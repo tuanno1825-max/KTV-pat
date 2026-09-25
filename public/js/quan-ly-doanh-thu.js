@@ -60,7 +60,7 @@ function veDanhSach(donHangs) {
   if (!donHangs.length) {
     const dong = document.createElement("tr");
     const oTrong = document.createElement("td");
-    oTrong.colSpan = 7;
+    oTrong.colSpan = 10;
     oTrong.textContent = "Chưa có đơn khách đến phù hợp.";
     dong.append(oTrong);
     danhSachEl.append(dong);
@@ -76,8 +76,14 @@ function veDanhSach(donHangs) {
     khach.textContent = `${don.tenKhach || "—"}${don.soDienThoai ? ` · ${don.soDienThoai}` : ""}`;
     const quan = document.createElement("td");
     quan.textContent = don.tenQuan || "—";
-    const gioDen = document.createElement("td");
-    gioDen.textContent = don.thoiGianCheckIn || "—";
+    const thoiGianDat = document.createElement("td");
+    thoiGianDat.textContent = dinhDangNgay(don.thoiGianDat);
+    const chietKhau = document.createElement("td");
+    chietKhau.textContent = `${Number(don.chietKhau || 0)}%`;
+    const giamGiaKhach = document.createElement("td");
+    giamGiaKhach.textContent = `${Number(don.giamGiaKhach || 0)}%`;
+    const thucNhan = document.createElement("td");
+    thucNhan.textContent = `${Number(don.thucNhanPhanTram ?? 100)}%`;
     const tien = document.createElement("td");
     tien.textContent = don.doanhThuDaThu ? dinhDangTien(don.soTienDaThu) : "—";
     const trangThai = document.createElement("td");
@@ -99,7 +105,7 @@ function veDanhSach(donHangs) {
       nutThu.addEventListener("click", () => moHopThoai(don));
       thaoTac.append(nutThu);
     }
-    dong.append(maDon, khach, quan, gioDen, tien, trangThai, thaoTac);
+    dong.append(maDon, khach, quan, thoiGianDat, chietKhau, giamGiaKhach, thucNhan, tien, trangThai, thaoTac);
     danhSachEl.append(dong);
   }
 }
@@ -123,7 +129,7 @@ async function taiDoanhThu() {
     thongBaoEl.textContent = error.message;
     danhSachDuLieu = [];
     apDungThongKe();
-    danhSachEl.innerHTML = '<tr><td colspan="7">Không thể tải dữ liệu doanh thu.</td></tr>';
+    danhSachEl.innerHTML = '<tr><td colspan="10">Không thể tải dữ liệu doanh thu.</td></tr>';
   }
 }
 

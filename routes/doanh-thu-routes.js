@@ -3,6 +3,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("crypto");
 const DonHang = require("../models/don-hang-models");
+const Quan = require("../models/admin-models");
 const { yeuCauDangNhap } = require("../middleware/xac-thuc-noi-bo");
 
 const router = express.Router();
@@ -43,10 +44,17 @@ router.get("/doanh-thu", yeuCauDangNhap, async (req, res) => {
       ];
     }
     const donHangs = await DonHang.find(boLoc)
-      .select("maDon tenKhach emailKhach tenQuan soDienThoai thoiGianCheckIn thoiGianDat thoiGianKhachDen doanhThuDaThu soTienDaThu hoaDonQuanThu hoaDonChuyenTien thoiGianThuTien nhanVienThuTien")
+      .select("maDon maQuan tenKhach emailKhach tenQuan soDienThoai thoiGianCheckIn thoiGianDat thoiGianKhachDen doanhThuDaThu soTienDaThu hoaDonQuanThu hoaDonChuyenTien thoiGianThuTien nhanVienThuTien")
       .sort({ thoiGianDat: -1 })
       .lean();
-    res.json(donHangs);
+    const maQuans = [...new Set(donHangs.map((don) => don.maQuan).filter(Boolean))];
+    const quans = await Quan.find({ maQuan: { $in: maQuans } }).select("maQuan chietKhau").lean();
+    const chietKhauTheoQuan = new Map(quans.map((quan) => [quan.maQuan, Number(quan.chietKhau || 0)]));
+    res.json(donHangs.map((don) => {
+      const chietKhau = chietKhauTheoQuan.get(don.maQuan) || 0;
+      const giamGiaKhach = chietKhau >= 15 ? chietKhau / 2 : 0;
+      return { ...don, chietKhau, giamGiaKhach, thucNhanPhanTram: 100 - giamGiaKhach };
+    }));
   } catch {
     res.status(500).json({ message: "Không thể tải danh sách doanh thu." });
   }
