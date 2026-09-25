@@ -51,7 +51,7 @@ async function khoiTaoUuDaiVip() {
     vungNangCap.hidden = false;
     return;
   }
-  trangThai.textContent = `Tài khoản ${phien.email} là thành viên VIP · Mức hoàn 5–20% do nhân viên xét duyệt.`;
+  trangThai.textContent = `Tài khoản ${phien.email} là thành viên VIP · Hoàn 5% theo chính sách VIP.`;
   formHoanTien.hidden = false;
   try {
     await taiDonDuDieuKien();

@@ -35,7 +35,7 @@ function taoNutQuyetDinh(ten, giaTri, id, laTuChoi = false, oPhanTram = null, ma
   nut.className = `nut-quyet-dinh-hoan-tien${laTuChoi ? " tu-choi" : ""}`;
   nut.textContent = ten;
   nut.addEventListener("click", async () => {
-    const phanTramXacNhan = oPhanTram ? Number(oPhanTram.value) : null;
+    const phanTramXacNhan = giaTri === "duyet" ? 5 : null;
     const thongDiep = giaTri === "duyet"
       ? `Duyệt yêu cầu hoàn tiền đơn ${maDon} với mức hoàn ${phanTramXacNhan}%?`
       : `Từ chối yêu cầu hoàn tiền đơn ${maDon}?`;
@@ -114,17 +114,12 @@ async function taiYeuCauHoanTien() {
       if (yc.trangThai === "Chờ duyệt") {
         const oPhanTram = document.createElement("input");
         oPhanTram.type = "number";
-        oPhanTram.min = "5";
-        oPhanTram.max = "20";
-        oPhanTram.step = "1";
-        oPhanTram.placeholder = "Hoàn % (5–20)";
-        oPhanTram.setAttribute("aria-label", `Nhập phần trăm hoàn cho đơn ${yc.maDon}`);
+        oPhanTram.type = "text";
+        oPhanTram.value = "5%";
+        oPhanTram.readOnly = true;
+        oPhanTram.setAttribute("aria-label", `Mức hoàn cố định 5% cho đơn ${yc.maDon}`);
         oPhanTram.className = "o-phan-tram-hoan";
         const nutDuyet = taoNutQuyetDinh("Xác nhận", "duyet", yc._id, false, oPhanTram, yc.maDon);
-        nutDuyet.disabled = true;
-        oPhanTram.addEventListener("input", () => {
-          nutDuyet.disabled = !oPhanTram.validity.valid || !oPhanTram.value;
-        });
         thaoTac.append(oPhanTram, nutDuyet);
         thaoTac.append(taoNutQuyetDinh("Từ chối", "tu-choi", yc._id, true, null, yc.maDon));
       }

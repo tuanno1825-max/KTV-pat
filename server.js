@@ -10,6 +10,7 @@ const path = require("path");
 const xacThucRoutes = require("./routes/xac-thuc-routes");
 const quanRoutes = require("./routes/quan-routes");
 const donHangRoutes = require("./routes/don-hang-routes");
+const doanhThuRoutes = require("./routes/doanh-thu-routes");
 const hoanTienRoutes = require("./routes/hoan-tien-routes");
 const danhGiaRoutes = require("./routes/danh-gia-routes");
 const dienDanRoutes = require("./routes/dien-dan-routes");
@@ -60,6 +61,9 @@ app.get("/quan-ly-don-hang", yeuCauDangNhap, (req, res) => {
 app.get("/quan-ly-hoan-tien", yeuCauDangNhap, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "quan-ly-hoan-tien.html"));
 });
+app.get("/quan-ly-doanh-thu", yeuCauDangNhap, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "html", "quan-ly-doanh-thu.html"));
+});
 app.get("/dangnhap", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "dangnhap.html"));
 });
@@ -70,6 +74,7 @@ app.get("/cong-dong", (req, res) => {
 app.use("/api", xacThucRoutes);
 app.use("/api", quanRoutes);
 app.use("/api", donHangRoutes);
+app.use("/api", doanhThuRoutes);
 app.use("/api/hoan-tien", hoanTienRoutes);
 app.use("/api", danhGiaRoutes);
 app.use("/api", dienDanRoutes);

@@ -133,7 +133,7 @@ router.post("/yeu-cau", async (req, res) => {
   const { maDon, nganHang, soTaiKhoan, tenThuHuong, hoaDon } = req.body || {};
   const nguoiDungVip = await NguoiDung.findOne({ email: phien.taiKhoan }).select("vipTrangThai vipHetHan").lean();
   if (!dangLaVip(nguoiDungVip)) {
-    return res.status(403).json({ message: "Dịch vụ hoàn tiền dành cho tài khoản VIP. Tích lũy 1.000 điểm tích cực hoặc được Quản trị viên cấp VIP để sử dụng." });
+    return res.status(403).json({ message: "Dịch vụ hoàn tiền dành cho tài khoản VIP. Tích lũy 600 điểm tích cực hoặc được Quản trị viên cấp VIP để sử dụng." });
   }
   if (!maDon ||
       ![nganHang, soTaiKhoan, tenThuHuong].every((giaTri) => typeof giaTri === "string" && giaTri.trim())) {
@@ -189,8 +189,8 @@ router.patch("/yeu-cau/:id/quyet-dinh", yeuCauDangNhap, async (req, res) => {
   const quyetDinh = req.body?.quyetDinh;
   if (!["duyet", "tu-choi"].includes(quyetDinh)) return res.status(400).json({ message: "Quyết định không hợp lệ." });
   const phanTramHoan = Number(req.body?.phanTramHoan);
-  if (quyetDinh === "duyet" && (!Number.isInteger(phanTramHoan) || phanTramHoan < 5 || phanTramHoan > 20)) {
-    return res.status(400).json({ message: "Nhập mức hoàn từ 5% đến 20%." });
+  if (quyetDinh === "duyet" && phanTramHoan !== 5) {
+    return res.status(400).json({ message: "Mức hoàn VIP cố định là 5%." });
   }
   try {
     const yc = await HoanTien.findOne({ _id: req.params.id, trangThai: "Chờ duyệt" });

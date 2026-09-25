@@ -31,19 +31,19 @@ async function taiDiemTichCuc() {
   if (!response.ok) throw new Error(user.message || "Không tải được điểm tích cực.");
   const diem = Number(user.diemTichLuy || 0);
   const diemEl = document.querySelector("#diem-so-hien-tai");
-  if (diemEl) diemEl.innerHTML = `${diem} <span>/ 1000 điểm</span>`;
-  const phanTram = Math.min(100, Math.round((diem / 1000) * 100));
+  if (diemEl) diemEl.innerHTML = `${diem} <span>/ 600 điểm</span>`;
+  const phanTram = Math.min(100, Math.round((diem / 600) * 100));
   const thanhTienDo = document.querySelector("#thanh-tien-do-diem");
   if (thanhTienDo) {
     thanhTienDo.style.width = `${phanTram}%`;
     thanhTienDo.parentElement.setAttribute("aria-valuenow", String(diem));
   }
   const laVip = Boolean(user.laVip);
-  const conThieu = Math.max(0, 1000 - diem);
+  const conThieu = Math.max(0, 600 - diem);
   const moTa = document.querySelector("#mo-ta-tien-do");
   if (moTa) {
     moTa.innerHTML = laVip
-      ? `🎉 Bạn đang sở hữu gói <strong>VIP</strong>! Điểm tích cực hiện tại: <strong>${diem}/1000</strong>.`
+      ? `🎉 Bạn đang sở hữu gói <strong>VIP</strong>! Điểm tích cực hiện tại: <strong>${diem}/600</strong>.`
       : `Bạn cần thêm <strong>${conThieu} điểm</strong> để tự động nhận <strong>VIP 1 tháng</strong>. Điểm sẽ được đặt lại sau khi nhận VIP.`;
   }
   const badgeVip = document.querySelector("#badge-vip-nho");

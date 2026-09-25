@@ -73,7 +73,7 @@ async function khoiTaoNguoiDung() {
           ${badgeHtml}
           <div class="ho-so-diem">
             <span>Đặc quyền:</span>
-            <strong>${thongTinNguoiDung.laVip ? "Hoàn tiền 5-20%" : "Tích điểm"}</strong>
+            <strong>${thongTinNguoiDung.laVip ? "Hoàn tiền 5%" : "Tích điểm"}</strong>
           </div>
         </div>
       `;

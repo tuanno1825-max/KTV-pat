@@ -5,7 +5,7 @@ const HoanTienSchema = new mongoose.Schema(
     emailKhach: { type: String, required: true, lowercase: true, trim: true, index: true },
     donHang: { type: mongoose.Schema.Types.ObjectId, ref: "DonHang", required: true },
     maDon: { type: String, required: true, trim: true },
-    phanTramHoan: { type: Number, default: null, min: 5, max: 20 },
+    phanTramHoan: { type: Number, default: null, min: 5, max: 5 },
     nganHang: { type: String, required: true, trim: true, maxlength: 100 },
     soTaiKhoan: { type: String, required: true, trim: true, maxlength: 40 },
     tenThuHuong: { type: String, required: true, trim: true, maxlength: 100 },

@@ -57,7 +57,7 @@ router.post("/admin/tai-khoan/:email/cong-diem", yeuCauAdmin, async (req, res) =
 
     user.diemTichLuy = (user.diemTichLuy || 0) + soDiem;
     let duocCapVip = false;
-    if (user.diemTichLuy >= 1000) {
+    if (user.diemTichLuy >= 600) {
       const now = new Date();
       user.vipTrangThai = "VIP";
       user.vipHetHan = congMotThang(user.vipHetHan > now ? user.vipHetHan : now);
@@ -66,7 +66,7 @@ router.post("/admin/tai-khoan/:email/cong-diem", yeuCauAdmin, async (req, res) =
     }
     await user.save();
     const noiDung = duocCapVip
-      ? `Quản trị viên đã cộng ${soDiem} điểm cho bạn. Bạn đạt mốc 1.000 điểm và được tự động cấp VIP đến ${user.vipHetHan.toLocaleDateString("vi-VN")}; điểm đã được đặt lại.`
+      ? `Quản trị viên đã cộng ${soDiem} điểm cho bạn. Bạn đạt mốc 600 điểm và được tự động cấp VIP đến ${user.vipHetHan.toLocaleDateString("vi-VN")}; điểm đã được đặt lại.`
       : `Quản trị viên đã cộng ${soDiem} điểm tích cực cho bạn. Số dư hiện tại: ${user.diemTichLuy} điểm.`;
     await ThongBao.create({ emailKhach: user.email, noiDung, loai: "he-thong" });
     res.json({ message: duocCapVip

@@ -75,9 +75,9 @@ tbody.addEventListener("click", async (event) => {
       }
       body = JSON.stringify({ soDiem });
       const diemHienTai = Number(row.children[1].textContent) || 0;
-      const datVip = diemHienTai + soDiem >= 1000;
+      const datVip = diemHienTai + soDiem >= 600;
       const xacNhan = datVip
-        ? `C\u1ed9ng ${soDiem} \u0111i\u1ec3m cho ${email}? Kh\u00e1ch \u0111\u1ea1t m\u1ed1c 1.000 \u0111i\u1ec3m n\u00ean s\u1ebd \u0111\u01b0\u1ee3c c\u1ea5p VIP 1 th\u00e1ng v\u00e0 \u0111i\u1ec3m \u0111\u01b0\u1ee3c \u0111\u1eb7t l\u1ea1i.`
+        ? `C\u1ed9ng ${soDiem} \u0111i\u1ec3m cho ${email}? Kh\u00e1ch \u0111\u1ea1t m\u1ed1c 600 \u0111i\u1ec3m n\u00ean s\u1ebd \u0111\u01b0\u1ee3c c\u1ea5p VIP 1 th\u00e1ng v\u00e0 \u0111i\u1ec3m \u0111\u01b0\u1ee3c \u0111\u1eb7t l\u1ea1i.`
         : `C\u1ed9ng ${soDiem} \u0111i\u1ec3m cho ${email}?`;
       if (!window.confirm(xacNhan)) return;
     }

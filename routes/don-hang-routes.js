@@ -282,6 +282,7 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
       return res.status(409).json({ message: "Chỉ xác nhận khách đã đến cho đơn đặt phòng thành công." });
     }
     const capNhat = { trangThai, maQuanDeXuat: "", tenQuanDeXuat: "" };
+    if (xacNhanKhachDen) capNhat.thoiGianKhachDen = new Date();
     if (trangThai === "Đề xuất quán mới") {
       if (donHienTai.daHuy) {
         return res
@@ -331,7 +332,7 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
       const user = await NguoiDung.findOne({ email: donHang.emailKhach });
       if (user) {
         user.diemTichLuy = (user.diemTichLuy || 0) + 100;
-        if (user.diemTichLuy >= 1000) {
+        if (user.diemTichLuy >= 600) {
           const now = new Date(); const start = user.vipHetHan > now ? user.vipHetHan : now;
           const end = new Date(start); const day = end.getDate(); end.setMonth(end.getMonth() + 1); if (end.getDate() < day) end.setDate(0);
           user.vipTrangThai = "VIP"; user.vipHetHan = end; user.diemTichLuy = 0;
@@ -343,11 +344,10 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
     } else if (trangThai === "Khách không đến" && donHienTai.trangThai !== trangThai && !donHienTai.diemTruDaXuLy && donHang.emailKhach) {
       const user = await NguoiDung.findOne({ email: donHang.emailKhach });
       if (user) {
-        user.diemTichLuy = Math.max(0, (user.diemTichLuy || 0) - 20);
         user.soLanKhongDen = (user.soLanKhongDen || 0) + 1;
         user.canhBao = `Đơn ${donHang.maDon}: khách đã đặt nhưng không đến.`;
         await user.save();
-        await ThongBao.create({ emailKhach: user.email, noiDung: `Quán báo bạn không đến theo đặt phòng ${donHang.maDon}; bị trừ 20 điểm. Số dư ${user.diemTichLuy} điểm.`, loai: "he-thong" });
+        await ThongBao.create({ emailKhach: user.email, noiDung: `Quán đã ghi nhận bạn không đến theo đặt phòng ${donHang.maDon}. Điểm tích lũy không bị trừ.`, loai: "he-thong" });
       }
       await DonHang.updateOne({ _id: donHang._id }, { $set: { diemTruDaXuLy: true } });
     }
