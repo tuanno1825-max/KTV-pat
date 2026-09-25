@@ -56,6 +56,23 @@ select {
   width: 118px;
   border-radius: 12px;
 }
+.khung-dau > .logo-kara {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 10px;
+}
+.khung-dau > .logo-kara img {
+  width: 76px;
+  border-radius: 9px;
+}
+.ten-thuong-hieu {
+  color: #123b4a;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: .015em;
+  white-space: nowrap;
+}
 .menu-ngang {
   display: flex;
   align-items: center;
@@ -526,6 +543,10 @@ select {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+.bieu-mau-dat-phong[hidden],
+.gia-quan-chon[hidden] {
+  display: none;
+}
 .nhom-truong-form {
   display: grid;
   gap: 7px;
@@ -607,6 +628,37 @@ select {
   opacity: 0.6;
   cursor: wait;
 }
+.lop-phu.cho-phan-hoi-de-xuat {
+  z-index: 1000;
+  background: rgba(11, 36, 43, 0.82);
+}
+.cho-phan-hoi-de-xuat .hop-dat-phong {
+  width: min(560px, 100%);
+  border: 2px solid #087e8b;
+  box-shadow: 0 28px 90px rgba(4, 31, 37, 0.45);
+}
+.cho-phan-hoi-de-xuat .hop-dat-phong h2 {
+  padding-right: 20px;
+  color: #087e68;
+  font-family: inherit;
+  font-size: 1.55rem;
+  font-weight: 800;
+}
+.cho-phan-hoi-de-xuat .mo-ta-bieu-mau {
+  margin: 16px 0 12px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.cho-phan-hoi-de-xuat .phan-hoi-de-xuat {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+.cho-phan-hoi-de-xuat .nut-phan-hoi-de-xuat {
+  min-height: 48px;
+  margin: 0;
+  font-size: 1rem;
+}
 .thong-bao-dat-phong {
   min-height: 18px;
   margin: 14px 0 0;
@@ -642,6 +694,12 @@ select {
     width: 100%;
     justify-content: space-between;
     overflow: auto;
+  }
+  .khung-dau > .logo-kara img {
+    width: 66px;
+  }
+  .khung-dau > .logo-kara .ten-thuong-hieu {
+    font-size: .94rem;
   }
   .menu-ngang a {
     padding: 8px 9px;

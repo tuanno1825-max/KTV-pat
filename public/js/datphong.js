@@ -17,7 +17,15 @@ let maDonDangTheoDoi = "";
 let soDienThoaiTheoDoi = "";
 let boDemTheoDoi = null;
 let trangThaiDaHien = "";
-let choHuyKhiRoiTrang = false;
+try {
+  const theoDoiDaLuu = JSON.parse(sessionStorage.getItem("theoDoiDatPhong") || "null");
+  maDonDangTheoDoi = theoDoiDaLuu?.maDon || "";
+  soDienThoaiTheoDoi = theoDoiDaLuu?.soDienThoai || "";
+} catch {}
+const nutDongBieuMau = document.querySelector("#dong-bieu-mau");
+const moTaBieuMau = document.querySelector(".mo-ta-bieu-mau");
+const giaQuanChonElement = document.querySelector("#gia-quan-chon");
+const tieuDeDatPhong = document.querySelector("#tieu-de-dat-phong");
 
 function moTaPhanHoiKhach(don) {
   if (don.daHuy) return "Bạn đã hủy đặt phòng.";
@@ -56,7 +64,15 @@ async function capNhatPhanHoiKhach() {
       trangThaiDaHien = don.trangThai;
       khuVucPhanHoiDeXuat.replaceChildren();
       if (don.trangThai === "Đề xuất quán mới") {
-        choHuyKhiRoiTrang = true;
+        lopPhu.classList.add("cho-phan-hoi-de-xuat");
+        lopPhu.hidden = false;
+        document.body.classList.add("khoa-cuon");
+        nutDongBieuMau.hidden = true;
+        bieuMauDatPhong.hidden = true;
+        giaQuanChonElement.hidden = true;
+        tieuDeDatPhong.firstChild.textContent = `Quán mới được đề xuất cho đơn ${don.maDon}`;
+        tenQuanChon.textContent = "";
+        moTaBieuMau.textContent = `Nhân viên đề xuất ${don.tenQuanDeXuat}. Địa chỉ: ${don.diaChiDeXuat || "Chưa có thông tin địa chỉ"}. Vui lòng chọn một phương án để đơn hàng được cập nhật.`;
         const taoNutPhanHoi = (nhan, duLieu) => {
           const nut = document.createElement("button");
           nut.type = "button";
@@ -65,7 +81,6 @@ async function capNhatPhanHoiKhach() {
           nut.addEventListener("click", async () => {
             nut.disabled = true;
             try {
-              choHuyKhiRoiTrang = false;
               const phanHoi = await fetch("/api/don-hang/phan-hoi", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -80,23 +95,45 @@ async function capNhatPhanHoiKhach() {
                 throw new Error(ketQua.message || "Không thể gửi phản hồi.");
               if (duLieu.chapNhan && ketQua.maDonMoi)
                 maDonDangTheoDoi = ketQua.maDonMoi;
+              if (duLieu.chapNhan && ketQua.maDonMoi) {
+                sessionStorage.setItem("theoDoiDatPhong", JSON.stringify({ maDon: maDonDangTheoDoi, soDienThoai: soDienThoaiTheoDoi }));
+              } else {
+                sessionStorage.removeItem("theoDoiDatPhong");
+                maDonDangTheoDoi = "";
+                soDienThoaiTheoDoi = "";
+              }
               thongBaoDatPhong.textContent = duLieu.chapNhan
                 ? `${ketQua.message} Mã đơn mới: ${ketQua.maDonMoi}.`
                 : ketQua.message;
+              lopPhu.classList.remove("cho-phan-hoi-de-xuat");
+              lopPhu.hidden = true;
+              document.body.classList.remove("khoa-cuon");
+              nutDongBieuMau.hidden = false;
+              bieuMauDatPhong.hidden = false;
+              giaQuanChonElement.hidden = false;
+              tieuDeDatPhong.firstChild.textContent = "Đặt phòng tại ";
+              moTaBieuMau.textContent = "Điền thông tin để quán chuẩn bị phòng cho bạn.";
               khuVucPhanHoiDeXuat.replaceChildren();
               trangThaiDaHien = "";
               if (duLieu.chapNhan) await capNhatPhanHoiKhach();
             } catch (error) {
-              choHuyKhiRoiTrang = true;
               thongBaoDatPhong.textContent = error.message;
               nut.disabled = false;
             }
           });
           khuVucPhanHoiDeXuat.append(nut);
         };
-        taoNutPhanHoi("Bỏ chọn quán đề xuất", { chapNhan: false });
         taoNutPhanHoi("Chấp nhận quán", { chapNhan: true });
         taoNutPhanHoi("Hủy đặt phòng", { chapNhan: false, hanhDong: "huy" });
+      } else if (trangThaiDaHien === "Đề xuất quán mới") {
+        lopPhu.classList.remove("cho-phan-hoi-de-xuat");
+        lopPhu.hidden = true;
+        document.body.classList.remove("khoa-cuon");
+        nutDongBieuMau.hidden = false;
+        bieuMauDatPhong.hidden = false;
+        giaQuanChonElement.hidden = false;
+        tieuDeDatPhong.firstChild.textContent = "Đặt phòng tại ";
+        moTaBieuMau.textContent = "Điền thông tin để quán chuẩn bị phòng cho bạn.";
       }
     }
     if (
@@ -107,24 +144,10 @@ async function capNhatPhanHoiKhach() {
     ) {
       clearInterval(boDemTheoDoi);
       boDemTheoDoi = null;
+      sessionStorage.removeItem("theoDoiDatPhong");
     }
   } catch {}
 }
-
-window.addEventListener("pagehide", () => {
-  if (!choHuyKhiRoiTrang || !maDonDangTheoDoi || !soDienThoaiTheoDoi) return;
-  const payload = new Blob(
-    [
-      JSON.stringify({
-        maDon: maDonDangTheoDoi,
-        soDienThoai: soDienThoaiTheoDoi,
-        hanhDong: "huy",
-      }),
-    ],
-    { type: "application/json" },
-  );
-  navigator.sendBeacon("/api/don-hang/phan-hoi", payload);
-});
 
 function taoTheQuan(quan) {
   const the = document.createElement("article");
@@ -222,6 +245,7 @@ function moBieuMau(tenQuan) {
 }
 
 function dongBieuMau() {
+  if (lopPhu.classList.contains("cho-phan-hoi-de-xuat")) return;
   lopPhu.hidden = true;
   document.body.classList.remove("khoa-cuon");
 }
@@ -273,6 +297,7 @@ bieuMauDatPhong.addEventListener("submit", async (suKien) => {
       throw new Error(ketQua.message || "Không thể gửi yêu cầu.");
     maDonDangTheoDoi = ketQua.maDon;
     soDienThoaiTheoDoi = bieuMauDatPhong.elements.soDienThoai.value.trim();
+    sessionStorage.setItem("theoDoiDatPhong", JSON.stringify({ maDon: maDonDangTheoDoi, soDienThoai: soDienThoaiTheoDoi }));
     thongBaoDatPhong.textContent = `${ketQua.message} Mã đơn: ${ketQua.maDon}. Đang chờ nhân viên phản hồi...`;
     bieuMauDatPhong.reset();
     boDemTheoDoi = setInterval(capNhatPhanHoiKhach, 5000);
@@ -291,6 +316,10 @@ nutXoaLoc.addEventListener("click", () => {
 });
 
 taiDanhSachQuan();
+if (maDonDangTheoDoi && soDienThoaiTheoDoi) {
+  capNhatPhanHoiKhach();
+  boDemTheoDoi = setInterval(capNhatPhanHoiKhach, 5000);
+}
 
 // --- LOGIC ĐÁNH GIÁ VÀ NHẬN XÉT QUÁN ---
 const lopPhuDanhGia = document.querySelector("#lop-phu-danh-gia");

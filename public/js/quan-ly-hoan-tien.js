@@ -1,7 +1,33 @@
 const danhSachHoanTien = document.querySelector("#danh-sach-yeu-cau-hoan-tien");
+const oTimKiemHoanTien = document.querySelector("#tu-khoa-hoan-tien");
+const oLocTrangThaiHoanTien = document.querySelector("#loc-trang-thai-hoan-tien");
+const demYeuCauHoanTien = document.querySelector("#dem-yeu-cau-hoan-tien");
+const khongCoKetQuaHoanTien = document.querySelector("#khong-co-ket-qua-hoan-tien");
+let cacHangHoanTien = [];
 const quyenNoiBoDangTai = fetch("/api/quyen-noi-bo", { credentials: "same-origin", cache: "no-store" })
   .then((response) => response.ok ? response.json() : null)
   .catch(() => null);
+
+function chuanHoaTuKhoa(value) {
+  return String(value || "")
+    .toLocaleLowerCase("vi")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d");
+}
+
+function apDungBoLocHoanTien() {
+  const tuKhoa = chuanHoaTuKhoa(oTimKiemHoanTien.value.trim());
+  const trangThai = oLocTrangThaiHoanTien.value;
+  let soKetQua = 0;
+  cacHangHoanTien.forEach(({ hang, chuoiTimKiem, trangThai: trangThaiHang }) => {
+    const hienThi = (!tuKhoa || chuoiTimKiem.includes(tuKhoa)) && (!trangThai || trangThaiHang === trangThai);
+    hang.hidden = !hienThi;
+    if (hienThi) soKetQua += 1;
+  });
+  demYeuCauHoanTien.textContent = `${soKetQua} / ${cacHangHoanTien.length} yêu cầu`;
+  khongCoKetQuaHoanTien.hidden = soKetQua > 0 || cacHangHoanTien.length === 0;
+}
 
 function taoNutQuyetDinh(ten, giaTri, id, laTuChoi = false, oPhanTram = null, maDon = id) {
   const nut = document.createElement("button");
@@ -51,23 +77,31 @@ async function taiYeuCauHoanTien() {
     }
     if (!phanHoi.ok) throw new Error(yeuCaus.message || "Không tải được yêu cầu hoàn tiền.");
     danhSachHoanTien.replaceChildren();
+    cacHangHoanTien = [];
     if (!yeuCaus.length) {
       danhSachHoanTien.textContent = "Chưa có yêu cầu hoàn tiền.";
+      demYeuCauHoanTien.textContent = "0 yêu cầu";
+      khongCoKetQuaHoanTien.hidden = true;
       return;
     }
     yeuCaus.forEach((yc) => {
       const hang = document.createElement("article");
       hang.className = "hang-yeu-cau-hoan-tien";
+      const chuoiTimKiem = chuanHoaTuKhoa([yc.maDon, yc.emailKhach, yc.nganHang, yc.soTaiKhoan, yc.tenThuHuong, yc.trangThai].join(" "));
+      hang.dataset.trangThai = yc.trangThai;
       const chiTiet = document.createElement("div");
       chiTiet.className = "chi-tiet-hoan-tien";
       const don = document.createElement("strong");
       don.textContent = `${yc.maDon} · ${yc.emailKhach}`;
+      const nhanTrangThai = document.createElement("span");
+      nhanTrangThai.className = `nhan-trang-thai-hoan-tien ${yc.trangThai === "Chờ duyệt" ? "cho-duyet" : yc.trangThai === "Đã duyệt" ? "da-duyet" : yc.trangThai === "Đã hoàn tiền" ? "da-hoan-tien" : "tu-choi"}`;
+      nhanTrangThai.textContent = yc.trangThai;
       const thongTin = document.createElement("div");
       thongTin.textContent = `Ngân hàng: ${yc.nganHang} · STK: ${yc.soTaiKhoan} · Thụ hưởng: ${yc.tenThuHuong}`;
       const ngay = document.createElement("div");
       const mucHoan = yc.phanTramHoan ? ` · Mức hoàn ${yc.phanTramHoan}%` : "";
-      ngay.textContent = `Gửi lúc ${new Date(yc.createdAt).toLocaleString("vi-VN")} · ${yc.trangThai}${mucHoan}`;
-      chiTiet.append(don, thongTin, ngay);
+      ngay.textContent = `Gửi lúc ${new Date(yc.createdAt).toLocaleString("vi-VN")}${mucHoan}`;
+      chiTiet.append(don, nhanTrangThai, thongTin, ngay);
       const thaoTac = document.createElement("div");
       thaoTac.className = "thao-tac-hoan-tien";
       const hoaDon = document.createElement("a");
@@ -125,11 +159,15 @@ async function taiYeuCauHoanTien() {
       }
       hang.append(chiTiet, thaoTac);
       danhSachHoanTien.append(hang);
+      cacHangHoanTien.push({ hang, chuoiTimKiem, trangThai: yc.trangThai });
     });
+    apDungBoLocHoanTien();
   } catch (error) {
     danhSachHoanTien.textContent = error.message;
   }
 }
 
 document.querySelector("#nut-tai-hoan-tien").addEventListener("click", taiYeuCauHoanTien);
+oTimKiemHoanTien.addEventListener("input", apDungBoLocHoanTien);
+oLocTrangThaiHoanTien.addEventListener("change", apDungBoLocHoanTien);
 taiYeuCauHoanTien();

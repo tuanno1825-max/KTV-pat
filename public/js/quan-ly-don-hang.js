@@ -134,7 +134,32 @@ async function taiDonHang() {
         taoNutCapNhat("Đặt phòng thành công", "success");
         taoNutCapNhat("Đặt phòng thất bại", "failed");
       } else if (don.trangThai === "Đặt phòng thành công") {
-        taoNutCapNhat("Khách không đến", "noshow");
+        if (don.diemCongDaXuLy) {
+          oThaoTac.textContent = "Đã ghi nhận khách đến";
+        } else {
+          taoNutCapNhat("Khách không đến", "noshow");
+          const nutKhachDen = document.createElement("button");
+          nutKhachDen.type = "button";
+          nutKhachDen.className = "nut-bang nut-bang-xac-nhan";
+          nutKhachDen.textContent = "Khách có đến";
+          nutKhachDen.addEventListener("click", async () => {
+            if (!window.confirm(`Xác nhận khách đã đến ở đơn ${don.maDon} và cộng 100 điểm?`)) return;
+            nutKhachDen.disabled = true;
+            try {
+              const capNhat = await fetch(`/api/don-hang/${don._id}`, {
+                method: "PATCH", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ trangThai: "Đặt phòng thành công", xacNhanKhachDen: true }),
+              });
+              const ketQua = await capNhat.json();
+              if (!capNhat.ok) throw new Error(ketQua.message || "Không thể ghi nhận khách đến.");
+              await taiDonHang();
+            } catch (error) {
+              alert(error.message);
+              await taiDonHang();
+            }
+          });
+          oThaoTac.append(nutKhachDen);
+        }
       } else if (don.trangThai === "Khách không đến") {
         oThaoTac.textContent = "Đã ghi nhận khách không đến";
       } else if (["Đặt phòng thất bại", "Khách từ chối đề xuất"].includes(don.trangThai) && !don.daHuy) {

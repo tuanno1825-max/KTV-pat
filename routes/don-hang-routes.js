@@ -89,14 +89,21 @@ router.get("/don-hang/tra-cuu", async (req, res) => {
       soDienThoai: String(soDienThoai).trim(),
     })
       .select(
-        "maDon trangThai tenQuan tenQuanDeXuat maDonTiepTheo thoiGianDat daHuy",
+        "maDon trangThai tenQuan tenQuanDeXuat maQuanDeXuat maDonTiepTheo thoiGianDat daHuy",
       )
       .lean();
     if (!don)
       return res
         .status(404)
         .json({ message: "Không tìm thấy đơn với thông tin này." });
-    res.json(don);
+    let diaChiDeXuat = "";
+    if (don.trangThai === "Đề xuất quán mới" && don.maQuanDeXuat) {
+      const quanDeXuat = await Quan.findOne({ maQuan: don.maQuanDeXuat })
+        .select("diaChiChiTiet")
+        .lean();
+      diaChiDeXuat = quanDeXuat?.diaChiChiTiet || "";
+    }
+    res.json({ ...don, diaChiDeXuat });
   } catch (error) {
     res.status(500).json({ message: "Không thể tra cứu trạng thái đơn." });
   }
@@ -133,7 +140,7 @@ router.post("/don-hang/phan-hoi", async (req, res) => {
       return res.json({ message: "Bạn đã hủy đặt phòng." });
     }
     if (!chapNhan) {
-      donGoc.trangThai = "Đặt phòng thất bại";
+      donGoc.trangThai = "Khách từ chối đề xuất";
       await donGoc.save();
       return res.json({
         message:
@@ -169,13 +176,14 @@ router.post("/don-hang/phan-hoi", async (req, res) => {
       maQuan: quan.maQuan,
       tenQuan: quan.tenQuan,
       tenKhach: donGoc.tenKhach,
+      emailKhach: donGoc.emailKhach,
       xungHo: donGoc.xungHo,
       soDienThoai: donGoc.soDienThoai,
       thoiGianCheckIn: donGoc.thoiGianCheckIn,
       soNguoi: donGoc.soNguoi,
       trangThai: "Đang chờ xử lý",
     });
-    donGoc.trangThai = "Đặt phòng thất bại";
+    donGoc.trangThai = "Khách đã chấp nhận đề xuất";
     donGoc.maDonTiepTheo = donMoi.maDon;
     await donGoc.save();
     res
@@ -197,7 +205,7 @@ router.get("/don-hang", yeuCauDangNhap, async (req, res) => {
         { maDon: { $regex: tuKhoa, $options: "i" } },
         { tenKhach: { $regex: tuKhoa, $options: "i" } },
       ];
-    res.json(await DonHang.find(boLoc).select("maDon maQuan tenQuan tenKhach emailKhach xungHo soDienThoai thoiGianCheckIn soNguoi trangThai maQuanDeXuat tenQuanDeXuat maDonGoc maDonTiepTheo daHuy thoiGianDat").sort({ thoiGianDat: -1 }).lean());
+    res.json(await DonHang.find(boLoc).select("maDon maQuan tenQuan tenKhach emailKhach xungHo soDienThoai thoiGianCheckIn soNguoi trangThai maQuanDeXuat tenQuanDeXuat maDonGoc maDonTiepTheo daHuy diemCongDaXuLy diemTruDaXuLy thoiGianDat").sort({ thoiGianDat: -1 }).lean());
   } catch (error) {
     res.status(500).json({ message: "Không thể tải danh sách đơn hàng." });
   }
@@ -242,7 +250,7 @@ router.get("/don-hang/thong-ke", yeuCauDangNhap, async (req, res) => {
 
 router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
   try {
-    const { maQuanDeXuat } = req.body;
+    const { maQuanDeXuat, xacNhanKhachDen } = req.body;
     const cacMaTrangThai = {
       pending: "Đang chờ xử lý",
       confirmed: "Đã xác nhận",
@@ -260,7 +268,7 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
       .lean();
     if (!donHienTai)
       return res.status(404).json({ message: "Không tìm thấy đơn hàng." });
-    if (["Đặt phòng thành công", "Đặt phòng thất bại"].includes(trangThai) && donHienTai.trangThai !== "Đã xác nhận") {
+    if (["Đặt phòng thành công", "Đặt phòng thất bại"].includes(trangThai) && donHienTai.trangThai !== "Đã xác nhận" && !(trangThai === "Đặt phòng thành công" && donHienTai.trangThai === trangThai && xacNhanKhachDen)) {
       return res
         .status(409)
         .json({
@@ -269,6 +277,9 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
     }
     if (trangThai === "Khách không đến" && donHienTai.trangThai !== "Đặt phòng thành công") {
       return res.status(409).json({ message: "Chỉ có thể ghi nhận khách không đến sau khi đơn đã đặt phòng thành công." });
+    }
+    if (xacNhanKhachDen && (trangThai !== "Đặt phòng thành công" || donHienTai.trangThai !== "Đặt phòng thành công")) {
+      return res.status(409).json({ message: "Chỉ xác nhận khách đã đến cho đơn đặt phòng thành công." });
     }
     const capNhat = { trangThai, maQuanDeXuat: "", tenQuanDeXuat: "" };
     if (trangThai === "Đề xuất quán mới") {
@@ -316,7 +327,7 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
     }).lean();
     if (!donHang)
       return res.status(404).json({ message: "Không tìm thấy đơn hàng." });
-    if (trangThai === "Đặt phòng thành công" && donHienTai.trangThai !== trangThai && !donHienTai.diemCongDaXuLy && donHang.emailKhach) {
+    if (xacNhanKhachDen && !donHienTai.diemCongDaXuLy && donHang.emailKhach) {
       const user = await NguoiDung.findOne({ email: donHang.emailKhach });
       if (user) {
         user.diemTichLuy = (user.diemTichLuy || 0) + 100;
@@ -329,14 +340,14 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
         await ThongBao.create({ emailKhach: user.email, noiDung: `Đơn ${donHang.maDon} thành công: +100 điểm. Số dư ${user.diemTichLuy} điểm.${user.diemTichLuy === 0 && user.vipTrangThai === "VIP" ? ` Bạn được tự động cấp VIP đến ${user.vipHetHan.toLocaleDateString("vi-VN")}.` : ""}`, loai: "he-thong" });
       }
       await DonHang.updateOne({ _id: donHang._id }, { $set: { diemCongDaXuLy: true } });
-    } else if (trangThai === "Khách không đến" && !donHienTai.diemTruDaXuLy && donHang.emailKhach) {
+    } else if (trangThai === "Khách không đến" && donHienTai.trangThai !== trangThai && !donHienTai.diemTruDaXuLy && donHang.emailKhach) {
       const user = await NguoiDung.findOne({ email: donHang.emailKhach });
       if (user) {
-        user.diemTichLuy = Math.max(0, (user.diemTichLuy || 0) - 150);
+        user.diemTichLuy = Math.max(0, (user.diemTichLuy || 0) - 20);
         user.soLanKhongDen = (user.soLanKhongDen || 0) + 1;
         user.canhBao = `Đơn ${donHang.maDon}: khách đã đặt nhưng không đến.`;
         await user.save();
-        await ThongBao.create({ emailKhach: user.email, noiDung: `Quán báo bạn không đến theo đặt phòng ${donHang.maDon}; bị trừ 150 điểm. Số dư ${user.diemTichLuy} điểm.`, loai: "he-thong" });
+        await ThongBao.create({ emailKhach: user.email, noiDung: `Quán báo bạn không đến theo đặt phòng ${donHang.maDon}; bị trừ 20 điểm. Số dư ${user.diemTichLuy} điểm.`, loai: "he-thong" });
       }
       await DonHang.updateOne({ _id: donHang._id }, { $set: { diemTruDaXuLy: true } });
     }

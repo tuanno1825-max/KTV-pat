@@ -57,6 +57,9 @@ app.get("/admin-tai-khoan", yeuCauAdmin, (req, res) => {
 app.get("/quan-ly-don-hang", yeuCauDangNhap, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "qldh.html"));
 });
+app.get("/quan-ly-hoan-tien", yeuCauDangNhap, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "html", "quan-ly-hoan-tien.html"));
+});
 app.get("/dangnhap", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "dangnhap.html"));
 });

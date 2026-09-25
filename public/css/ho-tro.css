@@ -10,7 +10,9 @@ a { color: var(--ho-tro-xanh); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .ho-tro-dau { background: #fff; border-bottom: 1px solid #dce8eb; }
 .ho-tro-dau-ben-trong { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: min(1080px, calc(100% - 36px)); min-height: 82px; margin: auto; }
-.ho-tro-logo img { display: block; width: 124px; border-radius: 12px; }
+.ho-tro-logo { display: inline-flex; align-items: center; gap: 12px; color: #123b4a; font-size: 1.08rem; font-weight: 900; letter-spacing: .01em; white-space: nowrap; }
+.ho-tro-logo:hover { text-decoration: none; }
+.ho-tro-logo img { display: block; width: 78px; border-radius: 9px; }
 .ho-tro-nav { display: flex; flex-wrap: wrap; gap: 20px; color: var(--ho-tro-phu); font-weight: 650; }
 .ho-tro-noi-dung { width: min(820px, calc(100% - 36px)); margin: 54px auto; padding: clamp(24px, 5vw, 44px); background: #fff; border: 1px solid #dce8eb; border-radius: 18px; box-shadow: 0 16px 40px #17333d12; }
 .ho-tro-nhan { margin: 0 0 10px; color: var(--ho-tro-xanh); font-size: .78rem; font-weight: 800; letter-spacing: .16em; }

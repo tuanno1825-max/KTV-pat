@@ -1132,11 +1132,20 @@ h2,
 }
 
 .tieu-de-trang p {
-  margin: 0 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 8px;
+  padding: 7px 15px;
+  border: 1px solid rgba(105, 224, 255, 0.38);
+  border-radius: 999px;
   color: var(--xanh-tuyet);
-  font-size: 0.7rem;
+  background: linear-gradient(110deg, rgba(0, 212, 255, .12), rgba(89, 242, 167, .08));
+  box-shadow: 0 5px 18px rgba(0, 212, 255, .1);
+  font-size: 0.9rem;
   font-weight: 800;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 16px rgba(0, 212, 255, .28);
 }
 
 .tieu-de-trang h1 {
@@ -1354,42 +1363,143 @@ h2,
   border-radius: 20px;
   box-shadow: 0 24px 70px #0003;
 }
+.the-uu-dai-vip #trang-thai-vip {
+  margin: 0 0 16px;
+  padding: 13px 15px;
+  border: 1px solid #d8ece8;
+  border-radius: 11px;
+  color: #176b5c;
+  background: #f0faf7;
+  font-weight: 650;
+  line-height: 1.5;
+}
+.link-huong-dan-hoan-tien {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 13px 15px;
+  border: 1px solid #d7e9f3;
+  border-radius: 12px;
+  color: #145c78;
+  background: linear-gradient(110deg, #f2faff, #f6fbff);
+  text-decoration: none;
+}
+.link-huong-dan-hoan-tien:hover {
+  border-color: #8bc8d8;
+  background: #eaf7fb;
+  text-decoration: none;
+}
+.link-huong-dan-hoan-tien > span:first-child {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: #087e8b;
+  font-weight: 800;
+}
+.link-huong-dan-hoan-tien > span:nth-child(2) {
+  display: grid;
+  flex: 1;
+  gap: 3px;
+}
+.link-huong-dan-hoan-tien small {
+  color: #637d89;
+  font-size: .78rem;
+  line-height: 1.4;
+}
+.link-huong-dan-hoan-tien > span:last-child {
+  color: #087e8b;
+  font-size: 1.2rem;
+}
 #form-hoan-tien {
   display: grid;
-  gap: 10px;
+  gap: 11px;
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid #e3ebef;
+  border-radius: 15px;
+  background: linear-gradient(150deg, #fff, #f8fbfc);
+  box-shadow: 0 8px 24px rgba(15, 54, 67, .06);
 }
 #form-hoan-tien[hidden],
 #yeu-cau-vip-dang-xuat[hidden] {
   display: none;
 }
 #form-hoan-tien label {
-  margin-top: 5px;
+  margin-top: 7px;
   color: #344054;
-  font-size: 0.88rem;
+  font-size: 0.87rem;
   font-weight: 700;
 }
 #form-hoan-tien input,
 #form-hoan-tien select {
   width: 100%;
-  min-height: 44px;
-  padding: 10px 12px;
+  min-height: 48px;
+  padding: 11px 13px;
   color: #263746;
   background: #fff;
-  border: 1px solid #d0d5dd;
-  border-radius: 9px;
+  border: 1px solid #d5e0e5;
+  border-radius: 10px;
+  font: inherit;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+#form-hoan-tien input:focus,
+#form-hoan-tien select:focus {
+  border-color: #07808b;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(8, 126, 139, .13);
 }
 #form-hoan-tien input[type="file"] {
-  padding: 8px;
+  min-height: 54px;
+  padding: 9px;
+  color: #667985;
+  background: #fff;
+}
+#form-hoan-tien input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 8px 13px;
+  border: 0;
+  border-radius: 7px;
+  color: #075c69;
+  background: #e5f4f5;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nhan-form-hoan-tien {
+  padding-bottom: 8px;
+}
+.nhan-form-hoan-tien span {
+  color: #087e8b;
+  font-size: .72rem;
+  font-weight: 850;
+  letter-spacing: .12em;
+}
+.nhan-form-hoan-tien p {
+  margin: 5px 0 4px;
+  color: #667985;
+  font-size: .87rem;
+  line-height: 1.5;
 }
 .nut-gui-hoan-tien {
-  min-height: 46px;
-  margin-top: 10px;
+  min-height: 49px;
+  margin-top: 12px;
   color: #fff;
-  background: #087e8b;
+  background: linear-gradient(110deg, #087e8b, #07939a);
   border: 0;
-  border-radius: 9px;
+  border-radius: 10px;
   font-weight: 750;
   cursor: pointer;
+  box-shadow: 0 7px 15px rgba(8, 126, 139, .18);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.nut-gui-hoan-tien:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(8, 126, 139, .25);
 }
 .nut-gui-hoan-tien:disabled {
   opacity: 0.6;

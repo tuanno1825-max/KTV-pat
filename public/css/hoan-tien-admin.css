@@ -1,0 +1,196 @@
+.khung-hoan-tien-admin {
+  max-width: 1280px;
+  padding-bottom: 50px;
+}
+
+.khung-hoan-tien-admin .khung-yeu-cau-hoan-tien {
+  padding: 28px;
+  border: 1px solid #dce8ed;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #fff 0%, #f9fcfd 100%);
+  box-shadow: 0 12px 35px rgba(19, 54, 68, 0.08);
+}
+
+.khung-hoan-tien-admin .dau-yeu-cau-hoan-tien {
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5edf0;
+}
+
+.nhan-muc-hoan-tien {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: #087e8b;
+  font-size: .73rem;
+  font-weight: 850;
+  letter-spacing: .12em;
+}
+
+.khung-hoan-tien-admin .dau-yeu-cau-hoan-tien h2 {
+  margin: 0 0 5px;
+  color: #123b4a;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+}
+
+.khung-hoan-tien-admin .dau-yeu-cau-hoan-tien p {
+  margin: 0;
+  color: #667985;
+}
+
+.khung-hoan-tien-admin #nut-tai-hoan-tien {
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 9px;
+  font-size: .92rem;
+  font-weight: 700;
+}
+
+.bo-loc-hoan-tien {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(190px, 245px);
+  gap: 12px;
+  margin: 20px 0 10px;
+}
+
+.truong-tim-hoan-tien {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid #d3e0e5;
+  border-radius: 10px;
+  background: #fff;
+  color: #647b86;
+}
+
+.truong-tim-hoan-tien:focus-within,
+.loc-trang-thai-hoan-tien select:focus {
+  border-color: #07808b;
+  outline: 3px solid rgba(8, 126, 139, .12);
+}
+
+.truong-tim-hoan-tien > span {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.truong-tim-hoan-tien input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #163b49;
+  background: transparent;
+  font: inherit;
+}
+
+.loc-trang-thai-hoan-tien {
+  display: grid;
+  gap: 4px;
+  color: #607680;
+  font-size: .76rem;
+  font-weight: 700;
+}
+
+.loc-trang-thai-hoan-tien select {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid #d3e0e5;
+  border-radius: 10px;
+  background: #fff;
+  color: #163b49;
+  font: inherit;
+}
+
+.dem-yeu-cau-hoan-tien {
+  margin: 14px 0 8px;
+  color: #667985;
+  font-size: .86rem;
+}
+
+.danh-sach-hoan-tien-moi {
+  display: grid;
+  gap: 12px;
+}
+
+.danh-sach-hoan-tien-moi .hang-yeu-cau-hoan-tien {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  padding: 20px;
+  border: 1px solid #e2ebee;
+  border-radius: 13px;
+  background: #fff;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.danh-sach-hoan-tien-moi .hang-yeu-cau-hoan-tien[hidden] {
+  display: none;
+}
+
+.danh-sach-hoan-tien-moi .hang-yeu-cau-hoan-tien:hover {
+  transform: translateY(-1px);
+  border-color: #bed8dd;
+  box-shadow: 0 8px 22px rgba(19, 54, 68, .07);
+}
+
+.danh-sach-hoan-tien-moi .chi-tiet-hoan-tien {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  color: #5d707a;
+  font-size: .93rem;
+}
+
+.danh-sach-hoan-tien-moi .chi-tiet-hoan-tien strong {
+  color: #153d4c;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.nhan-trang-thai-hoan-tien {
+  justify-self: start;
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: .76rem;
+  font-weight: 800;
+}
+
+.nhan-trang-thai-hoan-tien.cho-duyet { color: #9a6700; background: #fff3c4; }
+.nhan-trang-thai-hoan-tien.da-duyet { color: #175cd3; background: #eaf2ff; }
+.nhan-trang-thai-hoan-tien.da-hoan-tien { color: #067647; background: #dcfae6; }
+.nhan-trang-thai-hoan-tien.tu-choi { color: #b42318; background: #fee4e2; }
+
+.danh-sach-hoan-tien-moi .chi-tiet-hoan-tien div:last-child {
+  color: #7b8990;
+  font-size: .84rem;
+}
+
+.danh-sach-hoan-tien-moi .thao-tac-hoan-tien {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.khong-co-ket-qua-hoan-tien {
+  padding: 30px 16px;
+  border: 1px dashed #cbd9de;
+  border-radius: 12px;
+  color: #71838c;
+  text-align: center;
+}
+
+.khong-co-ket-qua-hoan-tien[hidden] {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .khung-hoan-tien-admin .khung-yeu-cau-hoan-tien { padding: 18px; }
+  .bo-loc-hoan-tien { grid-template-columns: 1fr; }
+  .danh-sach-hoan-tien-moi .hang-yeu-cau-hoan-tien { grid-template-columns: 1fr; gap: 16px; }
+  .danh-sach-hoan-tien-moi .thao-tac-hoan-tien { justify-content: flex-start; }
+}

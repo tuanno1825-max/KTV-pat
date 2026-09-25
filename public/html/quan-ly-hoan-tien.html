@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yêu cầu hoàn tiền VIP | Karaoke Together</title>
+    <link rel="stylesheet" href="/css/qldh.css" />
+    <link rel="stylesheet" href="/css/hoan-tien-admin.css" />
+  </head>
+  <body>
+    <header class="dau-quan-tri">
+      <div class="thanh-dau-quan-tri">
+        <div>
+          <p class="nhan-quan-tri">KARAOKE TOGETHER</p>
+          <h1>Yêu cầu hoàn tiền VIP</h1>
+          <span>Kiểm tra hóa đơn và thông tin chuyển khoản trước khi duyệt.</span>
+        </div>
+        <nav class="cntqlad" aria-label="Chức năng quản trị">
+          <a class="nut-thoat" href="/">Về trang chủ</a>
+          <a class="nut-thoat" href="/quan-ly-don-hang">Quản lý đơn</a>
+          <a class="nut-thoat" href="/quan-ly-hoan-tien" aria-current="page">Yêu cầu hoàn tiền</a>
+          <a class="nut-thoat" href="/admin">Quản lý quán</a>
+          <a class="nut-thoat" id="tab-quan-ly-tai-khoan" href="/admin-tai-khoan" hidden>Quản lý tài khoản</a>
+        </nav>
+      </div>
+    </header>
+    <main class="khung-quan-tri khung-hoan-tien-admin">
+      <section class="khung-yeu-cau-hoan-tien" aria-labelledby="tieu-de-hoan-tien">
+        <div class="dau-yeu-cau-hoan-tien">
+          <div>
+            <span class="nhan-muc-hoan-tien">QUẢN LÝ VIP</span>
+            <h2 id="tieu-de-hoan-tien">Yêu cầu hoàn tiền</h2>
+            <p>Kiểm tra hóa đơn, thông tin nhận tiền và xử lý yêu cầu của khách.</p>
+          </div>
+          <button type="button" id="nut-tai-hoan-tien">↻ Làm mới</button>
+        </div>
+        <div class="bo-loc-hoan-tien">
+          <label class="truong-tim-hoan-tien">
+            <span aria-hidden="true">⌕</span>
+            <input id="tu-khoa-hoan-tien" type="search" placeholder="Tìm mã đơn, email, ngân hàng, số tài khoản..." autocomplete="off" />
+          </label>
+          <label class="loc-trang-thai-hoan-tien">
+            <span>Trạng thái</span>
+            <select id="loc-trang-thai-hoan-tien">
+              <option value="">Tất cả yêu cầu</option>
+              <option value="Chờ duyệt">Chờ duyệt</option>
+              <option value="Đã duyệt">Đã duyệt</option>
+              <option value="Đã hoàn tiền">Đã hoàn tiền</option>
+              <option value="Từ chối">Từ chối</option>
+            </select>
+          </label>
+        </div>
+        <p id="dem-yeu-cau-hoan-tien" class="dem-yeu-cau-hoan-tien" aria-live="polite">Đang tải yêu cầu...</p>
+        <div id="danh-sach-yeu-cau-hoan-tien" class="danh-sach-hoan-tien-moi" aria-live="polite">Đang tải yêu cầu...</div>
+        <p id="khong-co-ket-qua-hoan-tien" class="khong-co-ket-qua-hoan-tien" hidden>Không tìm thấy yêu cầu phù hợp.</p>
+      </section>
+    </main>
+    <script>
+      fetch("/api/quyen-noi-bo", { credentials: "same-origin", cache: "no-store" })
+        .then((response) => response.ok ? response.json() : null)
+        .then((quyen) => {
+          if (quyen?.vaiTro === "admin") document.querySelector("#tab-quan-ly-tai-khoan")?.removeAttribute("hidden");
+        })
+        .catch(() => {});
+    </script>
+    <script src="/js/quan-ly-hoan-tien.js?v=4"></script>
+  </body>
+</html>
