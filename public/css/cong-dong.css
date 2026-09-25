@@ -827,7 +827,10 @@ textarea {
 /* Responsive */
 @media (max-width: 992px) {
   .khung-dien-dan {
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  .cot-giua {
+    min-width: 0;
   }
   .cot-phai {
     display: none;
@@ -841,7 +844,63 @@ textarea {
     gap: 10px;
   }
   .khung-dien-dan {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    width: calc(100% - 24px);
+  }
+  .cot-trai,
+  .cot-giua {
+    width: 100%;
+    min-width: 0;
+  }
+  .khung-tao-bai-viet,
+  .the-bai-viet,
+  .thanh-loc-feed {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .thanh-loc-feed {
+    flex-wrap: wrap;
+    padding: 10px 12px;
+  }
+  .tab-loc {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .o-tim-feed {
+    flex: 1 1 190px;
+    min-width: 0;
+  }
+  .o-tim-feed input {
+    width: 100%;
+    min-width: 0;
+  }
+  .chan-tao-bai,
+  .nhom-tuy-chon-dang {
+    width: 100%;
+  }
+  .nhom-tuy-chon-dang select {
+    flex: 1 1 180px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .nut-dang-bai {
+    width: 100%;
+  }
+  .the-bai-viet {
+    padding: 16px;
+  }
+  .cot-giua,
+  .the-bai-viet,
+  .chi-tiet-bai-viet,
+  .noi-dung-bai-viet {
+    overflow-wrap: anywhere;
+  }
+  .dau-the-bai {
+    gap: 10px;
+  }
+  .thanh-tuong-tac {
+    flex-wrap: wrap;
   }
   .cot-trai {
     position: static;
