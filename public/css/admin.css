@@ -82,6 +82,16 @@ button {
   font-size: 0.86rem;
 }
 
+@media (max-width: 1050px) {
+  .thanh-dau-quan-tri {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .cntqlad {
+    justify-content: flex-start;
+  }
+}
+
 .nut-thoat {
   padding: 9px 15px;
   border: 1px solid rgba(255, 255, 255, 0.55);

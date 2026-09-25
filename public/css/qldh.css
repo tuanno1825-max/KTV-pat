@@ -68,9 +68,26 @@ body {
 
 .cntqlad [hidden] { display: none; }
 
-@media (max-width: 760px) {
+@media (max-width: 1050px) {
   .thanh-dau-quan-tri { align-items: flex-start; flex-direction: column; gap: 14px; }
   .cntqlad { justify-content: flex-start; }
+}
+
+@media (max-width: 600px) {
+  .thanh-dau-quan-tri { padding: 14px 16px; }
+  .thanh-dau-quan-tri h1 { font-size: clamp(1.35rem, 6vw, 1.75rem); overflow-wrap: anywhere; }
+  .cntqlad { gap: 7px; }
+  .nut-thoat { padding: 7px 10px; font-size: .8rem; }
+  .khung-quan-tri { margin: 18px auto; padding: 0 12px 28px; }
+  .khung-thong-ke { padding: 16px; }
+  .dau-thong-ke { align-items: stretch; flex-direction: column; }
+  .the-gio-cao-diem { overflow-wrap: anywhere; }
+  .khung-tim-kiem { padding: 14px; }
+  .nhom-tim-kiem input { flex-basis: 100%; min-width: 0; width: 100%; }
+  .nhom-tim-kiem select,
+  .nhom-tim-kiem .nut-chung { flex: 1 1 100%; width: 100%; }
+  .bang-du-lieu th,
+  .bang-du-lieu td { padding: 10px 12px; }
 }
 
 /* Nút thoát / điều hướng ở Header */

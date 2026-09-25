@@ -682,7 +682,7 @@ select {
   color: #a9e4df;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1050px) {
   .khung-dau {
     width: calc(100% - 28px);
     flex-wrap: wrap;
