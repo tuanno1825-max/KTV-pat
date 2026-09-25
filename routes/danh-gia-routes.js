@@ -2,6 +2,7 @@ const express = require("express");
 const DanhGia = require("../models/danh-gia-model");
 const Quan = require("../models/admin-models");
 const DonHang = require("../models/don-hang-models");
+const NguoiDung = require("../models/nguoi-dung-model");
 const { layPhien } = require("../middleware/xac-thuc-noi-bo");
 
 const router = express.Router();
