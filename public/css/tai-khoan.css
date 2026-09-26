@@ -400,6 +400,140 @@
   border-top: 1px solid #e5eff1;
 }
 
+.khoi-doi-mat-khau {
+  margin-top: 22px;
+  padding: 18px;
+  border: 1px solid #e1edef;
+  border-radius: 14px;
+  background: #f8fbfc;
+}
+
+.tieu-de-doi-mat-khau {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.tieu-de-doi-mat-khau h3 {
+  margin: 0;
+  color: #123b4b;
+  font-size: 1.05rem;
+}
+
+.tieu-de-doi-mat-khau > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 10px;
+  background: #e7f5f6;
+  font-size: 1rem;
+}
+
+.nut-mo-doi-mat-khau {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid #c9e0e3;
+  border-radius: 9px;
+  color: #075c69;
+  background: #fff;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.nut-mo-doi-mat-khau:hover {
+  background: #eaf7f7;
+}
+
+.form-doi-mat-khau[hidden] {
+  display: none;
+}
+
+.form-doi-mat-khau {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.form-doi-mat-khau label {
+  color: #38566a;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.form-doi-mat-khau input {
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid #cbdde2;
+  border-radius: 9px;
+  outline: 0;
+  color: #17384c;
+  background: #fff;
+  font: inherit;
+}
+
+.form-doi-mat-khau input:focus {
+  border-color: #0b8795;
+  box-shadow: 0 0 0 4px rgba(11, 135, 149, 0.11);
+}
+
+.hien-mat-khau {
+  margin: 0;
+}
+
+.hien-mat-khau input {
+  width: auto;
+  min-height: auto;
+  padding: 0;
+  accent-color: #087e8b;
+}
+
+.hanh-dong-doi-mat-khau {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #e2edef;
+}
+
+.hanh-dong-doi-mat-khau p {
+  margin: 0;
+  color: #607789;
+  font-size: 0.82rem;
+}
+
+#nut-doi-mat-khau {
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid #087e8b;
+  border-radius: 9px;
+  color: #fff;
+  background: #087e8b;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+#nut-doi-mat-khau:hover {
+  background: #075c69;
+}
+
+#nut-doi-mat-khau:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 .hop-xac-nhan-ho-so[hidden] {
   display: none;
 }
@@ -838,6 +972,19 @@
 
   .nhan-da-xac-minh {
     align-self: flex-start;
+  }
+
+  .form-doi-mat-khau {
+    grid-template-columns: 1fr;
+  }
+
+  .hanh-dong-doi-mat-khau {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #nut-doi-mat-khau {
+    width: 100%;
   }
 
   .noi-dung-hop-xac-nhan {

@@ -208,6 +208,45 @@ router.patch("/thong-tin-ca-nhan", async (req, res) => {
   }
 });
 
+router.patch("/thong-tin-ca-nhan/mat-khau", async (req, res) => {
+  const phien = layPhien(req);
+  if (phien?.vaiTro !== "khach-hang") {
+    return res
+      .status(401)
+      .json({ message: "Vui lòng đăng nhập tài khoản khách hàng." });
+  }
+
+  const matKhauHienTai =
+    typeof req.body?.matKhauHienTai === "string" ? req.body.matKhauHienTai : "";
+  const matKhauMoi =
+    typeof req.body?.matKhauMoi === "string" ? req.body.matKhauMoi : "";
+  if (matKhauMoi.length < 6 || matKhauMoi.length > 128) {
+    return res
+      .status(400)
+      .json({ message: "Mật khẩu mới cần từ 6 đến 128 ký tự." });
+  }
+  if (!matKhauHienTai) {
+    return res
+      .status(400)
+      .json({ message: "Vui lòng nhập mật khẩu hiện tại." });
+  }
+
+  try {
+    const user = await NguoiDung.findOne({ email: phien.taiKhoan }).select(
+      "+matKhau",
+    );
+    if (!user || !(await soSanhMatKhau(matKhauHienTai, user.matKhau))) {
+      return res.status(400).json({ message: "Mật khẩu hiện tại không đúng." });
+    }
+    user.matKhau = await bamMatKhau(matKhauMoi);
+    await user.save();
+    return res.json({ message: "Đã đổi mật khẩu thành công." });
+  } catch (error) {
+    console.error("Lỗi đổi mật khẩu khách hàng:", error.message);
+    return res.status(500).json({ message: "Không thể đổi mật khẩu lúc này." });
+  }
+});
+
 router.post("/dang-xuat", (req, res) => {
   res.setHeader(
     "Set-Cookie",

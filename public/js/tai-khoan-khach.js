@@ -171,6 +171,32 @@ function dongHopXacNhanHoSo() {
   hopXacNhanHoSo.hidden = true;
 }
 
+const formDoiMatKhau = document.querySelector("#form-doi-mat-khau");
+const nutMoDoiMatKhau = document.querySelector("#nut-mo-doi-mat-khau");
+nutMoDoiMatKhau?.addEventListener("click", () => {
+  const dangMo = formDoiMatKhau.hidden;
+  formDoiMatKhau.hidden = !dangMo;
+  nutMoDoiMatKhau.setAttribute("aria-expanded", String(dangMo));
+  nutMoDoiMatKhau.querySelector("span").textContent = dangMo
+    ? "Thu gọn"
+    : "Đổi mật khẩu";
+  if (dangMo) formDoiMatKhau.querySelector("input")?.focus();
+});
+
+document
+  .querySelectorAll("#form-doi-mat-khau [data-hien-mat-khau]")
+  .forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      checkbox.dataset.hienMatKhau
+        .split(",")
+        .map((id) => document.getElementById(id))
+        .filter(Boolean)
+        .forEach((input) => {
+          input.type = checkbox.checked ? "text" : "password";
+        });
+    });
+  });
+
 hopXacNhanHoSo?.querySelectorAll("[data-dong-hop-xac-nhan]").forEach((nut) => {
   nut.addEventListener("click", dongHopXacNhanHoSo);
 });
@@ -272,6 +298,45 @@ formThongTinCaNhan.addEventListener("submit", async (event) => {
     nutLuu.disabled = false;
   }
 });
+
+document
+  .querySelector("#form-doi-mat-khau")
+  ?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const thongBao = document.querySelector("#thong-bao-doi-mat-khau");
+    const nutDoi = document.querySelector("#nut-doi-mat-khau");
+    const duLieu = new FormData(form);
+    const matKhauMoi = duLieu.get("matKhauMoi");
+    const xacNhan = duLieu.get("xacNhanMatKhauMoi");
+    if (matKhauMoi !== xacNhan) {
+      thongBao.textContent = "Mật khẩu mới và phần xác nhận không khớp.";
+      return;
+    }
+    if (!window.confirm("Bạn có chắc muốn đổi mật khẩu không?")) return;
+    nutDoi.disabled = true;
+    thongBao.textContent = "Đang cập nhật mật khẩu...";
+    try {
+      const response = await fetch("/api/thong-tin-ca-nhan/mat-khau", {
+        method: "PATCH",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          matKhauHienTai: duLieu.get("matKhauHienTai"),
+          matKhauMoi,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok)
+        throw new Error(data.message || "Không thể đổi mật khẩu.");
+      form.reset();
+      thongBao.textContent = data.message;
+    } catch (error) {
+      thongBao.textContent = error.message;
+    } finally {
+      nutDoi.disabled = false;
+    }
+  });
 
 async function taiTrangThaiGoiVip() {
   const phanHoi = await fetch("/api/hoan-tien/vip-trang-thai", {

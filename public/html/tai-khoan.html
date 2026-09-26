@@ -202,6 +202,75 @@
               </div>
             </div>
           </div>
+          <div class="khoi-doi-mat-khau">
+            <div class="tieu-de-doi-mat-khau">
+              <div>
+                <p class="nhan-muc-thong-tin">BẢO MẬT TÀI KHOẢN</p>
+                <h3>Đổi mật khẩu</h3>
+              </div>
+              <button
+                type="button"
+                class="nut-mo-doi-mat-khau"
+                id="nut-mo-doi-mat-khau"
+                aria-expanded="false"
+              >
+                🔒 <span>Đổi mật khẩu</span>
+              </button>
+            </div>
+            <form id="form-doi-mat-khau" class="form-doi-mat-khau" hidden>
+              <div class="nhom-truong-ho-so">
+                <label for="mat-khau-hien-tai">Mật khẩu hiện tại</label>
+                <input
+                  id="mat-khau-hien-tai"
+                  name="matKhauHienTai"
+                  type="password"
+                  autocomplete="current-password"
+                  required
+                />
+              </div>
+              <div class="nhom-truong-ho-so">
+                <label for="mat-khau-moi">Mật khẩu mới</label>
+                <input
+                  id="mat-khau-moi"
+                  name="matKhauMoi"
+                  type="password"
+                  minlength="6"
+                  maxlength="128"
+                  autocomplete="new-password"
+                  required
+                />
+              </div>
+              <div class="nhom-truong-ho-so">
+                <label for="xac-nhan-mat-khau-moi">Xác nhận mật khẩu mới</label>
+                <input
+                  id="xac-nhan-mat-khau-moi"
+                  name="xacNhanMatKhauMoi"
+                  type="password"
+                  minlength="6"
+                  maxlength="128"
+                  autocomplete="new-password"
+                  required
+                />
+              </div>
+              <div class="hanh-dong-doi-mat-khau">
+                <label class="ghi-nho hien-mat-khau">
+                  <input
+                    type="checkbox"
+                    data-hien-mat-khau="mat-khau-hien-tai,mat-khau-moi,xac-nhan-mat-khau-moi"
+                  />
+                  Hiện mật khẩu
+                </label>
+                <p
+                  id="thong-bao-doi-mat-khau"
+                  role="status"
+                  aria-live="polite"
+                ></p>
+                <button type="submit" id="nut-doi-mat-khau">
+                  Cập nhật mật khẩu
+                </button>
+              </div>
+            </form>
+          </div>
         </section>
         <section
           class="muc-tai-khoan"

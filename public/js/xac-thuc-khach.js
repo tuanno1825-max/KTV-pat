@@ -1,4 +1,16 @@
 const formXacThuc = document.querySelector(".bieu-mau-xac-thuc[data-che-do]");
+document.querySelectorAll("[data-hien-mat-khau]").forEach((checkbox) => {
+  checkbox.addEventListener("change", () => {
+    checkbox.dataset.hienMatKhau
+      .split(",")
+      .map((id) => document.getElementById(id))
+      .filter(Boolean)
+      .forEach((input) => {
+        input.type = checkbox.checked ? "text" : "password";
+      });
+  });
+});
+
 const formQuenMatKhau = document.querySelector("#form-quen-mat-khau");
 const moQuenMatKhau = document.querySelector("#mo-quen-mat-khau");
 const dongQuenMatKhau = document.querySelector("#dong-quen-mat-khau");
