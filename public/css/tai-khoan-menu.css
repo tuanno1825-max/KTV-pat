@@ -102,26 +102,6 @@
   overflow: hidden;
 }
 
-.nut-avatar .anh-avatar-menu {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  transform: scale(var(--avatar-zoom, 1.4));
-}
-
-.nut-avatar .anh-avatar-menu[hidden] {
-  display: none;
-}
-
-.nut-avatar svg[hidden] {
-  display: none;
-}
-
-.nut-avatar img {
-  display: block;
-}
-
 @media (max-width: 520px) {
   .cum-thong-bao .danh-sach-thong-bao {
     position: fixed;

@@ -196,5 +196,35 @@
         <div id="lich-su" class="lich-su"></div>
       </section>
     </main>
+    <dialog
+      id="mat-khau-tam-dialog"
+      class="hop-thoai-mat-khau"
+      aria-labelledby="mat-khau-tam-tieu-de"
+    >
+      <h2 id="mat-khau-tam-tieu-de">Mật khẩu tạm đã được tạo</h2>
+      <p id="mat-khau-tam-thong-diep"></p>
+      <div class="mat-khau-tam-noi-dung">
+        <span>Mật khẩu tạm</span>
+        <code id="mat-khau-tam-gia-tri"></code>
+      </div>
+      <p
+        id="mat-khau-tam-trang-thai"
+        class="mat-khau-tam-trang-thai"
+        role="status"
+        aria-live="polite"
+      ></p>
+      <div class="mat-khau-tam-hanh-dong">
+        <button
+          id="sao-chep-mat-khau-tam"
+          class="nut-sao-chep-mat-khau"
+          type="button"
+        >
+          Sao chép mật khẩu
+        </button>
+        <button id="dong-mat-khau-tam" class="nut-dong-mat-khau" type="button">
+          Đóng
+        </button>
+      </div>
+    </dialog>
   </body>
 </html>

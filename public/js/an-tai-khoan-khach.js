@@ -9,7 +9,7 @@ async function capNhatTaiKhoanKhach() {
     });
     if (!phanHoi.ok) return;
 
-    const { daDangNhap, avatarUrl, avatarZoom } = await phanHoi.json();
+    const { daDangNhap } = await phanHoi.json();
     if (daDangNhap) {
       khuVucTaiKhoan.classList.add("tai-khoan-da-dang-nhap");
       khuVucTaiKhoan.innerHTML = `
@@ -22,7 +22,6 @@ async function capNhatTaiKhoanKhach() {
         </div>
         <div class="menu-tai-khoan">
           <button class="nut-avatar" type="button" aria-label="Mở menu tài khoản" aria-expanded="false">
-            <img class="anh-avatar-menu" alt="" hidden />
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
           </button>
           <div class="menu-tai-khoan-noi-dung" hidden>
@@ -47,29 +46,6 @@ async function capNhatTaiKhoanKhach() {
         nutThongBao.setAttribute("aria-expanded", "false");
         menuAvatar.hidden = !dangMo;
         nutAvatar.setAttribute("aria-expanded", String(dangMo));
-      });
-      const anhAvatar = khuVucTaiKhoan.querySelector(".anh-avatar-menu");
-      const bieuTuongAvatar = anhAvatar.nextElementSibling;
-      if (avatarUrl) {
-        anhAvatar.src = avatarUrl;
-        anhAvatar.style.setProperty("--avatar-zoom", String(avatarZoom || 1.4));
-        anhAvatar.hidden = false;
-        bieuTuongAvatar.hidden = true;
-      }
-      window.addEventListener("khachHangDoiAvatar", (event) => {
-        if (event.detail?.avatarUrl) {
-          anhAvatar.src = event.detail.avatarUrl;
-          anhAvatar.style.setProperty(
-            "--avatar-zoom",
-            String(event.detail.avatarZoom || 1.4),
-          );
-          anhAvatar.hidden = false;
-          bieuTuongAvatar.hidden = true;
-        } else {
-          anhAvatar.hidden = true;
-          anhAvatar.removeAttribute("src");
-          bieuTuongAvatar.hidden = false;
-        }
       });
       const taiThongBao = async () => {
         const phanHoiThongBao = await fetch("/api/hoan-tien/thong-bao", {

@@ -4,6 +4,10 @@ const lichSu = document.querySelector("#lich-su");
 const lichSuMoTa = document.querySelector("#lich-su-mo-ta");
 const yeuCauMatKhau = document.querySelector("#yeu-cau-mat-khau");
 const thongBaoMatKhau = document.querySelector("#thong-bao-mat-khau");
+const hopThoaiMatKhau = document.querySelector("#mat-khau-tam-dialog");
+const thongDiepMatKhau = document.querySelector("#mat-khau-tam-thong-diep");
+const giaTriMatKhau = document.querySelector("#mat-khau-tam-gia-tri");
+const trangThaiSaoChep = document.querySelector("#mat-khau-tam-trang-thai");
 
 const esc = (value) =>
   String(value ?? "").replace(
@@ -103,13 +107,48 @@ async function datLaiMatKhau(email) {
     `/api/admin/tai-khoan/${encodeURIComponent(email)}/dat-lai-mat-khau`,
     { method: "POST" },
   );
-  window.alert(`${result.message}\n\nMật khẩu tạm: ${result.matKhauTam}`);
+  thongDiepMatKhau.textContent = result.message;
+  giaTriMatKhau.textContent = result.matKhauTam;
+  trangThaiSaoChep.textContent = "";
+  hopThoaiMatKhau.showModal();
   if (thongBaoMatKhau) {
     thongBaoMatKhau.textContent =
       "Mật khẩu tạm đã được tạo và chỉ hiển thị một lần.";
   }
   await taiYeuCauMatKhau();
 }
+
+document
+  .querySelector("#sao-chep-mat-khau-tam")
+  .addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(giaTriMatKhau.textContent);
+      trangThaiSaoChep.textContent = "Đã sao chép mật khẩu tạm.";
+    } catch {
+      const inputTam = document.createElement("textarea");
+      inputTam.value = giaTriMatKhau.textContent;
+      inputTam.setAttribute("readonly", "");
+      inputTam.style.position = "fixed";
+      inputTam.style.opacity = "0";
+      document.body.append(inputTam);
+      inputTam.select();
+      const saoChepThanhCong = document.execCommand("copy");
+      inputTam.remove();
+      trangThaiSaoChep.textContent = saoChepThanhCong
+        ? "Đã sao chép mật khẩu tạm."
+        : "Không thể sao chép tự động. Vui lòng chọn và sao chép mật khẩu.";
+    }
+  });
+
+document.querySelector("#dong-mat-khau-tam").addEventListener("click", () => {
+  hopThoaiMatKhau.close();
+});
+
+hopThoaiMatKhau.addEventListener("close", () => {
+  giaTriMatKhau.textContent = "";
+  thongDiepMatKhau.textContent = "";
+  trangThaiSaoChep.textContent = "";
+});
 
 tbody.addEventListener("click", async (event) => {
   const button = event.target.closest("button[data-act]");
