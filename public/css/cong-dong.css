@@ -184,6 +184,7 @@ textarea {
   width: 64px;
   height: 64px;
   border-radius: 50%;
+  overflow: hidden;
   margin: 0 auto 10px;
   background: linear-gradient(135deg, var(--xanh), #023e4f);
   color: #fff;
@@ -193,6 +194,17 @@ textarea {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(8, 126, 139, 0.25);
+}
+
+.ho-so-avatar img,
+.avatar-bai-viet img,
+.avatar-binh-luan img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  transform: scale(var(--avatar-zoom, 1.4));
 }
 
 .ho-so-ten {
@@ -519,6 +531,7 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .ten-va-thoi-gian {
@@ -696,6 +709,7 @@ textarea {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .noi-dung-binh-luan-wrap {

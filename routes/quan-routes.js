@@ -1,9 +1,11 @@
 const express = require("express");
 const Quan = require("../models/admin-models");
-const {
-  yeuCauAdmin,
-} = require("../middleware/xac-thuc-noi-bo");
+const { yeuCauAdmin } = require("../middleware/xac-thuc-noi-bo");
 const router = express.Router();
+
+function escapeRegex(chuoi) {
+  return String(chuoi).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 router.get("/quan/ma-moi", yeuCauAdmin, async (req, res) => {
   try {
     const quanCuoi = await Quan.findOne({ maQuan: /^Q\d+$/ })
@@ -89,9 +91,10 @@ router.get("/quan", yeuCauAdmin, async (req, res) => {
     }
 
     if (tuKhoa) {
+      const tuKhoaAnToan = escapeRegex(tuKhoa);
       boLoc.$or = [
-        { tenQuan: { $regex: tuKhoa, $options: "i" } },
-        { soDienThoai: { $regex: tuKhoa, $options: "i" } },
+        { tenQuan: { $regex: tuKhoaAnToan, $options: "i" } },
+        { soDienThoai: { $regex: tuKhoaAnToan, $options: "i" } },
       ];
     }
 
@@ -117,12 +120,10 @@ router.post("/quan", yeuCauAdmin, async (req, res) => {
       Number(giaMin) < 0 ||
       Number(giaMax) < Number(giaMin)
     ) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu và cả hai giá phải từ 0 trở lên.",
-        });
+      return res.status(400).json({
+        message:
+          "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu và cả hai giá phải từ 0 trở lên.",
+      });
     }
     const quanMoi = new Quan({
       ...req.body,
@@ -147,12 +148,10 @@ router.put("/quan/:id", yeuCauAdmin, async (req, res) => {
       Number(giaMin) < 0 ||
       Number(giaMax) < Number(giaMin)
     ) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu và cả hai giá phải từ 0 trở lên.",
-        });
+      return res.status(400).json({
+        message:
+          "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu và cả hai giá phải từ 0 trở lên.",
+      });
     }
     const quanDaCapNhat = await Quan.findByIdAndUpdate(
       req.params.id,

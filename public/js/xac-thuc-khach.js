@@ -1,4 +1,45 @@
 const formXacThuc = document.querySelector(".bieu-mau-xac-thuc[data-che-do]");
+const formQuenMatKhau = document.querySelector("#form-quen-mat-khau");
+const moQuenMatKhau = document.querySelector("#mo-quen-mat-khau");
+const dongQuenMatKhau = document.querySelector("#dong-quen-mat-khau");
+
+moQuenMatKhau?.addEventListener("click", (event) => {
+  event.preventDefault();
+  formXacThuc.hidden = true;
+  formQuenMatKhau.hidden = false;
+  formQuenMatKhau.querySelector("input")?.focus();
+});
+
+dongQuenMatKhau?.addEventListener("click", () => {
+  formQuenMatKhau.hidden = true;
+  formXacThuc.hidden = false;
+});
+
+formQuenMatKhau?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const thongBao = formQuenMatKhau.querySelector(".thong-bao-xac-thuc");
+  const nutGui = formQuenMatKhau.querySelector('button[type="submit"]');
+  const email = new FormData(formQuenMatKhau).get("email");
+  thongBao.textContent = "";
+  nutGui.disabled = true;
+  try {
+    const response = await fetch("/api/yeu-cau-dat-lai-mat-khau", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || "Không thể gửi yêu cầu.");
+    thongBao.dataset.loai = "thanh-cong";
+    thongBao.textContent = data.message;
+    formQuenMatKhau.reset();
+  } catch (error) {
+    thongBao.dataset.loai = "";
+    thongBao.textContent = error.message;
+  } finally {
+    nutGui.disabled = false;
+  }
+});
 
 if (formXacThuc) {
   const thongBao = formXacThuc.querySelector(".thong-bao-xac-thuc");
@@ -19,7 +60,8 @@ if (formXacThuc) {
 
     nutGui.disabled = true;
     const nhanNutCu = nutGui.textContent;
-    nutGui.textContent = cheDo === "dang-ky" ? "Đang tạo tài khoản..." : "Đang đăng nhập...";
+    nutGui.textContent =
+      cheDo === "dang-ky" ? "Đang tạo tài khoản..." : "Đang đăng nhập...";
 
     try {
       const phanHoi = await fetch(`/api/${cheDo}`, {
@@ -28,22 +70,27 @@ if (formXacThuc) {
         body: JSON.stringify({
           hoTen: duLieuForm.get("hoTen"),
           email: duLieuForm.get("email"),
+          soDienThoai: duLieuForm.get("soDienThoai"),
           matKhau,
           dongYDieuKhoan: duLieuForm.get("dongYDieuKhoan") === "on",
         }),
       });
       const ketQua = await phanHoi.json();
-      if (!phanHoi.ok) throw new Error(ketQua.message || "Yêu cầu không thành công.");
+      if (!phanHoi.ok)
+        throw new Error(ketQua.message || "Yêu cầu không thành công.");
 
       if (cheDo === "dang-ky") {
         thongBao.dataset.loai = "thanh-cong";
         thongBao.textContent = `${ketQua.message} Đang chuyển đến trang đăng nhập...`;
-        window.setTimeout(() => { window.location.href = "dangnhap.html"; }, 1200);
+        window.setTimeout(() => {
+          window.location.href = "dangnhap.html";
+        }, 1200);
       } else {
         window.location.href = "/";
       }
     } catch (error) {
-      thongBao.textContent = error.message || "Không thể kết nối máy chủ. Vui lòng thử lại.";
+      thongBao.textContent =
+        error.message || "Không thể kết nối máy chủ. Vui lòng thử lại.";
       nutGui.disabled = false;
       nutGui.textContent = nhanNutCu;
     }

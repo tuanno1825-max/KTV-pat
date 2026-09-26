@@ -145,8 +145,10 @@ router.get("/don-hang-cua-toi", async (req, res) => {
     const cacDon = await DonHang.find({
       emailKhach: phien.taiKhoan,
       trangThai: "Đặt phòng thành công",
+      thoiGianKhachDen: { $ne: null },
+      vipConHanKhiKhachDen: true,
     })
-      .select("maDon tenQuan thoiGianDat")
+      .select("maDon tenQuan thoiGianDat thoiGianKhachDen")
       .sort({ thoiGianDat: -1 })
       .lean();
     const cacYeuCau = await HoanTien.find({ emailKhach: phien.taiKhoan })
@@ -186,15 +188,6 @@ router.post("/yeu-cau", async (req, res) => {
   const phien = await layPhienKhach(req, res);
   if (!phien) return;
   const { maDon, nganHang, soTaiKhoan, tenThuHuong, hoaDon } = req.body || {};
-  const nguoiDungVip = await NguoiDung.findOne({ email: phien.taiKhoan })
-    .select("vipTrangThai vipHetHan")
-    .lean();
-  if (!dangLaVip(nguoiDungVip)) {
-    return res.status(403).json({
-      message:
-        "Dịch vụ hoàn tiền dành cho tài khoản VIP. Tích lũy 600 điểm tích cực hoặc được Quản trị viên cấp VIP để sử dụng.",
-    });
-  }
   if (
     !maDon ||
     ![nganHang, soTaiKhoan, tenThuHuong].every(
@@ -216,12 +209,15 @@ router.post("/yeu-cau", async (req, res) => {
       maDon,
       emailKhach: phien.taiKhoan,
       trangThai: "Đặt phòng thành công",
+      thoiGianKhachDen: { $ne: null },
+      vipConHanKhiKhachDen: true,
     })
       .select("_id maDon")
       .lean();
     if (!don)
       return res.status(404).json({
-        message: "Không tìm thấy đơn đủ điều kiện của tài khoản này.",
+        message:
+          "Đơn này không đủ điều kiện hoàn tiền: cần check-in thành công khi VIP còn hiệu lực.",
       });
     if (await HoanTien.exists({ donHang: don._id }))
       return res
@@ -344,6 +340,8 @@ router.patch("/yeu-cau/:id/quyet-dinh", yeuCauQuanLy, async (req, res) => {
       _id: yc.donHang,
       emailKhach: yc.emailKhach,
       trangThai: "Đặt phòng thành công",
+      thoiGianKhachDen: { $ne: null },
+      vipConHanKhiKhachDen: true,
     })
       .select("_id")
       .lean();

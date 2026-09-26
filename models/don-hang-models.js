@@ -34,6 +34,7 @@ const DonHangSchema = new mongoose.Schema(
     diemCongDaXuLy: { type: Boolean, default: false },
     diemTruDaXuLy: { type: Boolean, default: false },
     thoiGianKhachDen: { type: Date, default: null },
+    vipConHanKhiKhachDen: { type: Boolean, default: false },
     doanhThuDaThu: { type: Boolean, default: false },
     soTienDaThu: { type: Number, default: 0, min: 0 },
     hoaDonQuanThu: { type: String, default: "" },

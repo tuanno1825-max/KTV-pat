@@ -2,6 +2,8 @@ const tbody = document.querySelector("#danh-sach");
 const thongBao = document.querySelector("#thong-bao");
 const lichSu = document.querySelector("#lich-su");
 const lichSuMoTa = document.querySelector("#lich-su-mo-ta");
+const yeuCauMatKhau = document.querySelector("#yeu-cau-mat-khau");
+const thongBaoMatKhau = document.querySelector("#thong-bao-mat-khau");
 
 const esc = (value) =>
   String(value ?? "").replace(
@@ -39,9 +41,10 @@ function taoDongKhach(user, index) {
     <td>${index + 1}</td>
     <td><strong>${esc(user.maKhachHang || "—")}</strong></td>
     <td><strong>${esc(user.hoTen)}</strong><br><span>${esc(user.email)}</span>${user.canhBao ? `<small>${esc(user.canhBao)}</small>` : ""}</td>
+    <td>${esc(user.soDienThoai || "Chưa cập nhật")}</td>
     <td><strong>${Number(user.diemTichLuy || 0)}</strong></td><td>${vip}</td>
     <td>${stats.tongDon}</td><td>${stats.thanhCong}</td><td>${stats.khongDen}</td><td>${stats.daHuy}</td><td>${stats.choXuLy}</td><td>${stats.thatBai}</td>
-    <td><button class="nut-hanh-dong" data-act="lich-su">Lịch sử</button><button class="nut-hanh-dong" data-act="cong-diem">C\u1ed9ng \u0111i\u1ec3m</button>${nutVip}<button class="nut-hanh-dong" data-act="xoa-tai-khoan">Xóa tài khoản</button></td>
+    <td><button class="nut-hanh-dong" data-act="lich-su">Lịch sử</button><button class="nut-hanh-dong" data-act="cong-diem">Cộng điểm</button>${nutVip}<button class="nut-hanh-dong" data-act="dat-lai-mat-khau">Đổi mật khẩu</button><button class="nut-hanh-dong" data-act="xoa-tai-khoan">Xóa tài khoản</button></td>
   </tr>`;
 }
 
@@ -54,7 +57,7 @@ async function taiDanhSach() {
     );
     tbody.innerHTML = users.length
       ? users.map((user, index) => taoDongKhach(user, index)).join("")
-      : '<tr><td colspan="12">Không tìm thấy tài khoản phù hợp.</td></tr>';
+      : '<tr><td colspan="13">Không tìm thấy tài khoản phù hợp.</td></tr>';
     thongBao.textContent = `${users.length} tài khoản`;
   } catch (error) {
     thongBao.textContent = error.message;
@@ -73,6 +76,41 @@ async function taiLichSu(email) {
     : "<p>Khách chưa có lịch sử đặt phòng.</p>";
 }
 
+async function taiYeuCauMatKhau() {
+  if (!yeuCauMatKhau) return;
+  try {
+    const requests = await api("/api/admin/yeu-cau-dat-lai-mat-khau");
+    yeuCauMatKhau.innerHTML = requests.length
+      ? requests
+          .map(
+            (request) => `<tr>
+              <td>${esc(request.hoTen)}<br><small>${esc(request.maKhachHang || "")}</small></td>
+              <td>${esc(request.email)}</td>
+              <td>${esc(request.soDienThoai || "Chưa cập nhật")}</td>
+              <td>${new Date(request.createdAt).toLocaleString("vi-VN")}</td>
+              <td><button class="nut-hanh-dong" data-reset-email="${esc(request.email)}">Đã xác minh, cấp mật khẩu</button></td>
+            </tr>`,
+          )
+          .join("")
+      : '<tr><td colspan="4">Không có yêu cầu đang chờ.</td></tr>';
+  } catch (error) {
+    yeuCauMatKhau.innerHTML = `<tr><td colspan="4">${esc(error.message)}</td></tr>`;
+  }
+}
+
+async function datLaiMatKhau(email) {
+  const result = await api(
+    `/api/admin/tai-khoan/${encodeURIComponent(email)}/dat-lai-mat-khau`,
+    { method: "POST" },
+  );
+  window.alert(`${result.message}\n\nMật khẩu tạm: ${result.matKhauTam}`);
+  if (thongBaoMatKhau) {
+    thongBaoMatKhau.textContent =
+      "Mật khẩu tạm đã được tạo và chỉ hiển thị một lần.";
+  }
+  await taiYeuCauMatKhau();
+}
+
 tbody.addEventListener("click", async (event) => {
   const button = event.target.closest("button[data-act]");
   if (!button) return;
@@ -80,28 +118,34 @@ tbody.addEventListener("click", async (event) => {
   const email = row.querySelector("td:nth-child(3) span").textContent;
   try {
     if (button.dataset.act === "lich-su") return await taiLichSu(email);
+    if (button.dataset.act === "dat-lai-mat-khau") {
+      if (!window.confirm(`Đổi mật khẩu cho ${email}?`)) return;
+      button.disabled = true;
+      await datLaiMatKhau(email);
+      return;
+    }
+
     let body = "{}";
     if (button.dataset.act === "cong-diem") {
       const nhapDiem = window.prompt(
-        `Nh\u1eadp s\u1ed1 \u0111i\u1ec3m mu\u1ed1n c\u1ed9ng cho ${email} (1\u20131.000.000):`,
+        `Nhập số điểm muốn cộng cho ${email} (1–1.000.000):`,
         "100",
       );
       if (nhapDiem === null) return;
       const soDiem = Number(nhapDiem.trim());
       if (!Number.isSafeInteger(soDiem) || soDiem < 1 || soDiem > 1000000) {
-        window.alert(
-          "S\u1ed1 \u0111i\u1ec3m ph\u1ea3i l\u00e0 s\u1ed1 nguy\u00ean t\u1eeb 1 \u0111\u1ebfn 1.000.000.",
-        );
+        window.alert("Số điểm phải là số nguyên từ 1 đến 1.000.000.");
         return;
       }
       body = JSON.stringify({ soDiem });
-      const diemHienTai = Number(row.children[3].textContent) || 0;
+      const diemHienTai = Number(row.children[4].textContent) || 0;
       const datVip = diemHienTai + soDiem >= 600;
       const xacNhan = datVip
-        ? `C\u1ed9ng ${soDiem} \u0111i\u1ec3m cho ${email}? Kh\u00e1ch \u0111\u1ea1t m\u1ed1c 600 \u0111i\u1ec3m n\u00ean s\u1ebd \u0111\u01b0\u1ee3c c\u1ea5p VIP 1 th\u00e1ng v\u00e0 \u0111i\u1ec3m \u0111\u01b0\u1ee3c \u0111\u1eb7t l\u1ea1i.`
-        : `C\u1ed9ng ${soDiem} \u0111i\u1ec3m cho ${email}?`;
+        ? `Cộng ${soDiem} điểm cho ${email}? Khách đạt mốc 600 điểm nên sẽ được cấp VIP 1 tháng và điểm được đặt lại.`
+        : `Cộng ${soDiem} điểm cho ${email}?`;
       if (!window.confirm(xacNhan)) return;
     }
+
     const confirmMessage = {
       "cap-vip": `Cấp VIP 1 tháng cho ${email}?`,
       "thu-hoi-vip": `Thu hồi VIP của ${email}?`,
@@ -126,8 +170,27 @@ tbody.addEventListener("click", async (event) => {
   }
 });
 
+yeuCauMatKhau?.addEventListener("click", async (event) => {
+  const button = event.target.closest("button[data-reset-email]");
+  if (!button) return;
+  const email = button.dataset.resetEmail;
+  if (
+    !window.confirm(`Bạn đã xác minh khách ${email} và muốn cấp mật khẩu tạm?`)
+  )
+    return;
+  button.disabled = true;
+  try {
+    await datLaiMatKhau(email);
+  } catch (error) {
+    thongBaoMatKhau.textContent = error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+
 document.querySelector("#tim-kiem").addEventListener("click", taiDanhSach);
 document.querySelector("#tu-khoa").addEventListener("keydown", (event) => {
   if (event.key === "Enter") taiDanhSach();
 });
 taiDanhSach();
+taiYeuCauMatKhau();

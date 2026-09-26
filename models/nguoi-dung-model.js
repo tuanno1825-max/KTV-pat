@@ -13,8 +13,12 @@ async function taoMaKhachHang() {
 const NguoiDungSchema = new mongoose.Schema(
   {
     hoTen: { type: String, required: true, trim: true, maxlength: 100 },
+    bietDanh: { type: String, default: "", trim: true, maxlength: 40 },
+    avatarUrl: { type: String, default: "", trim: true },
+    avatarZoom: { type: Number, default: 1.4, min: 1, max: 2.2 },
     maKhachHang: { type: String },
     email: { type: String, required: true, trim: true, lowercase: true },
+    soDienThoai: { type: String, trim: true, match: /^0\d{9}$/ },
     matKhau: { type: String, required: true, select: false },
     diemTichLuy: { type: Number, default: 0, min: 0 },
     vipTrangThai: {

@@ -96,11 +96,40 @@ a {
   gap: 16px;
   text-align: left;
 }
+.bieu-mau-xac-thuc[hidden] {
+  display: none;
+}
 
-.thong-bao-xac-thuc:empty { display: none; }
-.thong-bao-xac-thuc { margin: 0; color: #b42318; font-size: 0.88rem; line-height: 1.5; }
-.thong-bao-xac-thuc[data-loai="thanh-cong"] { color: #067647; }
-.nut-xac-thuc:disabled { opacity: 0.7; cursor: wait; }
+.thong-bao-xac-thuc:empty {
+  display: none;
+}
+.thong-bao-xac-thuc {
+  margin: 0;
+  color: #b42318;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.thong-bao-xac-thuc[data-loai="thanh-cong"] {
+  color: #067647;
+}
+.nut-xac-thuc:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.nut-quay-lai-dang-nhap {
+  border: 0;
+  color: var(--xanh-dam);
+  background: transparent;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.nut-quay-lai-dang-nhap:hover {
+  text-decoration: underline;
+}
 
 .nhom-truong {
   display: grid;

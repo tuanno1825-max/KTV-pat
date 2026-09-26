@@ -6,8 +6,9 @@
     <title>Quản lý gói VIP | Karaoke Together</title>
     <link rel="stylesheet" href="../css/datphong.css" />
     <link rel="stylesheet" href="../css/tai-khoan.css?v=2" />
-    <script src="../js/an-tai-khoan-khach.js?v=6" defer></script>
-    <script src="../js/tai-khoan-khach.js?v=9" defer></script>
+    <link rel="stylesheet" href="../css/tai-khoan-menu.css?v=2" />
+    <script src="../js/an-tai-khoan-khach.js?v=9" defer></script>
+    <script src="../js/tai-khoan-khach.js?v=12" defer></script>
   </head>
   <body>
     <header class="thanh-dau">
@@ -43,7 +44,171 @@
             <span>Email</span><strong id="email-tai-khoan">Đang tải...</strong>
           </div>
         </div>
-        <section class="muc-tai-khoan" id="diem-tich-cuc">
+        <nav class="tab-tai-khoan" aria-label="Nội dung tài khoản">
+          <button
+            class="tab-tai-khoan-nut dang-chon"
+            type="button"
+            data-tab-tai-khoan="tong-quan"
+            aria-selected="true"
+          >
+            Tổng quan
+          </button>
+          <button
+            class="tab-tai-khoan-nut"
+            type="button"
+            data-tab-tai-khoan="lich-su"
+            aria-selected="false"
+          >
+            Đơn đặt phòng
+          </button>
+          <button
+            class="tab-tai-khoan-nut"
+            type="button"
+            data-tab-tai-khoan="hoan-tien"
+            aria-selected="false"
+          >
+            Hoàn tiền
+          </button>
+          <button
+            class="tab-tai-khoan-nut"
+            type="button"
+            data-tab-tai-khoan="vip"
+            aria-selected="false"
+          >
+            Gói VIP
+          </button>
+        </nav>
+        <section
+          class="muc-tai-khoan"
+          id="thong-tin-ca-nhan"
+          data-tab-noi-dung="tong-quan"
+        >
+          <div class="tieu-de-thong-tin-ca-nhan">
+            <div>
+              <p class="nhan-muc-thong-tin">HỒ SƠ CÁ NHÂN</p>
+              <h2>Thông tin cá nhân</h2>
+              <p>
+                Cập nhật thông tin để admin có thể liên hệ xác minh khi cần.
+              </p>
+            </div>
+            <span class="nhan-da-xac-minh">● Hồ sơ đang hoạt động</span>
+          </div>
+          <form id="form-thong-tin-ca-nhan" class="form-thong-tin-ca-nhan">
+            <div class="cot-avatar-ho-so">
+              <div class="dau-form-thong-tin-ca-nhan">
+                <div class="xem-truoc-avatar">
+                  <img id="xem-truoc-anh-dai-dien" alt="Ảnh đại diện" hidden />
+                  <span id="chu-cai-avatar">K</span>
+                </div>
+                <div class="thao-tac-avatar">
+                  <label class="nut-chon-anh" for="tep-anh-dai-dien">
+                    Chọn ảnh
+                    <input
+                      id="tep-anh-dai-dien"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                    />
+                  </label>
+                  <button
+                    id="xoa-anh-dai-dien"
+                    class="nut-xoa-anh"
+                    type="button"
+                    hidden
+                  >
+                    Xóa ảnh
+                  </button>
+                  <small>JPG, PNG hoặc WEBP · tối đa 2 MB</small>
+                </div>
+              </div>
+              <div class="can-anh-dai-dien">
+                <label for="zoom-anh-dai-dien">Căn ảnh</label>
+                <input
+                  id="zoom-anh-dai-dien"
+                  type="range"
+                  min="1"
+                  max="2.2"
+                  step="0.05"
+                  value="1.4"
+                />
+                <output id="gia-tri-zoom-avatar" for="zoom-anh-dai-dien"
+                  >1.4×</output
+                >
+              </div>
+            </div>
+            <div class="thong-tin-chinh-ho-so">
+              <div class="nhom-truong-ho-so">
+                <label class="nhan-biet-danh" for="biet-danh">Biệt danh</label>
+                <input
+                  id="biet-danh"
+                  name="bietDanh"
+                  type="text"
+                  maxlength="40"
+                  autocomplete="nickname"
+                  required
+                />
+              </div>
+              <div class="nhom-truong-ho-so">
+                <label class="nhan-biet-danh" for="so-dien-thoai-ca-nhan"
+                  >Số điện thoại</label
+                >
+                <input
+                  id="so-dien-thoai-ca-nhan"
+                  name="soDienThoai"
+                  type="tel"
+                  autocomplete="tel"
+                  inputmode="tel"
+                  pattern="(?:0|\+84)[0-9 .()-]{9,14}"
+                  required
+                />
+              </div>
+              <div class="hanh-dong-ho-so">
+                <p id="thong-bao-ho-so" role="status" aria-live="polite"></p>
+                <button id="luu-ho-so" type="submit">Lưu thay đổi</button>
+              </div>
+            </div>
+          </form>
+          <div class="hop-xac-nhan-ho-so" id="hop-xac-nhan-ho-so" hidden>
+            <div class="nen-hop-xac-nhan" data-dong-hop-xac-nhan></div>
+            <div
+              class="noi-dung-hop-xac-nhan"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="tieu-de-xac-nhan-ho-so"
+            >
+              <div class="bieu-tuong-xac-nhan">✓</div>
+              <div>
+                <p class="nhan-muc-thong-tin">XÁC NHẬN THAY ĐỔI</p>
+                <h3 id="tieu-de-xac-nhan-ho-so">Lưu thông tin hồ sơ?</h3>
+                <p>
+                  Biệt danh, số điện thoại và ảnh đại diện sẽ được cập nhật vào
+                  tài khoản của bạn.
+                </p>
+              </div>
+              <div class="nut-xac-nhan-ho-so">
+                <button
+                  type="button"
+                  class="nut-huy-xac-nhan"
+                  data-dong-hop-xac-nhan
+                >
+                  Kiểm tra lại
+                </button>
+                <button
+                  type="button"
+                  class="nut-dong-y-xac-nhan"
+                  id="dong-y-luu-ho-so"
+                >
+                  Xác nhận lưu
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          class="muc-tai-khoan"
+          id="diem-tich-cuc"
+          data-tab-noi-dung="vip"
+          hidden
+        >
           <h2>⭐ Điểm tích cực (Uy tín)</h2>
           <div class="khung-diem-tich-cuc">
             <div class="dau-diem-tich-cuc">
@@ -80,7 +245,12 @@
             </div>
           </div>
         </section>
-        <section class="muc-tai-khoan" id="goi-vip">
+        <section
+          class="muc-tai-khoan"
+          id="goi-vip"
+          data-tab-noi-dung="vip"
+          hidden
+        >
           <h2>Gói hội viên</h2>
           <p id="trang-thai-goi-vip">Đang tải trạng thái gói...</p>
           <div id="yeu-cau-dang-ky-vip" hidden>
@@ -93,12 +263,42 @@
             >
           </div>
         </section>
-        <section class="muc-tai-khoan" id="yeu-cau-hoan-tien">
+        <section
+          class="muc-tai-khoan"
+          id="yeu-cau-hoan-tien"
+          data-tab-noi-dung="hoan-tien"
+          hidden
+        >
           <h2>Các yêu cầu hoàn tiền</h2>
+          <div class="bo-loc-lich-su bo-loc-hoan-tien">
+            <label for="loc-trang-thai-hoan-tien">Lọc theo trạng thái</label>
+            <select id="loc-trang-thai-hoan-tien">
+              <option value="tat-ca">Tất cả yêu cầu</option>
+              <option value="Chờ duyệt">Chờ duyệt</option>
+              <option value="Đã duyệt">Đã duyệt</option>
+              <option value="Đã hoàn tiền">Đã hoàn tiền</option>
+              <option value="Từ chối">Từ chối</option>
+            </select>
+          </div>
           <div id="noi-dung-yeu-cau-hoan-tien">Đang tải yêu cầu...</div>
         </section>
-        <section class="muc-tai-khoan" id="lich-su">
+        <section
+          class="muc-tai-khoan"
+          id="lich-su"
+          data-tab-noi-dung="lich-su"
+          hidden
+        >
           <h2>Lịch sử đơn đặt</h2>
+          <div class="bo-loc-lich-su">
+            <label for="loc-trang-thai-don">Lọc theo trạng thái</label>
+            <select id="loc-trang-thai-don">
+              <option value="tat-ca">Tất cả đơn</option>
+              <option value="Đặt phòng thành công">Đặt phòng thành công</option>
+              <option value="Đang chờ xử lý">Đang xử lý</option>
+              <option value="Khách đã hủy đặt phòng">Đã hủy</option>
+              <option value="Đặt phòng thất bại">Thất bại</option>
+            </select>
+          </div>
           <div id="noi-dung-lich-su">Đang tải lịch sử...</div>
         </section>
         <p id="thong-bao" role="status" aria-live="polite"></p>

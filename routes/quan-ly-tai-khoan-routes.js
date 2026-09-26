@@ -1,13 +1,21 @@
 const express = require("express");
+const crypto = require("crypto");
+const { promisify } = require("util");
 const NguoiDung = require("../models/nguoi-dung-model");
 const DonHang = require("../models/don-hang-models");
 const ThongBao = require("../models/thong-bao-model");
 const HoanTien = require("../models/hoan-tien-model");
 const DanhGia = require("../models/danh-gia-model");
 const BaiViet = require("../models/dien-dan-model");
+const YeuCauMatKhau = require("../models/yeu-cau-mat-khau-model");
 const { yeuCauAdmin } = require("../middleware/xac-thuc-noi-bo");
 const router = express.Router();
+const scrypt = promisify(crypto.scrypt);
 let tienTrinhCapMaTaiKhoanCu;
+
+function escapeRegex(chuoi) {
+  return String(chuoi).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 async function damBaoTaiKhoanCuCoMa() {
   if (!tienTrinhCapMaTaiKhoanCu) {
@@ -29,16 +37,27 @@ function congMotThang(date) {
   return d;
 }
 
+async function bamMatKhau(matKhau) {
+  const muoi = crypto.randomBytes(16).toString("hex");
+  const khoa = await scrypt(matKhau, muoi, 64);
+  return `${muoi}:${khoa.toString("hex")}`;
+}
+
+function taoMatKhauTam() {
+  return crypto.randomBytes(9).toString("base64url");
+}
+
 router.get("/admin/tai-khoan", yeuCauAdmin, async (req, res) => {
   try {
     await damBaoTaiKhoanCuCoMa();
     const tuKhoa = String(req.query.tuKhoa || "").trim();
+    const tuKhoaAnToan = escapeRegex(tuKhoa);
     const filter = tuKhoa
       ? {
           $or: [
-            { maKhachHang: { $regex: tuKhoa, $options: "i" } },
-            { hoTen: { $regex: tuKhoa, $options: "i" } },
-            { email: { $regex: tuKhoa, $options: "i" } },
+            { maKhachHang: { $regex: tuKhoaAnToan, $options: "i" } },
+            { hoTen: { $regex: tuKhoaAnToan, $options: "i" } },
+            { email: { $regex: tuKhoaAnToan, $options: "i" } },
           ],
         }
       : {};
@@ -82,6 +101,7 @@ router.get("/admin/tai-khoan", yeuCauAdmin, async (req, res) => {
         maKhachHang: u.maKhachHang,
         hoTen: u.hoTen,
         email: u.email,
+        soDienThoai: u.soDienThoai || "",
         diemTichLuy: u.diemTichLuy || 0,
         vipTrangThai: u.vipTrangThai,
         vipHetHan: u.vipHetHan,
@@ -116,6 +136,67 @@ router.get("/admin/tai-khoan/:email/lich-su", yeuCauAdmin, async (req, res) => {
     res.status(500).json({ message: "Không thể tải lịch sử đặt phòng." });
   }
 });
+
+router.get("/admin/yeu-cau-dat-lai-mat-khau", yeuCauAdmin, async (req, res) => {
+  try {
+    const requests = await YeuCauMatKhau.find({ trangThai: "cho-xu-ly" })
+      .sort({ createdAt: 1 })
+      .lean();
+    const emails = requests.map((request) => request.emailKhach);
+    const users = await NguoiDung.find({ email: { $in: emails } })
+      .select("email hoTen maKhachHang soDienThoai")
+      .lean();
+    const usersByEmail = new Map(users.map((user) => [user.email, user]));
+    res.json(
+      requests.map((request) => ({
+        _id: request._id,
+        email: request.emailKhach,
+        hoTen: usersByEmail.get(request.emailKhach)?.hoTen || "Không tìm thấy",
+        maKhachHang: usersByEmail.get(request.emailKhach)?.maKhachHang || "",
+        soDienThoai: usersByEmail.get(request.emailKhach)?.soDienThoai || "",
+        createdAt: request.createdAt,
+      })),
+    );
+  } catch {
+    res
+      .status(500)
+      .json({ message: "Không thể tải yêu cầu đặt lại mật khẩu." });
+  }
+});
+
+router.post(
+  "/admin/tai-khoan/:email/dat-lai-mat-khau",
+  yeuCauAdmin,
+  async (req, res) => {
+    try {
+      const email = req.params.email.trim().toLowerCase();
+      const user = await NguoiDung.findOne({ email }).select("email hoTen");
+      if (!user)
+        return res.status(404).json({ message: "Không tìm thấy khách hàng." });
+
+      const matKhauTam = taoMatKhauTam();
+      user.matKhau = await bamMatKhau(matKhauTam);
+      await user.save();
+      await YeuCauMatKhau.updateMany(
+        { emailKhach: email, trangThai: "cho-xu-ly" },
+        {
+          $set: {
+            trangThai: "da-cap",
+            nguoiXuLy: req.taiKhoanNoiBo.taiKhoan,
+            thoiGianXuLy: new Date(),
+          },
+        },
+      );
+      res.json({
+        message: `Đã đổi mật khẩu cho ${user.hoTen}. Chỉ gửi mật khẩu tạm này cho đúng khách hàng.`,
+        matKhauTam,
+      });
+    } catch (error) {
+      console.error("Lỗi admin đặt lại mật khẩu:", error.message);
+      res.status(500).json({ message: "Không thể đặt lại mật khẩu." });
+    }
+  },
+);
 
 router.post(
   "/admin/tai-khoan/:email/cap-vip",

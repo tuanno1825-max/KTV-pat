@@ -12,6 +12,32 @@ const thongBaoDangBai = document.querySelector("#thong-bao-dang");
 const widgetHoSo = document.querySelector("#widget-ho-so");
 const widgetQuanHot = document.querySelector("#widget-quan-hot");
 
+function escapeHtml(value) {
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    (kyTu) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[kyTu],
+  );
+}
+
+function taoHtmlAvatar(url, ten, className, mucZoom) {
+  const chuCai = escapeHtml((ten || "K").trim().charAt(0).toUpperCase());
+  const zoom = Number.isFinite(Number(mucZoom))
+    ? Math.min(2.2, Math.max(1, Number(mucZoom)))
+    : 1.4;
+  const duongDan =
+    /^\/uploads\/avatars\/[0-9a-f-]{36}\.(?:jpg|png|webp)$/i.test(url || "")
+      ? escapeHtml(url)
+      : "";
+  return `<div class="${className}">${duongDan ? `<img src="${duongDan}" alt="" loading="lazy" style="--avatar-zoom:${zoom}">` : chuCai || "K"}</div>`;
+}
+
 // Tính thời gian hiển thị tương đối (vd: 5 phút trước)
 function thoiGianTuongDoi(dateStr) {
   const date = new Date(dateStr);
@@ -31,7 +57,8 @@ async function khoiTaoNguoiDung() {
   try {
     const res = await fetch("/api/phien-khach-hang", { cache: "no-store" });
     if (!res.ok) return;
-    const { daDangNhap, email } = await res.json();
+    const { daDangNhap, email, bietDanh, avatarUrl, avatarZoom } =
+      await res.json();
     if (!daDangNhap || !email) {
       if (widgetHoSo) {
         widgetHoSo.innerHTML = `
@@ -55,26 +82,29 @@ async function khoiTaoNguoiDung() {
 
     thongTinNguoiDung = {
       email,
+      bietDanh: bietDanh || email.split("@")[0],
+      avatarUrl: avatarUrl || "",
+      avatarZoom: avatarZoom || 1.4,
       laVip: Boolean(vipInfo.vip),
       vipTrangThai: vipInfo.trangThai || "Chưa đăng ký",
     };
 
     if (widgetHoSo) {
-      const tenVietTat = email.charAt(0).toUpperCase();
       const badgeHtml = thongTinNguoiDung.laVip
         ? `<span class="huy-hieu-vip-lon">👑 VIP MEMBER</span>`
         : `<span class="huy-hieu-thuong">Thành viên KTV</span>`;
 
       widgetHoSo.innerHTML = `
         <div class="the-ho-so">
-          <div class="ho-so-avatar">${tenVietTat}</div>
-          <div class="ho-so-ten">${email.split("@")[0]}</div>
-          <div class="ho-so-email">${email}</div>
+          ${taoHtmlAvatar(thongTinNguoiDung.avatarUrl, thongTinNguoiDung.bietDanh, "ho-so-avatar", thongTinNguoiDung.avatarZoom)}
+          <div class="ho-so-ten">${escapeHtml(thongTinNguoiDung.bietDanh)}</div>
+          <div class="ho-so-email">${escapeHtml(email)}</div>
           ${badgeHtml}
           <div class="ho-so-diem">
             <span>Đặc quyền:</span>
             <strong>${thongTinNguoiDung.laVip ? "Hoàn tiền theo chính sách VIP" : "Tích điểm"}</strong>
           </div>
+          <a class="link-sua-ho-so" href="/html/tai-khoan.html#thong-tin-ca-nhan">Chỉnh sửa hồ sơ</a>
         </div>
       `;
     }
@@ -132,9 +162,15 @@ async function taiDanhSachQuan() {
 function taoTheBaiViet(bai) {
   const the = document.createElement("article");
   the.className = "the-bai-viet";
-  the.dataset.id = bai._id;
+  the.dataset.id = String(bai._id || "");
 
-  const chuCai = (bai.tenNguoiDang || "K").charAt(0).toUpperCase();
+  const tenNguoiDang = bai.tenNguoiDang || "Karaoke Together";
+  const avatar = taoHtmlAvatar(
+    bai.avatarNguoiDang,
+    tenNguoiDang,
+    "avatar-bai-viet",
+    bai.avatarZoomNguoiDang,
+  );
   const badgeVip = bai.laVip
     ? `<span class="badge-vip-nho" title="Thành viên VIP">👑 VIP</span>`
     : "";
@@ -145,7 +181,7 @@ function taoTheBaiViet(bai) {
   if (bai.chuDe === "Hỏi đáp & Kinh nghiệm") tagClass = "tag-hoi-dap";
 
   const tagQuanHtml = bai.tenQuanLienQuan
-    ? `<div class="tag-quan-lien-quan">📍 Tại: <strong>${bai.tenQuanLienQuan}</strong></div>`
+    ? `<div class="tag-quan-lien-quan">📍 Tại: <strong>${escapeHtml(bai.tenQuanLienQuan)}</strong></div>`
     : "";
 
   const nutXoaHtml = bai.laTacGia
@@ -155,24 +191,24 @@ function taoTheBaiViet(bai) {
   the.innerHTML = `
     <div class="dau-the-bai">
       <div class="nguoi-dang-thong-tin">
-        <div class="avatar-bai-viet">${chuCai}</div>
+        ${avatar}
         <div class="ten-va-thoi-gian">
           <div class="hang-ten-va-vip">
-            <span class="ten-nguoi-dang">${bai.tenNguoiDang}</span>
+            <span class="ten-nguoi-dang">${escapeHtml(tenNguoiDang)}</span>
             ${badgeVip}
           </div>
           <time class="thoi-gian-dang">${thoiGianTuongDoi(bai.createdAt)}</time>
         </div>
       </div>
       <div>
-        <span class="nhan-chu-de-tag ${tagClass}">${bai.chuDe}</span>
+        <span class="nhan-chu-de-tag ${tagClass}">${escapeHtml(bai.chuDe)}</span>
       </div>
     </div>
 
     ${tagQuanHtml}
 
-    <h2 class="tieu-de-bai-viet">${bai.tieuDe}</h2>
-    <div class="noi-dung-bai-viet">${bai.noiDung}</div>
+    <h2 class="tieu-de-bai-viet">${escapeHtml(bai.tieuDe)}</h2>
+    <div class="noi-dung-bai-viet">${escapeHtml(bai.noiDung)}</div>
 
     <div class="thanh-tuong-tac">
       <button class="nut-tuong-tac nut-thich ${bai.daThich ? "da-thich" : ""}" type="button">
@@ -294,20 +330,26 @@ function renderDanhSachBinhLuan(binhLuans) {
   }
   return binhLuans
     .map((bl) => {
-      const chuCai = (bl.tenNguoiBinhLuan || "K").charAt(0).toUpperCase();
+      const tenNguoiBinhLuan = bl.tenNguoiBinhLuan || "Karaoke Together";
+      const avatar = taoHtmlAvatar(
+        bl.avatarNguoiBinhLuan,
+        tenNguoiBinhLuan,
+        "avatar-binh-luan",
+        bl.avatarZoomBinhLuan,
+      );
       const badgeVip = bl.laVip
         ? `<span class="badge-vip-nho">👑 VIP</span>`
         : "";
       return `
         <div class="the-binh-luan-item">
-          <div class="avatar-binh-luan">${chuCai}</div>
+          ${avatar}
           <div class="noi-dung-binh-luan-wrap">
             <div class="dau-binh-luan">
-              <span class="ten-nguoi-binh-luan">${bl.tenNguoiBinhLuan}</span>
+              <span class="ten-nguoi-binh-luan">${escapeHtml(tenNguoiBinhLuan)}</span>
               ${badgeVip}
               <time class="thoi-gian-binh-luan">${thoiGianTuongDoi(bl.createdAt)}</time>
             </div>
-            <p class="chu-binh-luan">${bl.noiDung}</p>
+            <p class="chu-binh-luan">${escapeHtml(bl.noiDung)}</p>
           </div>
         </div>
       `;

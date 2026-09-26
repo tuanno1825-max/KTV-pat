@@ -3,9 +3,14 @@ const crypto = require("crypto");
 const BaiViet = require("../models/dien-dan-model");
 const Quan = require("../models/admin-models");
 const NguoiDung = require("../models/nguoi-dung-model");
+const ThongBao = require("../models/thong-bao-model");
 const { layPhien } = require("../middleware/xac-thuc-noi-bo");
 
 const router = express.Router();
+
+function escapeRegex(chuoi) {
+  return String(chuoi).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 function dangLaVip(nguoiDung) {
   const trangThai = String(nguoiDung?.vipTrangThai || "")
@@ -13,6 +18,40 @@ function dangLaVip(nguoiDung) {
     .toUpperCase();
   const hetHan = nguoiDung?.vipHetHan ? new Date(nguoiDung.vipHetHan) : null;
   return trangThai === "VIP" && (!hetHan || hetHan > new Date());
+}
+
+async function thongBaoChuBaiViet(baiViet, emailNguoiTuongTac, taoNoiDung) {
+  const emailChuBaiViet = String(baiViet.emailNguoiDang || "")
+    .trim()
+    .toLowerCase();
+  const emailNguoiTuongTacChuanHoa = String(emailNguoiTuongTac || "")
+    .trim()
+    .toLowerCase();
+  if (!emailChuBaiViet || emailChuBaiViet === emailNguoiTuongTacChuanHoa) {
+    return;
+  }
+
+  try {
+    const nguoiDung = await NguoiDung.findOne({
+      email: emailNguoiTuongTacChuanHoa,
+    })
+      .select("hoTen bietDanh")
+      .lean();
+    const tenNguoiTuongTac =
+      nguoiDung?.bietDanh ||
+      nguoiDung?.hoTen ||
+      emailNguoiTuongTacChuanHoa.split("@")[0];
+    await ThongBao.create({
+      emailKhach: emailChuBaiViet,
+      noiDung: taoNoiDung(tenNguoiTuongTac).slice(0, 300),
+      loai: "he-thong",
+    });
+  } catch (error) {
+    console.error(
+      "Không thể tạo thông báo hoạt động cộng đồng:",
+      error.message,
+    );
+  }
 }
 
 // Lấy danh sách bài viết diễn đàn cộng đồng
@@ -26,11 +65,12 @@ router.get("/dien-dan", async (req, res) => {
     }
 
     if (tuKhoa && typeof tuKhoa === "string" && tuKhoa.trim()) {
+      const tuKhoaAnToan = escapeRegex(tuKhoa.trim());
       filter.$or = [
-        { tieuDe: { $regex: tuKhoa.trim(), $options: "i" } },
-        { noiDung: { $regex: tuKhoa.trim(), $options: "i" } },
-        { tenQuanLienQuan: { $regex: tuKhoa.trim(), $options: "i" } },
-        { tenNguoiDang: { $regex: tuKhoa.trim(), $options: "i" } },
+        { tieuDe: { $regex: tuKhoaAnToan, $options: "i" } },
+        { noiDung: { $regex: tuKhoaAnToan, $options: "i" } },
+        { tenQuanLienQuan: { $regex: tuKhoaAnToan, $options: "i" } },
+        { tenNguoiDang: { $regex: tuKhoaAnToan, $options: "i" } },
       ];
     }
 
@@ -42,26 +82,61 @@ router.get("/dien-dan", async (req, res) => {
 
     const phien = layPhien(req);
     const emailHienTai = phien?.vaiTro === "khach-hang" ? phien.taiKhoan : null;
+    const cacEmailHoSo = [
+      ...new Set(
+        danhSach
+          .flatMap((bai) => [
+            bai.emailNguoiDang,
+            ...(bai.binhLuan || []).map(
+              (binhLuan) => binhLuan.emailNguoiBinhLuan,
+            ),
+          ])
+          .filter(Boolean),
+      ),
+    ];
+    const hoSoNguoiDung = await NguoiDung.find({ email: { $in: cacEmailHoSo } })
+      .select("email hoTen bietDanh avatarUrl avatarZoom")
+      .lean();
+    const hoSoTheoEmail = new Map(
+      hoSoNguoiDung.map((user) => [user.email, user]),
+    );
 
-    const ketQua = danhSach.map((bai) => ({
-      _id: bai._id,
-      tieuDe: bai.tieuDe,
-      noiDung: bai.noiDung,
-      chuDe: bai.chuDe,
-      tenNguoiDang: bai.tenNguoiDang,
-      emailNguoiDang: bai.emailNguoiDang,
-      laVip: Boolean(bai.laVip),
-      maQuanLienQuan: bai.maQuanLienQuan,
-      tenQuanLienQuan: bai.tenQuanLienQuan,
-      soLuotThich: (bai.luotThich || []).length,
-      daThich: emailHienTai
-        ? (bai.luotThich || []).includes(emailHienTai)
-        : false,
-      laTacGia: emailHienTai ? bai.emailNguoiDang === emailHienTai : false,
-      soBinhLuan: (bai.binhLuan || []).length,
-      binhLuan: bai.binhLuan || [],
-      createdAt: bai.createdAt,
-    }));
+    const ketQua = danhSach.map((bai) => {
+      const hoSoTacGia = hoSoTheoEmail.get(bai.emailNguoiDang);
+      const binhLuan = (bai.binhLuan || []).map((muc) => {
+        const hoSo = hoSoTheoEmail.get(muc.emailNguoiBinhLuan);
+        return {
+          ...muc,
+          tenNguoiBinhLuan:
+            hoSo?.bietDanh || hoSo?.hoTen || muc.tenNguoiBinhLuan,
+          avatarNguoiBinhLuan: hoSo?.avatarUrl || muc.avatarNguoiBinhLuan || "",
+          avatarZoomBinhLuan: hoSo?.avatarZoom || muc.avatarZoomBinhLuan || 1.4,
+        };
+      });
+      return {
+        _id: bai._id,
+        tieuDe: bai.tieuDe,
+        noiDung: bai.noiDung,
+        chuDe: bai.chuDe,
+        tenNguoiDang:
+          hoSoTacGia?.bietDanh || hoSoTacGia?.hoTen || bai.tenNguoiDang,
+        avatarNguoiDang: hoSoTacGia?.avatarUrl || bai.avatarNguoiDang || "",
+        avatarZoomNguoiDang:
+          hoSoTacGia?.avatarZoom || bai.avatarZoomNguoiDang || 1.4,
+        emailNguoiDang: bai.emailNguoiDang,
+        laVip: Boolean(bai.laVip),
+        maQuanLienQuan: bai.maQuanLienQuan,
+        tenQuanLienQuan: bai.tenQuanLienQuan,
+        soLuotThich: (bai.luotThich || []).length,
+        daThich: emailHienTai
+          ? (bai.luotThich || []).includes(emailHienTai)
+          : false,
+        laTacGia: emailHienTai ? bai.emailNguoiDang === emailHienTai : false,
+        soBinhLuan: binhLuan.length,
+        binhLuan,
+        createdAt: bai.createdAt,
+      };
+    });
 
     res.json(ketQua);
   } catch (error) {
@@ -75,12 +150,10 @@ router.get("/dien-dan", async (req, res) => {
 router.post("/dien-dan", async (req, res) => {
   const phien = layPhien(req);
   if (phien?.vaiTro !== "khach-hang") {
-    return res
-      .status(401)
-      .json({
-        message:
-          "Vui lòng đăng nhập tài khoản khách hàng để chia sẻ trên cộng đồng.",
-      });
+    return res.status(401).json({
+      message:
+        "Vui lòng đăng nhập tài khoản khách hàng để chia sẻ trên cộng đồng.",
+    });
   }
 
   try {
@@ -98,9 +171,10 @@ router.post("/dien-dan", async (req, res) => {
     }
 
     const nguoiDung = await NguoiDung.findOne({ email: phien.taiKhoan })
-      .select("hoTen vipTrangThai vipHetHan")
+      .select("hoTen bietDanh avatarUrl avatarZoom vipTrangThai vipHetHan")
       .lean();
-    const tenNguoiDang = nguoiDung?.hoTen || phien.taiKhoan.split("@")[0];
+    const tenNguoiDang =
+      nguoiDung?.bietDanh || nguoiDung?.hoTen || phien.taiKhoan.split("@")[0];
     const laVip = dangLaVip(nguoiDung);
 
     let tenQuanLienQuan = "";
@@ -124,6 +198,8 @@ router.post("/dien-dan", async (req, res) => {
         : "Giao lưu",
       emailNguoiDang: phien.taiKhoan,
       tenNguoiDang,
+      avatarNguoiDang: nguoiDung?.avatarUrl || "",
+      avatarZoomNguoiDang: nguoiDung?.avatarZoom || 1.4,
       laVip,
       maQuanLienQuan: maQuanLienQuan || "",
       tenQuanLienQuan,
@@ -168,6 +244,14 @@ router.post("/dien-dan/:id/thich", async (req, res) => {
 
     await baiViet.save();
 
+    if (daThich) {
+      await thongBaoChuBaiViet(
+        baiViet,
+        email,
+        (ten) => `${ten} đã thích bài viết "${baiViet.tieuDe}".`,
+      );
+    }
+
     res.json({
       daThich,
       soLuotThich: baiViet.luotThich.length,
@@ -200,15 +284,18 @@ router.post("/dien-dan/:id/binh-luan", async (req, res) => {
     }
 
     const nguoiDung = await NguoiDung.findOne({ email: phien.taiKhoan })
-      .select("hoTen vipTrangThai vipHetHan")
+      .select("hoTen bietDanh avatarUrl avatarZoom vipTrangThai vipHetHan")
       .lean();
-    const tenNguoiBinhLuan = nguoiDung?.hoTen || phien.taiKhoan.split("@")[0];
+    const tenNguoiBinhLuan =
+      nguoiDung?.bietDanh || nguoiDung?.hoTen || phien.taiKhoan.split("@")[0];
     const laVip = dangLaVip(nguoiDung);
 
     const binhLuanMoi = {
       id: crypto.randomUUID(),
       emailNguoiBinhLuan: phien.taiKhoan,
       tenNguoiBinhLuan,
+      avatarNguoiBinhLuan: nguoiDung?.avatarUrl || "",
+      avatarZoomBinhLuan: nguoiDung?.avatarZoom || 1.4,
       laVip,
       noiDung: noiDung.trim().slice(0, 600),
       createdAt: new Date(),
@@ -216,6 +303,12 @@ router.post("/dien-dan/:id/binh-luan", async (req, res) => {
 
     baiViet.binhLuan.push(binhLuanMoi);
     await baiViet.save();
+    await thongBaoChuBaiViet(
+      baiViet,
+      phien.taiKhoan,
+      (ten) =>
+        `${ten} đã bình luận bài viết "${baiViet.tieuDe}": ${binhLuanMoi.noiDung}`,
+    );
 
     res.status(201).json({
       message: "Đã gửi bình luận!",

@@ -21,7 +21,11 @@
             Đăng nhập để tiếp tục đặt phòng và tận hưởng những giờ hát vui vẻ.
           </p>
 
-          <form class="bieu-mau-xac-thuc" id="form-dang-nhap" data-che-do="dang-nhap">
+          <form
+            class="bieu-mau-xac-thuc"
+            id="form-dang-nhap"
+            data-che-do="dang-nhap"
+          >
             <p class="thong-bao-xac-thuc" role="status" aria-live="polite"></p>
             <div class="nhom-truong">
               <label for="email-dang-nhap">Email</label>
@@ -51,10 +55,37 @@
               <label class="ghi-nho"
                 ><input type="checkbox" /> Ghi nhớ đăng nhập</label
               >
-              <a href="#quen-mat-khau">Quên mật khẩu?</a>
+              <a href="#quen-mat-khau" id="mo-quen-mat-khau">Quên mật khẩu?</a>
             </div>
 
             <button class="nut-xac-thuc" type="submit">Đăng nhập</button>
+          </form>
+
+          <form
+            class="bieu-mau-xac-thuc form-quen-mat-khau"
+            id="form-quen-mat-khau"
+            hidden
+          >
+            <p class="thong-bao-xac-thuc" role="status" aria-live="polite"></p>
+            <div class="nhom-truong">
+              <label for="email-quen-mat-khau">Email tài khoản</label>
+              <input
+                id="email-quen-mat-khau"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                placeholder="Nhập email đã đăng ký"
+              />
+            </div>
+            <button class="nut-xac-thuc" type="submit">Gửi yêu cầu</button>
+            <button
+              class="nut-quay-lai-dang-nhap"
+              id="dong-quen-mat-khau"
+              type="button"
+            >
+              Quay lại đăng nhập
+            </button>
           </form>
 
           <p class="doi-form">

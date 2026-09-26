@@ -21,11 +21,23 @@
             Đăng ký để đặt phòng nhanh hơn và quản lý những buổi hát của bạn.
           </p>
 
-          <form class="bieu-mau-xac-thuc" id="form-dang-ky" data-che-do="dang-ky">
+          <form
+            class="bieu-mau-xac-thuc"
+            id="form-dang-ky"
+            data-che-do="dang-ky"
+          >
             <p class="thong-bao-xac-thuc" role="status" aria-live="polite"></p>
             <div class="nhom-truong">
               <label for="ho-ten">Họ và tên</label>
-              <input id="ho-ten" name="hoTen" type="text" autocomplete="name" maxlength="100" required placeholder="Nhập họ và tên" />
+              <input
+                id="ho-ten"
+                name="hoTen"
+                type="text"
+                autocomplete="name"
+                maxlength="100"
+                required
+                placeholder="Nhập họ và tên"
+              />
             </div>
 
             <div class="nhom-truong">
@@ -37,6 +49,20 @@
                 autocomplete="email"
                 required
                 placeholder="you@example.com"
+              />
+            </div>
+
+            <div class="nhom-truong">
+              <label for="so-dien-thoai-dang-ky">Số điện thoại</label>
+              <input
+                id="so-dien-thoai-dang-ky"
+                name="soDienThoai"
+                type="tel"
+                autocomplete="tel"
+                inputmode="tel"
+                pattern="(?:0|\+84)[0-9 .()-]{9,14}"
+                required
+                placeholder="Ví dụ: 0912345678"
               />
             </div>
 
@@ -69,8 +95,8 @@
             </div>
 
             <label class="ghi-nho dieu-khoan"
-              ><input name="dongYDieuKhoan" type="checkbox" required /> Tôi đồng ý với điều khoản sử
-              dụng</label
+              ><input name="dongYDieuKhoan" type="checkbox" required /> Tôi đồng
+              ý với điều khoản sử dụng</label
             >
             <button class="nut-xac-thuc" type="submit">Tạo tài khoản</button>
           </form>

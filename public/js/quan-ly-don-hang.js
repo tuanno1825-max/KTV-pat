@@ -376,11 +376,7 @@ async function taiDonHang() {
           nutKhachDen.className = "nut-bang nut-bang-xac-nhan";
           nutKhachDen.textContent = "Khách có đến";
           nutKhachDen.addEventListener("click", async () => {
-            if (
-              !window.confirm(
-                `Xác nhận khách đã đến ở đơn ${don.maDon} và cộng 100 điểm?`,
-              )
-            )
+            if (!window.confirm(`Ghi nhận khách đã đến ở đơn ${don.maDon}?`))
               return;
             nutKhachDen.disabled = true;
             try {

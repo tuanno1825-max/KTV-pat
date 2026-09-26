@@ -19,7 +19,9 @@ async function taiDonDuDieuKien() {
   const donHangs = await phanHoi.json();
   if (!phanHoi.ok)
     throw new Error(donHangs.message || "Không tải được đơn hàng.");
-  chonDonHoanTien.replaceChildren(new Option("Chọn đơn đã hát", ""));
+  chonDonHoanTien.replaceChildren(
+    new Option("Chọn đơn đã check-in khi VIP còn hiệu lực", ""),
+  );
   donHangs.forEach((don) => {
     const nhan = `${don.maDon} · ${don.tenQuan} · ${new Date(don.thoiGianDat).toLocaleDateString("vi-VN")}`;
     const muc = new Option(nhan, don.maDon);
@@ -30,13 +32,15 @@ async function taiDonDuDieuKien() {
     chonDonHoanTien.add(muc);
   });
   const nutGui = formHoanTien.querySelector("button[type=submit]");
-  nutGui.disabled = !donHangs.some((don) => !don.yeuCauHoanTien);
+  const coDonDuDieuKien = donHangs.some((don) => !don.yeuCauHoanTien);
+  nutGui.disabled = !coDonDuDieuKien;
   if (!donHangs.length) {
     chonDonHoanTien.replaceChildren(
-      new Option("Chưa có đơn đặt phòng thành công", ""),
+      new Option("Chưa có đơn check-in đủ điều kiện VIP", ""),
     );
     nutGui.disabled = true;
   }
+  return coDonDuDieuKien;
 }
 
 async function khoiTaoUuDaiVip() {
@@ -62,7 +66,20 @@ async function khoiTaoUuDaiVip() {
       tinhTrangVip.message || "Không kiểm tra được trạng thái VIP.",
     );
   if (!tinhTrangVip.vip) {
-    trangThai.textContent = `Tài khoản ${phien.email} chưa đăng ký VIP.`;
+    try {
+      const coDonDuDieuKien = await taiDonDuDieuKien();
+      if (coDonDuDieuKien) {
+        trangThai.textContent = `Tài khoản ${phien.email} hiện không còn VIP, nhưng vẫn có thể gửi yêu cầu cho đơn đã check-in khi VIP còn hiệu lực.`;
+        formHoanTien.hidden = false;
+        return;
+      }
+    } catch (error) {
+      thongBaoHoanTien.textContent = error.message;
+      chonDonHoanTien.replaceChildren(
+        new Option("Không tải được đơn hàng", ""),
+      );
+    }
+    trangThai.textContent = `Tài khoản ${phien.email} chưa có đơn hoàn tiền đủ điều kiện.`;
     const vungNangCap = document.querySelector("#yeu-cau-nang-cap-vip");
     vungNangCap.hidden = false;
     return;
