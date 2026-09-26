@@ -30,7 +30,11 @@ bieuMauNoiBo.addEventListener("submit", async (suKien) => {
     const ketQua = await phanHoi.json();
     if (!phanHoi.ok) throw new Error(ketQua.message);
 
-    window.location.href = "/admin";
+    window.location.href = ketQua.vaiTro === "manager"
+      ? "/quan-ly-doanh-thu"
+      : ketQua.vaiTro === "nhanvien"
+        ? "/quan-ly-don-hang"
+        : "/admin";
   } catch (error) {
     hienThiLoi(error.message || "Đăng nhập không thành công.");
     nutDangNhap.disabled = false;

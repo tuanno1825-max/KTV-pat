@@ -22,13 +22,21 @@ async function taiThongTinTaiKhoan() {
 }
 
 async function taiDiemTichCuc() {
-  const response = await fetch("/api/thong-tin-ca-nhan", { credentials: "same-origin", cache: "no-store" });
+  const response = await fetch("/api/thong-tin-ca-nhan", {
+    credentials: "same-origin",
+    cache: "no-store",
+  });
   const contentType = response.headers.get("content-type") || "";
   if (!contentType.includes("application/json")) {
-    throw new Error("Máy chủ chưa trả dữ liệu điểm tích cực. Hãy tải lại trang sau khi khởi động lại máy chủ.");
+    throw new Error(
+      "Máy chủ chưa trả dữ liệu điểm tích cực. Hãy tải lại trang sau khi khởi động lại máy chủ.",
+    );
   }
   const user = await response.json();
-  if (!response.ok) throw new Error(user.message || "Không tải được điểm tích cực.");
+  if (!response.ok)
+    throw new Error(user.message || "Không tải được điểm tích cực.");
+  document.querySelector("#ma-khach-hang").textContent =
+    user.maKhachHang || "—";
   const diem = Number(user.diemTichLuy || 0);
   const diemEl = document.querySelector("#diem-so-hien-tai");
   if (diemEl) diemEl.innerHTML = `${diem} <span>/ 600 điểm</span>`;
@@ -47,7 +55,10 @@ async function taiDiemTichCuc() {
       : `Bạn cần thêm <strong>${conThieu} điểm</strong> để tự động nhận <strong>VIP 1 tháng</strong>. Điểm sẽ được đặt lại sau khi nhận VIP.`;
   }
   const badgeVip = document.querySelector("#badge-vip-nho");
-  if (badgeVip) badgeVip.innerHTML = laVip ? '<span class="huy-hieu-xac-thuc">👑 Đang là VIP</span>' : "";
+  if (badgeVip)
+    badgeVip.innerHTML = laVip
+      ? '<span class="huy-hieu-xac-thuc">👑 Đang là VIP</span>'
+      : "";
 }
 
 async function taiTrangThaiGoiVip() {
@@ -86,6 +97,7 @@ async function taiYeuCauHoanTien() {
   const bang = document.createElement("table");
   bang.className = "bang-lich-su";
   const dau = document.createElement("thead");
+  const nhanCot = ["Mã đơn", "Ngày gửi", "Mức hoàn", "Trạng thái"];
   dau.innerHTML =
     "<tr><th>Mã đơn</th><th>Ngày gửi</th><th>Mức hoàn</th><th>Trạng thái</th></tr>";
   const than = document.createElement("tbody");
@@ -97,8 +109,9 @@ async function taiYeuCauHoanTien() {
     const mucHoan = yc.phanTramHoan
       ? `${yc.phanTramHoan}%`
       : "Chờ nhân viên xét";
-    [yc.maDon, ngay, mucHoan, yc.trangThai].forEach((giaTri) => {
+    [yc.maDon, ngay, mucHoan, yc.trangThai].forEach((giaTri, viTri) => {
       const o = document.createElement("td");
+      o.dataset.label = nhanCot[viTri];
       o.textContent = giaTri || "—";
       hang.append(o);
     });
@@ -124,6 +137,13 @@ async function taiLichSuDatPhong() {
   const bang = document.createElement("table");
   bang.className = "bang-lich-su";
   const dau = document.createElement("thead");
+  const nhanCot = [
+    "Mã đơn",
+    "Quán",
+    "Ngày đặt",
+    "Giờ đến dự kiến",
+    "Trạng thái",
+  ];
   dau.innerHTML =
     "<tr><th>Mã đơn</th><th>Quán</th><th>Ngày đặt</th><th>Giờ đến dự kiến</th><th>Trạng thái</th></tr>";
   const than = document.createElement("tbody");
@@ -138,8 +158,9 @@ async function taiLichSuDatPhong() {
       ngayDat,
       don.thoiGianCheckIn,
       don.trangThai,
-    ].forEach((giaTri) => {
+    ].forEach((giaTri, viTri) => {
       const o = document.createElement("td");
+      o.dataset.label = nhanCot[viTri];
       o.textContent = giaTri || "—";
       hang.append(o);
     });

@@ -14,9 +14,10 @@ const scrypt = promisify(crypto.scrypt);
 
 router.get("/phien-khach-hang", async (req, res) => {
   const phien = layPhien(req);
-  const daDangNhap = phien?.vaiTro === "khach-hang"
-    ? Boolean(await NguoiDung.exists({ email: phien.taiKhoan }))
-    : false;
+  const daDangNhap =
+    phien?.vaiTro === "khach-hang"
+      ? Boolean(await NguoiDung.exists({ email: phien.taiKhoan }))
+      : false;
   res.json({
     daDangNhap,
     email: daDangNhap ? phien.taiKhoan : null,
@@ -26,25 +27,39 @@ router.get("/phien-khach-hang", async (req, res) => {
 router.get("/thong-tin-ca-nhan", async (req, res) => {
   const phien = layPhien(req);
   if (phien?.vaiTro !== "khach-hang") {
-    return res.status(401).json({ message: "Vui lòng đăng nhập tài khoản khách hàng." });
+    return res
+      .status(401)
+      .json({ message: "Vui lòng đăng nhập tài khoản khách hàng." });
   }
   try {
     const user = await NguoiDung.findOne({ email: phien.taiKhoan }).lean();
-    if (!user) return res.status(404).json({ message: "Không tìm thấy tài khoản khách hàng." });
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy tài khoản khách hàng." });
     const [tongThanhCong, tongKhongDen] = await Promise.all([
-      DonHang.countDocuments({ emailKhach: user.email, trangThai: "Đặt phòng thành công" }),
-      DonHang.countDocuments({ emailKhach: user.email, trangThai: "Khách không đến" }),
+      DonHang.countDocuments({
+        emailKhach: user.email,
+        trangThai: "Đặt phòng thành công",
+      }),
+      DonHang.countDocuments({
+        emailKhach: user.email,
+        trangThai: "Khách không đến",
+      }),
     ]);
+    const maKhachHang = await NguoiDung.damBaoMaKhachHang(user);
     const vipHetHan = user.vipHetHan ? new Date(user.vipHetHan) : null;
     res.json({
       hoTen: user.hoTen,
       email: user.email,
+      maKhachHang,
       diemTichLuy: user.diemTichLuy || 0,
       tongThanhCong,
       tongKhongDen,
       vipTrangThai: user.vipTrangThai,
       vipHetHan: user.vipHetHan,
-      laVip: user.vipTrangThai === "VIP" && (!vipHetHan || vipHetHan > new Date()),
+      laVip:
+        user.vipTrangThai === "VIP" && (!vipHetHan || vipHetHan > new Date()),
     });
   } catch (error) {
     console.error("Lỗi tải thông tin cá nhân:", error);

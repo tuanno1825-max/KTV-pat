@@ -1,7 +1,6 @@
 const express = require("express");
 const Quan = require("../models/admin-models");
 const {
-  yeuCauDangNhap,
   yeuCauAdmin,
 } = require("../middleware/xac-thuc-noi-bo");
 const router = express.Router();
@@ -76,7 +75,7 @@ router.get("/quan-cong-khai", async (req, res) => {
 
 // API công khai: ghi nhận yêu cầu đặt phòng
 // API: Lay danh sach quan
-router.get("/quan", yeuCauDangNhap, async (req, res) => {
+router.get("/quan", yeuCauAdmin, async (req, res) => {
   try {
     const { quanHuyen, trangThai, tuKhoa } = req.query;
     const boLoc = {};

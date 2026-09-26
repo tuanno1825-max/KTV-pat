@@ -1,0 +1,102 @@
+.bo-cuc-huong-dan-admin {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 290px);
+  align-items: start;
+  gap: 16px;
+}
+
+.noi-dung-admin-co-huong-dan {
+  min-width: 0;
+}
+
+.the-huong-dan-admin {
+  position: sticky;
+  top: 20px;
+  padding: 18px;
+  border: 1px solid #d5e5e8;
+  border-top: 3px solid #087e8b;
+  border-radius: 10px;
+  background: linear-gradient(155deg, #fff, #f7fbfb);
+  box-shadow: 0 6px 18px rgba(16, 50, 70, 0.06);
+}
+
+.nhan-huong-dan-admin {
+  margin: 0 0 6px;
+  color: #087e8b;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.the-huong-dan-admin h2 {
+  margin: 0;
+  color: #17384c;
+  font-size: 1.02rem;
+  line-height: 1.35;
+}
+
+.the-huong-dan-admin ol {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: buoc-huong-dan;
+}
+
+.the-huong-dan-admin li {
+  position: relative;
+  padding-left: 30px;
+  color: #536b7c;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  counter-increment: buoc-huong-dan;
+}
+
+.the-huong-dan-admin li::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  width: 21px;
+  height: 21px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e5f4f3;
+  color: #087e8b;
+  content: counter(buoc-huong-dan);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.the-huong-dan-admin li strong {
+  color: #244757;
+}
+
+.luu-y-huong-dan-admin {
+  margin: 16px 0 0;
+  padding: 10px 11px;
+  border-left: 3px solid #d99a31;
+  border-radius: 0 6px 6px 0;
+  background: #fff8e9;
+  color: #77531b;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1050px) {
+  .bo-cuc-huong-dan-admin {
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+}
+
+@media (max-width: 900px) {
+  .bo-cuc-huong-dan-admin {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .the-huong-dan-admin {
+    position: static;
+  }
+}

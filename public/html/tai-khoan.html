@@ -5,154 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quản lý gói VIP | Karaoke Together</title>
     <link rel="stylesheet" href="../css/datphong.css" />
+    <link rel="stylesheet" href="../css/tai-khoan.css?v=2" />
     <script src="../js/an-tai-khoan-khach.js?v=6" defer></script>
-    <script src="../js/tai-khoan-khach.js?v=7" defer></script>
-    <style>
-      .quan-ly-tai-khoan {
-        width: min(620px, calc(100% - 32px));
-        margin: 72px auto;
-        padding: 32px;
-        background: #fff;
-        border: 1px solid #dce8eb;
-        border-radius: 18px;
-        box-shadow: 0 18px 48px #17333d14;
-      }
-      .quan-ly-tai-khoan h1 {
-        margin-top: 0;
-        color: #075c69;
-      }
-      .thong-tin-tai-khoan {
-        padding: 16px;
-        background: #f4f8fa;
-        border-radius: 10px;
-      }
-      .muc-tai-khoan {
-        margin-top: 28px;
-        padding-top: 18px;
-        border-top: 1px solid #dce8eb;
-      }
-      .muc-tai-khoan h2 {
-        color: #075c69;
-      }
-      .khung-diem-tich-cuc {
-        padding: 20px;
-        margin-bottom: 14px;
-        border: 1px solid #bbf7d0;
-        border-radius: 16px;
-        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
-      }
-      .dau-diem-tich-cuc {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 12px;
-      }
-      .con-so-diem {
-        color: #059669;
-        font-size: 2.2rem;
-        font-weight: 800;
-      }
-      .con-so-diem span {
-        color: #64748b;
-        font-size: 1rem;
-        font-weight: 600;
-      }
-      .thanh-tien-do-diem {
-        width: 100%;
-        height: 12px;
-        margin-bottom: 10px;
-        overflow: hidden;
-        border-radius: 999px;
-        background: #e2e8f0;
-      }
-      .thanh-tien-do-chay {
-        height: 100%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, #10b981, #059669);
-        transition: width 0.4s ease;
-      }
-      .mo-ta-tien-do {
-        margin: 0;
-        color: #334155;
-        font-size: 0.9rem;
-        line-height: 1.6;
-      }
-      .luat-tich-diem {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 10px;
-        margin-top: 14px;
-        font-size: 0.82rem;
-      }
-      .the-luat {
-        padding: 10px 12px;
-        border: 1px solid #d1fae5;
-        border-radius: 8px;
-        background: #fff;
-      }
-      .the-luat strong { display: block; margin-top: 4px; font-size: 0.9rem; }
-      .huy-hieu-xac-thuc {
-        display: inline-flex;
-        padding: 4px 12px;
-        border: 1px solid #f59e0b;
-        border-radius: 999px;
-        background: #fef3c7;
-        color: #b45309;
-        font-size: 0.85rem;
-        font-weight: 700;
-      }
-      .bang-lich-su {
-        width: 100%;
-        min-width: 560px;
-        border-collapse: collapse;
-        text-align: left;
-      }
-      #noi-dung-lich-su {
-        overflow-x: auto;
-        overscroll-behavior-x: contain;
-      }
-      .bang-lich-su th,
-      .bang-lich-su td {
-        padding: 10px 6px;
-        border-bottom: 1px solid #dce8eb;
-      }
-      .nut-nang-cap-vip {
-        display: inline-block;
-        margin-top: 8px;
-        padding: 10px 14px;
-        color: #fff;
-        background: #087e8b;
-        border-radius: 8px;
-        font-weight: 700;
-      }
-      .nut-dang-xuat {
-        margin-top: 20px;
-        padding: 11px 18px;
-        color: #fff;
-        background: #b42318;
-        border: 0;
-        border-radius: 9px;
-        cursor: pointer;
-        font-weight: 700;
-      }
-      #thong-bao {
-        min-height: 1.5em;
-      }
-      @media (max-width: 520px) {
-        .quan-ly-tai-khoan {
-          margin: 32px auto;
-          padding: 22px;
-        }
-      }
-    </style>
+    <script src="../js/tai-khoan-khach.js?v=9" defer></script>
   </head>
   <body>
     <header class="thanh-dau">
       <div class="khung-dau">
         <a class="logo-kara" href="/" aria-label="Trang chủ"
-          ><img src="../image/logo.png" alt="Karaoke Together"
-        /><span class="ten-thuong-hieu">Karaoke Together</span></a>
+          ><img src="../image/logo.png" alt="Karaoke Together" /><span
+            class="ten-thuong-hieu"
+            >Karaoke Together</span
+          ></a
+        >
         <nav class="menu-ngang" aria-label="Điều hướng chính">
           <a href="/">Trang chủ</a>
           <a href="/html/datphong.html">Đặt phòng</a>
@@ -170,25 +35,48 @@
         <p class="nhan-nho">KARAOKE TOGETHER / HỘI VIÊN</p>
         <h1>Tài khoản của tôi</h1>
         <div class="thong-tin-tai-khoan">
-          Email: <strong id="email-tai-khoan">Đang tải...</strong>
+          <div>
+            <span>Mã khách hàng</span
+            ><strong id="ma-khach-hang">Đang tải...</strong>
+          </div>
+          <div>
+            <span>Email</span><strong id="email-tai-khoan">Đang tải...</strong>
+          </div>
         </div>
         <section class="muc-tai-khoan" id="diem-tich-cuc">
           <h2>⭐ Điểm tích cực (Uy tín)</h2>
           <div class="khung-diem-tich-cuc">
             <div class="dau-diem-tich-cuc">
               <div>
-                <span style="font-size:0.88rem;color:#475569;font-weight:600">Điểm tích lũy hiện có</span>
-                <div class="con-so-diem" id="diem-so-hien-tai">0 <span>/ 600 điểm</span></div>
+                <span class="nhan-diem-tich-luy">Điểm tích lũy hiện có</span>
+                <div class="con-so-diem" id="diem-so-hien-tai">
+                  0 <span>/ 600 điểm</span>
+                </div>
               </div>
               <div id="badge-vip-nho"></div>
             </div>
-            <div class="thanh-tien-do-diem" role="progressbar" aria-label="Tiến độ điểm tích cực" aria-valuemin="0" aria-valuemax="600">
-              <div class="thanh-tien-do-chay" id="thanh-tien-do-diem" style="width:0%"></div>
+            <div
+              class="thanh-tien-do-diem"
+              role="progressbar"
+              aria-label="Tiến độ điểm tích cực"
+              aria-valuemin="0"
+              aria-valuemax="600"
+            >
+              <div class="thanh-tien-do-chay" id="thanh-tien-do-diem"></div>
             </div>
-            <p class="mo-ta-tien-do" id="mo-ta-tien-do">Đang tải điểm tích cực...</p>
+            <p class="mo-ta-tien-do" id="mo-ta-tien-do">
+              Đang tải điểm tích cực...
+            </p>
             <div class="luat-tich-diem">
-              <div class="the-luat"><span style="color:#059669">✅ Đặt phòng và check-in thành công</span><strong>+100 điểm tích lũy</strong></div>
-              <div class="the-luat"><span style="color:#d97706">👑 Đạt từ 600 điểm</span><strong>Tự động nhận VIP 1 tháng</strong></div>
+              <div class="the-luat">
+                <span class="nhan-diem-thanh-cong"
+                  >✅ Đặt phòng và check-in thành công</span
+                ><strong>+100 điểm tích lũy</strong>
+              </div>
+              <div class="the-luat">
+                <span class="nhan-diem-du-vip">👑 Đạt từ 600 điểm</span
+                ><strong>Tự động nhận VIP 1 tháng</strong>
+              </div>
             </div>
           </div>
         </section>
@@ -197,7 +85,8 @@
           <p id="trang-thai-goi-vip">Đang tải trạng thái gói...</p>
           <div id="yeu-cau-dang-ky-vip" hidden>
             <p>
-              Tích lũy 600 điểm tích cực để được tự động cấp VIP 1 tháng, hoặc nhận VIP từ Quản trị viên.
+              Tích lũy 600 điểm tích cực để được tự động cấp VIP 1 tháng, hoặc
+              nhận VIP từ Quản trị viên.
             </p>
             <a class="nut-nang-cap-vip" href="/html/uu-dai-vip.html"
               >Tích điểm để nhận VIP</a

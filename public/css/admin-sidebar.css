@@ -1,0 +1,345 @@
+/* Shared navigation for internal staff and admin pages. */
+body:has(.dau-quan-tri) {
+  min-height: 100vh;
+}
+.dau-quan-tri,
+.dau-quan-tri * {
+  box-sizing: border-box;
+}
+.dau-quan-tri {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 20;
+  width: 286px;
+  height: 100vh;
+  overflow-y: auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 24px 16px;
+  background: linear-gradient(155deg, #103347 0%, #075e6b 55%, #087e8b 100%);
+  box-shadow: 12px 0 35px rgba(13, 45, 61, 0.13);
+}
+.thanh-dau-quan-tri {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 27px;
+  height: 100%;
+  min-height: 0;
+  padding: 8px 0;
+}
+.thanh-dau-quan-tri > div:first-child {
+  align-items: flex-start;
+  padding: 8px 10px 18px;
+}
+.nut-an-menu {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 11px;
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 11px;
+  border: 1px solid rgba(218, 248, 248, 0.18);
+  border-radius: 11px;
+  color: #e9ffff;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-align: left;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+.nut-an-menu:hover {
+  border-color: rgba(218, 248, 248, 0.4);
+  background: rgba(255, 255, 255, 0.15);
+}
+.bieu-tuong-menu {
+  width: 20px;
+  color: #9ce9e4;
+  font-size: 1.25rem;
+  line-height: 1;
+  text-align: center;
+}
+.nhan-nut-menu {
+  white-space: nowrap;
+}
+.thanh-dau-quan-tri .nhan-quan-tri {
+  color: #a9e5e5;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+}
+.thanh-dau-quan-tri h1 {
+  margin-top: 8px;
+  font-size: 1.45rem;
+  line-height: 1.25;
+}
+.thanh-dau-quan-tri > div:first-child > span {
+  color: #d0e8ea;
+  line-height: 1.5;
+}
+.cntqlad {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  gap: 5px;
+  align-items: stretch;
+  justify-content: stretch;
+  flex-shrink: 1;
+  padding: 0 4px;
+}
+.nhom-menu-noi-bo {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 5px;
+  margin: 0 0 16px;
+}
+.nhom-menu-noi-bo[hidden] {
+  display: none;
+}
+.nhom-menu-noi-bo:not(.menu-nhom-mo) > a {
+  display: none;
+}
+.nut-chon-nhom-menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 30px;
+  padding: 0 12px 6px;
+  border: 0;
+  color: #9ed2d8;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.nut-chon-nhom-menu::after {
+  content: "+";
+  font-size: 1rem;
+  letter-spacing: 0;
+  opacity: 0.8;
+}
+.nut-chon-nhom-menu[aria-expanded="true"]::after {
+  content: "−";
+}
+.nut-chon-nhom-menu:hover {
+  color: #e6ffff;
+}
+.nhom-menu-noi-bo > span {
+  padding: 0 12px 7px;
+  color: #9ed2d8;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.cntqlad a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  color: #edfafa;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+.cntqlad a[hidden] {
+  display: none;
+}
+.cntqlad[hidden] {
+  display: none;
+}
+.cntqlad a::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border: 2px solid #79d1d0;
+  border-radius: 50%;
+}
+.cntqlad a:hover {
+  transform: translateX(3px);
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.11);
+}
+.cntqlad a[aria-current="page"] {
+  border-color: rgba(180, 242, 239, 0.22);
+  background: rgba(205, 255, 250, 0.17);
+  color: #fff;
+  box-shadow: inset 3px 0 #6ee7d8;
+}
+.cntqlad a[aria-current="page"]::before {
+  border-color: #a6fff0;
+  background: #a6fff0;
+}
+.nut-dang-xuat-noi-bo {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  margin-top: auto;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 190, 190, 0.3);
+  border-radius: 11px;
+  color: #fff0f0;
+  background: rgba(160, 35, 45, 0.23);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+.nut-dang-xuat-noi-bo:hover {
+  border-color: rgba(255, 210, 210, 0.55);
+  background: rgba(180, 45, 55, 0.45);
+}
+.khung-bang,
+.bang-wrap,
+.bang-doanh-thu-wrap {
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-color: #91a7ad #edf3f6;
+  scrollbar-width: thin;
+}
+.khung-bang thead th,
+.bang-wrap thead th,
+.bang-doanh-thu-wrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.nut-dang-xuat-noi-bo:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.khung-quan-tri {
+  width: min(1440px, calc(100% - 286px));
+  max-width: 1440px;
+  margin: 28px 0 28px 286px;
+  padding: 0 28px 40px;
+}
+body.menu-noi-bo-an .dau-quan-tri {
+  width: 76px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+body.menu-noi-bo-an .thanh-dau-quan-tri {
+  align-items: center;
+}
+body.menu-noi-bo-an .thanh-dau-quan-tri > div:first-of-type {
+  display: none;
+}
+body.menu-noi-bo-an .nut-an-menu {
+  justify-content: center;
+  padding: 8px;
+}
+body.menu-noi-bo-an .nhan-nut-menu,
+body.menu-noi-bo-an .cntqlad {
+  display: none;
+}
+body.menu-noi-bo-an .khung-quan-tri {
+  width: min(1440px, calc(100% - 76px));
+  margin-left: 76px;
+}
+@media (max-width: 760px) {
+  .dau-quan-tri {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    padding: 18px 16px 14px;
+  }
+  .thanh-dau-quan-tri {
+    height: auto;
+    gap: 12px;
+    padding: 0;
+  }
+  .thanh-dau-quan-tri > div:first-child {
+    padding: 4px 5px 2px;
+  }
+  .thanh-dau-quan-tri h1 {
+    font-size: 1.35rem;
+  }
+  .cntqlad {
+    display: grid;
+    flex: initial;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px 7px;
+    padding: 0;
+  }
+  .nhom-menu-noi-bo {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px 7px;
+    margin: 0 0 7px;
+  }
+  .nhom-menu-noi-bo > span,
+  .nhom-menu-noi-bo > .nut-chon-nhom-menu {
+    grid-column: 1 / -1;
+    padding: 6px 9px 3px;
+  }
+  .cntqlad a {
+    min-height: 40px;
+    padding: 8px 9px;
+    font-size: 0.82rem;
+  }
+  .nut-dang-xuat-noi-bo {
+    grid-column: 1 / -1;
+    margin-top: 7px;
+  }
+  .khung-quan-tri {
+    width: auto;
+    max-width: 1440px;
+    margin: 18px auto;
+    padding: 0 16px 30px;
+  }
+  body.menu-noi-bo-an .dau-quan-tri {
+    width: 100%;
+    padding: 10px 16px;
+  }
+  body.menu-noi-bo-an .thanh-dau-quan-tri {
+    align-items: stretch;
+  }
+  body.menu-noi-bo-an .nut-an-menu {
+    width: auto;
+    align-self: flex-start;
+  }
+  body.menu-noi-bo-an .bieu-tuong-menu {
+    display: inline;
+  }
+  body.menu-noi-bo-an .nhan-nut-menu {
+    display: inline;
+  }
+  body.menu-noi-bo-an .khung-quan-tri {
+    width: auto;
+    margin: 18px auto;
+  }
+}
+@media (max-width: 390px) {
+  .cntqlad,
+  .nhom-menu-noi-bo {
+    grid-template-columns: 1fr;
+  }
+  .nhom-menu-noi-bo > span,
+  .nhom-menu-noi-bo > .nut-chon-nhom-menu {
+    grid-column: auto;
+  }
+}

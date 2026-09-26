@@ -16,7 +16,7 @@ const danhGiaRoutes = require("./routes/danh-gia-routes");
 const dienDanRoutes = require("./routes/dien-dan-routes");
 const quanLyTaiKhoanRoutes = require("./routes/quan-ly-tai-khoan-routes");
 const NguoiDung = require("./models/nguoi-dung-model");
-const { yeuCauDangNhap, yeuCauAdmin, layPhien } = require("./middleware/xac-thuc-noi-bo");
+const { yeuCauDangNhap, yeuCauAdmin, yeuCauQuanLy, layPhien } = require("./middleware/xac-thuc-noi-bo");
 
 // Khoi tao ung dung Express
 const app = express();
@@ -37,31 +37,26 @@ app.use("/api", async (req, res, next) => {
   }
 });
 
-// Phuc vu cac file HTML, CSS, JS trong thu muc public
-app.use(express.static(path.join(__dirname, "public")));
-// Cho phep truy cap cac trang HTML bang ten file ngan, vi du /dangnhap.html.
-app.use(express.static(path.join(__dirname, "public", "html")));
-
 // Mo trang chu khi truy cap truc tiep vao http://localhost:3000/
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "index.html"));
 });
 
 // Duong dan ngan cho cac trang quan tri va tai khoan
-app.get("/admin", yeuCauDangNhap, (req, res) => {
+app.get(["/admin", "/admin.html", "/html/admin.html"], yeuCauAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "admin.html"));
 });
-app.get("/admin-tai-khoan", yeuCauAdmin, (req, res) => {
+app.get(["/admin-tai-khoan", "/admin-tai-khoan.html", "/html/admin-tai-khoan.html"], yeuCauAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "admin-tai-khoan.html"));
 });
 //Đường dẫn trang quản lý đơn hàng cho Nhân viên
-app.get("/quan-ly-don-hang", yeuCauDangNhap, (req, res) => {
+app.get(["/quan-ly-don-hang", "/qldh.html", "/html/qldh.html"], yeuCauDangNhap, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "qldh.html"));
 });
-app.get("/quan-ly-hoan-tien", yeuCauDangNhap, (req, res) => {
+app.get(["/quan-ly-hoan-tien", "/quan-ly-hoan-tien.html", "/html/quan-ly-hoan-tien.html"], yeuCauQuanLy, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "quan-ly-hoan-tien.html"));
 });
-app.get("/quan-ly-doanh-thu", yeuCauDangNhap, (req, res) => {
+app.get(["/quan-ly-doanh-thu", "/quan-ly-doanh-thu.html", "/html/quan-ly-doanh-thu.html"], yeuCauQuanLy, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "quan-ly-doanh-thu.html"));
 });
 app.get("/dangnhap", (req, res) => {
@@ -70,6 +65,11 @@ app.get("/dangnhap", (req, res) => {
 app.get("/cong-dong", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "html", "cong-dong.html"));
 });
+
+// Public assets are served after guarded internal page aliases.
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public", "html")));
+
 // Su dung router quan ly quan cho cac API
 app.use("/api", xacThucRoutes);
 app.use("/api", quanRoutes);

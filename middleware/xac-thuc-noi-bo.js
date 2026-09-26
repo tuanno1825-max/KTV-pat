@@ -44,7 +44,7 @@ function yeuCauDangNhap(req, res, next) {
   if (!phien) {
     return res.status(401).json({ message: "Bạn cần đăng nhập nội bộ." });
   }
-  if (!["admin", "nhanvien"].includes(phien.vaiTro)) {
+  if (!["admin", "manager", "nhanvien"].includes(phien.vaiTro)) {
     return res.status(403).json({ message: "Tài khoản khách không có quyền truy cập khu vực nội bộ." });
   }
   req.taiKhoanNoiBo = phien;
@@ -62,5 +62,16 @@ function yeuCauAdmin(req, res, next) {
   });
 }
 
+function yeuCauQuanLy(req, res, next) {
+  yeuCauDangNhap(req, res, () => {
+    if (!["admin", "manager"].includes(req.taiKhoanNoiBo.vaiTro)) {
+      return res
+        .status(403)
+        .json({ message: "Chỉ Quản lý hoặc Admin được truy cập chức năng này." });
+    }
+    next();
+  });
+}
 
-module.exports = { taoPhienNoiBo, layPhien, yeuCauDangNhap, yeuCauAdmin };
+
+module.exports = { taoPhienNoiBo, layPhien, yeuCauDangNhap, yeuCauAdmin, yeuCauQuanLy };

@@ -4,47 +4,262 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quản lý đơn hàng - Karaoke Together</title>
-    <link rel="stylesheet" href="/css/qldh.css" />
+    <link rel="stylesheet" href="/css/qldh.css?v=18" />
+    <link rel="stylesheet" href="/css/admin-sidebar.css?v=2" />
+    <link rel="stylesheet" href="/css/admin-work-guides.css?v=1" />
     <!-- File CSS chung hoặc CSS riêng của bạn -->
+    <script src="/js/admin-sidebar.js" defer></script>
+    <script src="/js/admin-table-scroll.js?v=1" defer></script>
   </head>
   <body>
     <!-- Phần đầu trang (Header đồng bộ với trang Admin) -->
     <header class="dau-quan-tri">
       <div class="thanh-dau-quan-tri">
+        <button
+          class="nut-an-menu"
+          type="button"
+          aria-controls="menu-quan-tri"
+          aria-expanded="true"
+          aria-label="Ẩn menu"
+        >
+          <span class="bieu-tuong-menu" aria-hidden="true">☰</span
+          ><span class="nhan-nut-menu">Ẩn menu</span>
+        </button>
         <div>
           <p class="nhan-quan-tri">KARAOKE TOGETHER</p>
           <h1>Quản lý đơn hàng</h1>
           <span>Xác nhận và theo dõi các lịch đặt phòng</span>
         </div>
-        <div class="cntqlad">
-          <a class="nut-thoat" href="/">Về trang chủ</a>
-          <a class="nut-thoat" href="/quan-ly-don-hang" aria-current="page">Quản lý đơn</a>
-          <a class="nut-thoat" href="/quan-ly-hoan-tien">Yêu cầu hoàn tiền</a>
-          <a class="nut-thoat" href="/quan-ly-doanh-thu">Quản lý doanh thu</a>
-          <a class="nut-thoat" href="/admin">Quản lý quán</a>
-          <a class="nut-thoat" id="tab-quan-ly-tai-khoan" href="/admin-tai-khoan" hidden>Quản lý tài khoản</a>
+        <div
+          class="cntqlad"
+          id="menu-quan-tri"
+          aria-label="&#272;i&#7873;u h&#432;&#7899;ng n&#7897;i b&#7897;"
+        >
+          <div
+            class="nhom-menu-noi-bo menu-nhom-mo"
+            id="nhom-menu-nhan-vien"
+            data-menu-group="nhan-vien"
+          >
+            <button
+              class="nut-chon-nhom-menu"
+              type="button"
+              aria-controls="nhom-menu-nhan-vien"
+              aria-expanded="true"
+            >
+              Nh&#226;n vi&#234;n
+            </button>
+            <a class="nut-thoat" href="/quan-ly-don-hang" aria-current="page"
+              >Qu&#7843;n l&#253; &#273;&#417;n</a
+            >
+          </div>
+          <div
+            class="nhom-menu-noi-bo"
+            id="nhom-menu-manager"
+            data-menu-group="manager"
+          >
+            <button
+              class="nut-chon-nhom-menu"
+              type="button"
+              aria-controls="nhom-menu-manager"
+              aria-expanded="false"
+            >
+              Qu&#7843;n l&#253;
+            </button>
+            <a class="nut-thoat" href="/quan-ly-hoan-tien"
+              >Y&#234;u c&#7847;u ho&#224;n ti&#7873;n</a
+            >
+            <a class="nut-thoat" href="/quan-ly-doanh-thu"
+              >Qu&#7843;n l&#253; doanh thu</a
+            >
+          </div>
+          <div
+            class="nhom-menu-noi-bo"
+            id="nhom-menu-admin"
+            data-menu-group="admin"
+          >
+            <button
+              class="nut-chon-nhom-menu"
+              type="button"
+              aria-controls="nhom-menu-admin"
+              aria-expanded="false"
+            >
+              Admin
+            </button>
+            <a class="nut-thoat" href="/admin">Qu&#7843;n l&#253; qu&#225;n</a>
+            <a
+              class="nut-thoat"
+              href="/admin-tai-khoan"
+              id="tab-quan-ly-tai-khoan"
+              hidden
+              >Qu&#7843;n l&#253; t&#224;i kho&#7843;n</a
+            >
+          </div>
         </div>
       </div>
     </header>
 
     <!-- Khung nội dung chính -->
     <main class="khung-quan-tri">
-      <!-- Khu vực bộ lọc và tìm kiếm -->
+      <div class="bo-cuc-huong-dan-admin">
+        <div class="noi-dung-admin-co-huong-dan">
+          <!-- Khu vực bộ lọc và tìm kiếm -->
 
+          <!-- Bảng danh sách đơn hàng -->
+          <section class="khung-thong-ke" aria-labelledby="tieu-de-thong-ke">
+            <div class="dau-thong-ke">
+              <div>
+                <h2 id="tieu-de-thong-ke">Thống kê đơn hàng</h2>
+                <p>Tổng hợp số đơn theo trạng thái</p>
+              </div>
+              <div
+                id="gio-cao-diem"
+                class="the-gio-cao-diem"
+                aria-live="polite"
+              >
+                Đang tải khung giờ cao điểm...
+              </div>
+            </div>
+            <div
+              class="loc-ngay-don-hang"
+              aria-label="L&#7885;c th&#7901;i gian th&#7889;ng k&#234;"
+            >
+              <div>
+                <label for="thong-ke-don-tu-ngay">T&#7915; ng&#224;y</label
+                ><input id="thong-ke-don-tu-ngay" type="date" />
+              </div>
+              <div>
+                <label for="thong-ke-don-den-ngay"
+                  >&#272;&#7871;n ng&#224;y</label
+                ><input id="thong-ke-don-den-ngay" type="date" />
+              </div>
+              <button class="nut-chung" id="ap-dung-loc-ngay-don" type="button">
+                L&#7885;c th&#7889;ng k&#234;
+              </button>
+              <button
+                class="nut-chung nut-hien-thi-don"
+                id="xoa-loc-ngay-don"
+                type="button"
+              >
+                T&#7845;t c&#7843; th&#7901;i gian
+              </button>
+            </div>
+            <div
+              id="thong-ke-trang-thai"
+              class="luoi-thong-ke"
+              aria-live="polite"
+            ></div>
+          </section>
 
-      <!-- Bảng danh sách đơn hàng -->
-      <section class="khung-thong-ke" aria-labelledby="tieu-de-thong-ke">
-        <div class="dau-thong-ke">
-          <div>
-            <h2 id="tieu-de-thong-ke">Thống kê đơn hàng</h2>
-            <p>Tổng hợp số đơn theo trạng thái</p>
-          </div>
-          <div id="gio-cao-diem" class="the-gio-cao-diem" aria-live="polite">
-            Đang tải khung giờ cao điểm...
-          </div>
+          <section
+            class="khu-bieu-do-don"
+            aria-label="Bi&#7875;u &#273;&#7891; th&#7889;ng k&#234; &#273;&#417;n h&#224;ng"
+          >
+            <section
+              class="khung-bieu-tron-don"
+              aria-labelledby="tieu-de-bieu-tron-don"
+            >
+              <div class="dau-bieu-do-don">
+                <div>
+                  <h2 id="tieu-de-bieu-tron-don">
+                    K&#7871;t qu&#7843; &#273;&#7863;t ph&#242;ng
+                  </h2>
+                  <p>
+                    &#272;&#417;n th&#224;nh c&#244;ng &#273;&#432;&#7907;c
+                    t&#225;ch theo kh&#225;ch c&#243; &#273;&#7871;n /
+                    kh&#244;ng &#273;&#7871;n; &#273;&#417;n th&#7845;t
+                    b&#7841;i / h&#7911;y hi&#7875;n th&#7883; ri&#234;ng.
+                  </p>
+                </div>
+              </div>
+              <div class="noi-dung-bieu-tron-don">
+                <div
+                  id="bieu-do-tron-don"
+                  class="bieu-do-tron-don"
+                  role="img"
+                  aria-label="Bi&#7875;u &#273;&#7891; k&#7871;t qu&#7843; &#273;&#7863;t ph&#242;ng"
+                  aria-live="polite"
+                >
+                  <span id="tong-bieu-do-tron-don">0</span>
+                </div>
+                <div
+                  id="chu-giai-bieu-tron-don"
+                  class="chu-giai-bieu-tron-don"
+                ></div>
+              </div>
+            </section>
+
+            <section
+              class="khung-bieu-do-don"
+              aria-labelledby="tieu-de-bieu-do-don"
+            >
+              <div class="dau-bieu-do-don">
+                <div>
+                  <h2 id="tieu-de-bieu-do-don">
+                    K&#7871;t qu&#7843; &#273;&#7863;t ph&#242;ng theo ng&#224;y
+                  </h2>
+                  <p>
+                    G&#7891;m &#273;&#417;n th&#224;nh c&#244;ng, kh&#225;ch
+                    kh&#244;ng &#273;&#7871;n v&#224; &#273;&#417;n th&#7845;t
+                    b&#7841;i / h&#7911;y.
+                  </p>
+                </div>
+                <div
+                  class="chu-giai-bieu-do-don"
+                  aria-label="Ch&#250; gi&#7843;i"
+                >
+                  <span
+                    ><i class="mau-bieu-do thanh-cong"></i>Kh&#225;ch c&#243;
+                    &#273;&#7871;n</span
+                  >
+                  <span
+                    ><i class="mau-bieu-do dang-xu-ly"></i>Kh&#225;ch kh&#244;ng
+                    &#273;&#7871;n</span
+                  >
+                  <span
+                    ><i class="mau-bieu-do that-bai"></i>Th&#7845;t b&#7841;i /
+                    h&#7911;y</span
+                  >
+                </div>
+              </div>
+              <div
+                id="bieu-do-don-theo-ngay"
+                class="bieu-do-don-theo-ngay"
+                role="img"
+                aria-label="Bi&#7875;u &#273;&#7891; k&#7871;t qu&#7843; &#273;&#7863;t ph&#242;ng theo ng&#224;y"
+                aria-live="polite"
+              >
+                <p class="thong-bao-bieu-do-don">
+                  &#272;ang t&#7843;i bi&#7875;u &#273;&#7891;...
+                </p>
+              </div>
+            </section>
+          </section>
         </div>
-        <div id="thong-ke-trang-thai" class="luoi-thong-ke" aria-live="polite"></div>
-      </section>
+        <aside
+          class="the-huong-dan-admin"
+          aria-labelledby="huong-dan-nhan-vien"
+        >
+          <p class="nhan-huong-dan-admin">Nhân viên · xử lý đơn</p>
+          <h2 id="huong-dan-nhan-vien">Các bước ghi nhận kết quả</h2>
+          <ol>
+            <li>
+              <strong>Đang chờ:</strong> kiểm tra thông tin đặt phòng rồi xác
+              nhận đơn.
+            </li>
+            <li>
+              <strong>Đã xác nhận:</strong> chọn thành công hoặc thất bại theo
+              phản hồi của quán.
+            </li>
+            <li>
+              <strong>Thành công:</strong> ghi nhận riêng khách có đến hoặc
+              không đến.
+            </li>
+          </ol>
+          <p class="luu-y-huong-dan-admin">
+            Chỉ ghi nhận khách có đến / không đến sau khi đã đối chiếu lịch đặt.
+          </p>
+        </aside>
+      </div>
 
       <section class="khung-tim-kiem">
         <div class="nhom-tim-kiem">
@@ -60,7 +275,9 @@
             <option value="Đặt phòng thành công">Đặt phòng thành công</option>
             <option value="Đặt phòng thất bại">Đặt phòng thất bại</option>
             <option value="Đề xuất quán mới">Đề xuất quán mới</option>
-            <option value="Khách đã chấp nhận đề xuất">Khách đã chấp nhận đề xuất</option>
+            <option value="Khách đã chấp nhận đề xuất">
+              Khách đã chấp nhận đề xuất
+            </option>
             <option value="Khách từ chối đề xuất">Khách từ chối đề xuất</option>
             <option value="Khách không đến">Khách không đến</option>
           </select>
@@ -78,6 +295,7 @@
               <th>STT</th>
               <th>Mã đơn</th>
               <th>Tên khách hàng</th>
+              <th>S&#7889; &#273;i&#7879;n tho&#7841;i qu&#225;n</th>
               <th>Thời gian đặt</th>
               <th>Giờ đến dự kiến</th>
               <th>Số điện thoại</th>
@@ -93,6 +311,6 @@
     </main>
 
     <!-- File JavaScript xử lý logic cho trang quản lý đơn hàng -->
-    <script src="/js/quan-ly-don-hang.js?v=13"></script>
+    <script src="/js/quan-ly-don-hang.js?v=18"></script>
   </body>
 </html>

@@ -46,12 +46,10 @@ router.post("/don-hang", async (req, res) => {
         layPhien(req)?.vaiTro === "khach-hang" ? layPhien(req).taiKhoan : "",
       soNguoi,
     });
-    res
-      .status(201)
-      .json({
-        message: "Đã ghi nhận yêu cầu đặt phòng.",
-        maDon: donHang.maDon,
-      });
+    res.status(201).json({
+      message: "Đã ghi nhận yêu cầu đặt phòng.",
+      maDon: donHang.maDon,
+    });
   } catch (error) {
     res.status(500).json({ message: "Không thể lưu yêu cầu đặt phòng." });
   }
@@ -64,7 +62,9 @@ router.get("/don-hang/lich-su-khach", async (req, res) => {
     return res.status(401).json({ message: "Vui lòng đăng nhập." });
   try {
     if (!(await NguoiDung.exists({ email: phien.taiKhoan }))) {
-      return res.status(401).json({ message: "Tài khoản này không còn hoạt động." });
+      return res
+        .status(401)
+        .json({ message: "Tài khoản này không còn hoạt động." });
     }
     const donHang = await DonHang.find({ emailKhach: phien.taiKhoan })
       .select("maDon tenQuan thoiGianCheckIn trangThai thoiGianDat")
@@ -205,40 +205,137 @@ router.get("/don-hang", yeuCauDangNhap, async (req, res) => {
         { maDon: { $regex: tuKhoa, $options: "i" } },
         { tenKhach: { $regex: tuKhoa, $options: "i" } },
       ];
-    res.json(await DonHang.find(boLoc).select("maDon maQuan tenQuan tenKhach emailKhach xungHo soDienThoai thoiGianCheckIn soNguoi trangThai maQuanDeXuat tenQuanDeXuat maDonGoc maDonTiepTheo daHuy diemCongDaXuLy diemTruDaXuLy thoiGianDat").sort({ thoiGianDat: -1 }).lean());
+    const donHangs = await DonHang.find(boLoc)
+      .select(
+        "maDon maQuan tenQuan tenKhach emailKhach xungHo soDienThoai thoiGianCheckIn soNguoi trangThai maQuanDeXuat tenQuanDeXuat maDonGoc maDonTiepTheo daHuy diemCongDaXuLy diemTruDaXuLy thoiGianDat",
+      )
+      .sort({ thoiGianDat: -1 })
+      .lean();
+    const maQuans = [
+      ...new Set(donHangs.map((don) => don.maQuan).filter(Boolean)),
+    ];
+    const quans = await Quan.find({ maQuan: { $in: maQuans } })
+      .select("maQuan soDienThoai")
+      .lean();
+    const soDienThoaiTheoQuan = new Map(
+      quans.map((quan) => [quan.maQuan, quan.soDienThoai]),
+    );
+    res.json(
+      donHangs.map((don) => ({
+        ...don,
+        soDienThoaiQuan: soDienThoaiTheoQuan.get(don.maQuan) || "",
+      })),
+    );
   } catch (error) {
     res.status(500).json({ message: "Không thể tải danh sách đơn hàng." });
   }
 });
 
+function ngayBangkokTuChuoi(ngayChuoi, congNgay = 0) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(ngayChuoi || "")) return null;
+  const [nam, thang, ngay] = ngayChuoi.split("-").map(Number);
+  const mocUtcGoc = Date.UTC(nam, thang - 1, ngay);
+  const ngayUtc = new Date(mocUtcGoc);
+  if (
+    ngayUtc.getUTCFullYear() !== nam ||
+    ngayUtc.getUTCMonth() !== thang - 1 ||
+    ngayUtc.getUTCDate() !== ngay
+  )
+    return null;
+  const mocUtc = Date.UTC(nam, thang - 1, ngay + congNgay);
+  return new Date(mocUtc - 7 * 60 * 60 * 1000);
+}
+
+function ngayHienTaiBangkok() {
+  const cacPhanNgay = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Bangkok",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const phanNgay = Object.fromEntries(
+    cacPhanNgay.map((phan) => [phan.type, phan.value]),
+  );
+  return `${phanNgay.year}-${phanNgay.month}-${phanNgay.day}`;
+}
+
 router.get("/don-hang/thong-ke", yeuCauDangNhap, async (req, res) => {
   try {
-    const thongKe = await DonHang.aggregate([
-      {
-        $facet: {
-          theoTrangThai: [
-            { $group: { _id: "$trangThai", soLuong: { $sum: 1 } } },
-          ],
-          theoGio: [
-            {
-              $group: {
-                _id: {
-                  $hour: { date: "$thoiGianDat", timezone: "Asia/Bangkok" },
-                },
-                soLuong: { $sum: 1 },
+    const tuNgay = String(req.query.tuNgay || "");
+    const denNgay = String(req.query.denNgay || "");
+    const mocTuNgay = tuNgay ? ngayBangkokTuChuoi(tuNgay) : null;
+    const mocDenNgay = denNgay ? ngayBangkokTuChuoi(denNgay, 1) : null;
+    if ((tuNgay && !mocTuNgay) || (denNgay && !mocDenNgay)) {
+      return res.status(400).json({ message: "Ngày lọc không hợp lệ." });
+    }
+    if (mocTuNgay && mocDenNgay && mocTuNgay >= mocDenNgay) {
+      return res
+        .status(400)
+        .json({ message: "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc." });
+    }
+
+    const ngayCuoiBieuDo = denNgay || ngayHienTaiBangkok();
+    const mocCuoiBieuDo = ngayBangkokTuChuoi(ngayCuoiBieuDo, 1);
+    const mocDauMacDinh = ngayBangkokTuChuoi(ngayCuoiBieuDo, -6);
+    const dieuKienNgay = {};
+    if (mocTuNgay) dieuKienNgay.$gte = mocTuNgay;
+    if (mocDenNgay) dieuKienNgay.$lt = mocDenNgay;
+    const cacBuocThongKe = [];
+    if (Object.keys(dieuKienNgay).length)
+      cacBuocThongKe.push({ $match: { thoiGianDat: dieuKienNgay } });
+    cacBuocThongKe.push({
+      $facet: {
+        theoTrangThai: [
+          { $group: { _id: "$trangThai", soLuong: { $sum: 1 } } },
+        ],
+        theoGio: [
+          {
+            $group: {
+              _id: {
+                $hour: { date: "$thoiGianDat", timezone: "Asia/Bangkok" },
               },
+              soLuong: { $sum: 1 },
             },
-            { $sort: { soLuong: -1, _id: 1 } },
-            { $limit: 1 },
-          ],
-          tong: [{ $count: "soLuong" }],
-        },
+          },
+          { $sort: { soLuong: -1, _id: 1 } },
+          { $limit: 1 },
+        ],
+        theoNgay: [
+          ...(!Object.keys(dieuKienNgay).length
+            ? [
+                {
+                  $match: {
+                    thoiGianDat: { $gte: mocDauMacDinh, $lt: mocCuoiBieuDo },
+                  },
+                },
+              ]
+            : []),
+          {
+            $group: {
+              _id: {
+                ngay: {
+                  $dateToString: {
+                    format: "%Y-%m-%d",
+                    date: "$thoiGianDat",
+                    timezone: "Asia/Bangkok",
+                  },
+                },
+                trangThai: "$trangThai",
+              },
+              soLuong: { $sum: 1 },
+            },
+          },
+          { $sort: { "_id.ngay": 1 } },
+        ],
+        tong: [{ $count: "soLuong" }],
       },
-    ]);
+    });
+    const thongKe = await DonHang.aggregate(cacBuocThongKe);
     const ketQua = thongKe[0] || {};
     res.json({
       tongDon: ketQua.tong?.[0]?.soLuong || 0,
       theoTrangThai: ketQua.theoTrangThai || [],
+      theoNgay: ketQua.theoNgay || [],
       gioCaoDiem: ketQua.theoGio?.[0]
         ? { gio: ketQua.theoGio[0]._id, soLuong: ketQua.theoGio[0].soLuong }
         : null,
@@ -268,40 +365,58 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
       .lean();
     if (!donHienTai)
       return res.status(404).json({ message: "Không tìm thấy đơn hàng." });
-    if (["Đặt phòng thành công", "Đặt phòng thất bại"].includes(trangThai) && donHienTai.trangThai !== "Đã xác nhận" && !(trangThai === "Đặt phòng thành công" && donHienTai.trangThai === trangThai && xacNhanKhachDen)) {
+    if (
+      ["Đặt phòng thành công", "Đặt phòng thất bại"].includes(trangThai) &&
+      donHienTai.trangThai !== "Đã xác nhận" &&
+      !(
+        trangThai === "Đặt phòng thành công" &&
+        donHienTai.trangThai === trangThai &&
+        xacNhanKhachDen
+      )
+    ) {
+      return res.status(409).json({
+        message: "Hãy xác nhận đơn trước khi chọn kết quả đặt phòng.",
+      });
+    }
+    if (
+      trangThai === "Khách không đến" &&
+      donHienTai.trangThai !== "Đặt phòng thành công"
+    ) {
       return res
         .status(409)
         .json({
-          message: "Hãy xác nhận đơn trước khi chọn kết quả đặt phòng.",
+          message:
+            "Chỉ có thể ghi nhận khách không đến sau khi đơn đã đặt phòng thành công.",
         });
     }
-    if (trangThai === "Khách không đến" && donHienTai.trangThai !== "Đặt phòng thành công") {
-      return res.status(409).json({ message: "Chỉ có thể ghi nhận khách không đến sau khi đơn đã đặt phòng thành công." });
-    }
-    if (xacNhanKhachDen && (trangThai !== "Đặt phòng thành công" || donHienTai.trangThai !== "Đặt phòng thành công")) {
-      return res.status(409).json({ message: "Chỉ xác nhận khách đã đến cho đơn đặt phòng thành công." });
+    if (
+      xacNhanKhachDen &&
+      (trangThai !== "Đặt phòng thành công" ||
+        donHienTai.trangThai !== "Đặt phòng thành công")
+    ) {
+      return res
+        .status(409)
+        .json({
+          message: "Chỉ xác nhận khách đã đến cho đơn đặt phòng thành công.",
+        });
     }
     const capNhat = { trangThai, maQuanDeXuat: "", tenQuanDeXuat: "" };
     if (xacNhanKhachDen) capNhat.thoiGianKhachDen = new Date();
     if (trangThai === "Đề xuất quán mới") {
       if (donHienTai.daHuy) {
-        return res
-          .status(409)
-          .json({
-            message: "Khách đã hủy đặt phòng, không thể gửi đề xuất mới.",
-          });
+        return res.status(409).json({
+          message: "Khách đã hủy đặt phòng, không thể gửi đề xuất mới.",
+        });
       }
       if (
         !["Đặt phòng thất bại", "Khách từ chối đề xuất"].includes(
           donHienTai.trangThai,
         )
       ) {
-        return res
-          .status(409)
-          .json({
-            message:
-              "Chỉ có thể đề xuất quán sau khi đặt phòng thất bại hoặc khách từ chối đề xuất trước.",
-          });
+        return res.status(409).json({
+          message:
+            "Chỉ có thể đề xuất quán sau khi đặt phòng thất bại hoặc khách từ chối đề xuất trước.",
+        });
       }
     }
     if (trangThai === "Đề xuất quán mới") {
@@ -314,11 +429,9 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
         .select("maQuan tenQuan")
         .lean();
       if (!quan)
-        return res
-          .status(404)
-          .json({
-            message: "Quán được chọn không tồn tại hoặc đang tạm ngưng.",
-          });
+        return res.status(404).json({
+          message: "Quán được chọn không tồn tại hoặc đang tạm ngưng.",
+        });
       capNhat.maQuanDeXuat = quan.maQuan;
       capNhat.tenQuanDeXuat = quan.tenQuan;
     }
@@ -333,23 +446,48 @@ router.patch("/don-hang/:id", yeuCauDangNhap, async (req, res) => {
       if (user) {
         user.diemTichLuy = (user.diemTichLuy || 0) + 100;
         if (user.diemTichLuy >= 600) {
-          const now = new Date(); const start = user.vipHetHan > now ? user.vipHetHan : now;
-          const end = new Date(start); const day = end.getDate(); end.setMonth(end.getMonth() + 1); if (end.getDate() < day) end.setDate(0);
-          user.vipTrangThai = "VIP"; user.vipHetHan = end; user.diemTichLuy = 0;
+          const now = new Date();
+          const start = user.vipHetHan > now ? user.vipHetHan : now;
+          const end = new Date(start);
+          const day = end.getDate();
+          end.setMonth(end.getMonth() + 1);
+          if (end.getDate() < day) end.setDate(0);
+          user.vipTrangThai = "VIP";
+          user.vipHetHan = end;
+          user.diemTichLuy = 0;
         }
         await user.save();
-        await ThongBao.create({ emailKhach: user.email, noiDung: `Đơn ${donHang.maDon} thành công: +100 điểm. Số dư ${user.diemTichLuy} điểm.${user.diemTichLuy === 0 && user.vipTrangThai === "VIP" ? ` Bạn được tự động cấp VIP đến ${user.vipHetHan.toLocaleDateString("vi-VN")}.` : ""}`, loai: "he-thong" });
+        await ThongBao.create({
+          emailKhach: user.email,
+          noiDung: `Đơn ${donHang.maDon} thành công: +100 điểm. Số dư ${user.diemTichLuy} điểm.${user.diemTichLuy === 0 && user.vipTrangThai === "VIP" ? ` Bạn được tự động cấp VIP đến ${user.vipHetHan.toLocaleDateString("vi-VN")}.` : ""}`,
+          loai: "he-thong",
+        });
       }
-      await DonHang.updateOne({ _id: donHang._id }, { $set: { diemCongDaXuLy: true } });
-    } else if (trangThai === "Khách không đến" && donHienTai.trangThai !== trangThai && !donHienTai.diemTruDaXuLy && donHang.emailKhach) {
+      await DonHang.updateOne(
+        { _id: donHang._id },
+        { $set: { diemCongDaXuLy: true } },
+      );
+    } else if (
+      trangThai === "Khách không đến" &&
+      donHienTai.trangThai !== trangThai &&
+      !donHienTai.diemTruDaXuLy &&
+      donHang.emailKhach
+    ) {
       const user = await NguoiDung.findOne({ email: donHang.emailKhach });
       if (user) {
         user.soLanKhongDen = (user.soLanKhongDen || 0) + 1;
         user.canhBao = `Đơn ${donHang.maDon}: khách đã đặt nhưng không đến.`;
         await user.save();
-        await ThongBao.create({ emailKhach: user.email, noiDung: `Quán đã ghi nhận bạn không đến theo đặt phòng ${donHang.maDon}. Điểm tích lũy không bị trừ.`, loai: "he-thong" });
+        await ThongBao.create({
+          emailKhach: user.email,
+          noiDung: `Quán đã ghi nhận bạn không đến theo đặt phòng ${donHang.maDon}. Điểm tích lũy không bị trừ.`,
+          loai: "he-thong",
+        });
       }
-      await DonHang.updateOne({ _id: donHang._id }, { $set: { diemTruDaXuLy: true } });
+      await DonHang.updateOne(
+        { _id: donHang._id },
+        { $set: { diemTruDaXuLy: true } },
+      );
     }
     res.json(donHang);
   } catch (error) {

@@ -4,7 +4,7 @@ const path = require("path");
 const crypto = require("crypto");
 const DonHang = require("../models/don-hang-models");
 const Quan = require("../models/admin-models");
-const { yeuCauDangNhap } = require("../middleware/xac-thuc-noi-bo");
+const { yeuCauQuanLy } = require("../middleware/xac-thuc-noi-bo");
 
 const router = express.Router();
 const thuMucHoaDon = path.join(__dirname, "..", "private_uploads", "hoa-don-doanh-thu");
@@ -30,7 +30,7 @@ function thoatRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-router.get("/doanh-thu", yeuCauDangNhap, async (req, res) => {
+router.get("/doanh-thu", yeuCauQuanLy, async (req, res) => {
   try {
     const tuKhoa = String(req.query.tuKhoa || "").trim();
     const trangThaiThu = String(req.query.trangThaiThu || "tat-ca");
@@ -53,14 +53,14 @@ router.get("/doanh-thu", yeuCauDangNhap, async (req, res) => {
     res.json(donHangs.map((don) => {
       const chietKhau = chietKhauTheoQuan.get(don.maQuan) || 0;
       const giamGiaKhach = chietKhau >= 15 ? chietKhau / 2 : 0;
-      return { ...don, chietKhau, giamGiaKhach, thucNhanPhanTram: 100 - giamGiaKhach };
+      return { ...don, chietKhau, giamGiaKhach, thucNhanPhanTram: chietKhau - giamGiaKhach };
     }));
   } catch {
     res.status(500).json({ message: "Không thể tải danh sách doanh thu." });
   }
 });
 
-router.patch("/doanh-thu/:id/thu-tien", yeuCauDangNhap, async (req, res) => {
+router.patch("/doanh-thu/:id/thu-tien", yeuCauQuanLy, async (req, res) => {
   const anhQuan = docAnh(req.body?.hoaDonQuan);
   const anhChuyenTien = docAnh(req.body?.hoaDonChuyenTien);
   const soTienDaThu = Number(req.body?.soTienDaThu);
@@ -107,7 +107,7 @@ router.patch("/doanh-thu/:id/thu-tien", yeuCauDangNhap, async (req, res) => {
   }
 });
 
-router.get("/doanh-thu/:id/hoa-don/:loai", yeuCauDangNhap, async (req, res) => {
+router.get("/doanh-thu/:id/hoa-don/:loai", yeuCauQuanLy, async (req, res) => {
   try {
     const truong = req.params.loai === "quan"
       ? "hoaDonQuanThu"

@@ -175,6 +175,27 @@
   justify-content: flex-end;
   gap: 8px;
 }
+.hop-thoai-bill-hoan-tien {
+  width: min(480px, calc(100% - 28px));
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #d7e5ea;
+  border-radius: 16px;
+  color: #17384c;
+  box-shadow: 0 24px 80px rgba(8, 35, 50, .24);
+}
+.hop-thoai-bill-hoan-tien::backdrop { background: rgba(8, 30, 45, .58); backdrop-filter: blur(3px); }
+.hop-thoai-bill-hoan-tien form { display: grid; gap: 12px; padding: 24px; }
+.hop-thoai-bill-hoan-tien h2 { margin: 0; color: #075c69; }
+.hop-thoai-bill-hoan-tien p { margin: 0; color: #607789; }
+.hop-thoai-bill-hoan-tien label { margin-top: 4px; font-size: .88rem; font-weight: 700; }
+.hop-thoai-bill-hoan-tien input[type="file"] { width: 100%; padding: 10px; border: 1px solid #cad8df; border-radius: 8px; background: #f9fbfc; }
+.hop-thoai-bill-hoan-tien .nut-bill-hoan-tien { display: flex; justify-content: flex-end; gap: 9px; margin-top: 5px; }
+.hop-thoai-bill-hoan-tien .nut-bill-hoan-tien button { min-height: 40px; padding: 8px 13px; border: 0; border-radius: 8px; background: #edf2f5; color: #43596a; cursor: pointer; font: inherit; font-weight: 700; }
+.hop-thoai-bill-hoan-tien #gui-bill-hoan-tien { background: #087e68; color: #fff; }
+.hop-thoai-bill-hoan-tien button:disabled { cursor: wait; opacity: .6; }
+.hop-thoai-bill-hoan-tien #loi-bill-hoan-tien:empty { display: none; }
+.hop-thoai-bill-hoan-tien #loi-bill-hoan-tien:not(:empty) { color: #b42318; font-size: .86rem; }
 
 .khong-co-ket-qua-hoan-tien {
   padding: 30px 16px;
@@ -193,4 +214,7 @@
   .bo-loc-hoan-tien { grid-template-columns: 1fr; }
   .danh-sach-hoan-tien-moi .hang-yeu-cau-hoan-tien { grid-template-columns: 1fr; gap: 16px; }
   .danh-sach-hoan-tien-moi .thao-tac-hoan-tien { justify-content: flex-start; }
+  .hop-thoai-bill-hoan-tien form { padding: 19px; }
+  .hop-thoai-bill-hoan-tien .nut-bill-hoan-tien { flex-direction: column-reverse; }
+  .hop-thoai-bill-hoan-tien .nut-bill-hoan-tien button { width: 100%; }
 }

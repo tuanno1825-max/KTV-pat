@@ -5,23 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quản lý tài khoản khách | Karaoke Together</title>
     <link rel="stylesheet" href="../css/admin.css" />
-    <link rel="stylesheet" href="../css/admin-tai-khoan.css" />
-    <script src="../js/quan-ly-tai-khoan.js?v=5" defer></script>
+    <link rel="stylesheet" href="../css/admin-sidebar.css?v=2" />
+    <link rel="stylesheet" href="../css/admin-tai-khoan.css?v=2" />
+    <script src="../js/quan-ly-tai-khoan.js?v=6" defer></script>
+    <script src="/js/admin-sidebar.js" defer></script>
+    <script src="/js/admin-table-scroll.js?v=1" defer></script>
   </head>
   <body>
     <header class="dau-quan-tri">
       <div class="thanh-dau-quan-tri">
+        <button
+          class="nut-an-menu"
+          type="button"
+          aria-controls="menu-quan-tri"
+          aria-expanded="true"
+          aria-label="Ẩn menu"
+        >
+          <span class="bieu-tuong-menu" aria-hidden="true">☰</span
+          ><span class="nhan-nut-menu">Ẩn menu</span>
+        </button>
         <div>
           <p class="nhan-quan-tri">KARAOKE TOGETHER / QUẢN TRỊ</p>
           <h1>Quản lý tài khoản khách</h1>
           <span>Theo dõi hoạt động đặt phòng và quyền hội viên</span>
         </div>
-        <nav class="cntqlad" aria-label="Chức năng quản trị">
-          <a class="nut-thoat" href="/">Trang chủ</a>
-          <a class="nut-thoat" href="/quan-ly-don-hang">Quản lý đơn</a>
-          <a class="nut-thoat" href="/quan-ly-hoan-tien">Yêu cầu hoàn tiền</a>
-          <a class="nut-thoat" href="/quan-ly-doanh-thu">Quản lý doanh thu</a>
-          <a class="nut-thoat" href="/admin">Quản lý quán</a>
+        <nav
+          class="cntqlad"
+          id="menu-quan-tri"
+          aria-label="&#272;i&#7873;u h&#432;&#7899;ng n&#7897;i b&#7897;"
+        >
+          <div
+            class="nhom-menu-noi-bo"
+            id="nhom-menu-nhan-vien"
+            data-menu-group="nhan-vien"
+          >
+            <button
+              class="nut-chon-nhom-menu"
+              type="button"
+              aria-controls="nhom-menu-nhan-vien"
+              aria-expanded="false"
+            >
+              Nh&#226;n vi&#234;n
+            </button>
+            <a class="nut-thoat" href="/quan-ly-don-hang"
+              >Qu&#7843;n l&#253; &#273;&#417;n</a
+            >
+          </div>
+          <div
+            class="nhom-menu-noi-bo"
+            id="nhom-menu-manager"
+            data-menu-group="manager"
+          >
+            <button
+              class="nut-chon-nhom-menu"
+              type="button"
+              aria-controls="nhom-menu-manager"
+              aria-expanded="false"
+            >
+              Qu&#7843;n l&#253;
+            </button>
+            <a class="nut-thoat" href="/quan-ly-hoan-tien"
+              >Y&#234;u c&#7847;u ho&#224;n ti&#7873;n</a
+            >
+            <a class="nut-thoat" href="/quan-ly-doanh-thu"
+              >Qu&#7843;n l&#253; doanh thu</a
+            >
+          </div>
+          <div
+            class="nhom-menu-noi-bo menu-nhom-mo"
+            id="nhom-menu-admin"
+            data-menu-group="admin"
+          >
+            <button
+              class="nut-chon-nhom-menu"
+              type="button"
+              aria-controls="nhom-menu-admin"
+              aria-expanded="true"
+            >
+              Admin
+            </button>
+            <a class="nut-thoat" href="/admin">Qu&#7843;n l&#253; qu&#225;n</a>
+            <a
+              class="nut-thoat"
+              href="/admin-tai-khoan"
+              aria-current="page"
+              id="tab-quan-ly-tai-khoan"
+              >Qu&#7843;n l&#253; t&#224;i kho&#7843;n</a
+            >
+          </div>
         </nav>
       </div>
     </header>
@@ -29,23 +100,66 @@
       <section class="khoi-quan-tri">
         <div class="tieu-de-khoi">
           <span class="vach-tieu-de"></span>
-          <div><h2>Danh sách khách hàng</h2><p>Tìm khách, xem thống kê và quản lý quyền VIP.</p></div>
+          <div>
+            <h2>Danh sách khách hàng</h2>
+            <p>Tìm khách, xem thống kê và quản lý quyền VIP.</p>
+          </div>
         </div>
         <div class="bo-loc-tai-khoan">
-          <label class="truong-tim-kiem" for="tu-khoa">Tìm theo tên hoặc email</label>
-          <input id="tu-khoa" type="search" placeholder="Ví dụ: ten@email.com" />
-          <button class="nut nut-tim" id="tim-kiem" type="button">Tìm kiếm</button>
+          <label class="truong-tim-kiem" for="tu-khoa"
+            >Tìm theo tên hoặc email</label
+          >
+          <input
+            id="tu-khoa"
+            type="search"
+            placeholder="Ví dụ: ten@email.com"
+          />
+          <button class="nut nut-tim" id="tim-kiem" type="button">
+            Tìm kiếm
+          </button>
         </div>
-        <p id="thong-bao" class="thong-bao-tai-khoan" role="status" aria-live="polite"></p>
+        <p
+          id="thong-bao"
+          class="thong-bao-tai-khoan"
+          role="status"
+          aria-live="polite"
+        ></p>
         <div class="bang-wrap">
           <table class="bang-tai-khoan">
-            <thead><tr><th>Khách hàng</th><th>Điểm</th><th>VIP</th><th>Tổng đơn</th><th>Thành công</th><th>Không đến</th><th>Đã hủy</th><th>Chờ xử lý</th><th>Thất bại</th><th>Thao tác</th></tr></thead>
-            <tbody id="danh-sach"><tr><td colspan="10">Đang tải danh sách...</td></tr></tbody>
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Mã khách hàng</th>
+                <th>Khách hàng</th>
+                <th>Điểm</th>
+                <th>VIP</th>
+                <th>Tổng đơn</th>
+                <th>Thành công</th>
+                <th>Không đến</th>
+                <th>Đã hủy</th>
+                <th>Chờ xử lý</th>
+                <th>Thất bại</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="danh-sach">
+              <tr>
+                <td colspan="12">Đang tải danh sách...</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </section>
       <section class="khoi-quan-tri">
-        <div class="tieu-de-khoi"><span class="vach-tieu-de"></span><div><h2>Lịch sử đặt phòng</h2><p id="lich-su-mo-ta">Chọn “Lịch sử” tại một khách hàng để xem các đơn.</p></div></div>
+        <div class="tieu-de-khoi">
+          <span class="vach-tieu-de"></span>
+          <div>
+            <h2>Lịch sử đặt phòng</h2>
+            <p id="lich-su-mo-ta">
+              Chọn “Lịch sử” tại một khách hàng để xem các đơn.
+            </p>
+          </div>
+        </div>
         <div id="lich-su" class="lich-su"></div>
       </section>
     </main>

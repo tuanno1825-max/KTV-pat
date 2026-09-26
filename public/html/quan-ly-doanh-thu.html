@@ -3,63 +3,254 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Theo dõi doanh thu đặt phòng và xác nhận thu tiền." />
+    <meta
+      name="description"
+      content="Theo dõi doanh thu đặt phòng và xác nhận thu tiền."
+    />
     <title>Quản lý doanh thu | Karaoke Together</title>
     <link rel="stylesheet" href="/css/qldh.css" />
-    <link rel="stylesheet" href="/css/doanh-thu.css" />
-    <script src="/js/quan-ly-doanh-thu.js?v=1" defer></script>
+    <link rel="stylesheet" href="/css/admin-sidebar.css?v=2" />
+    <link rel="stylesheet" href="/css/doanh-thu.css?v=2" />
+    <link rel="stylesheet" href="/css/admin-work-guides.css?v=1" />
+    <script src="/js/quan-ly-doanh-thu.js?v=3" defer></script>
+    <script src="/js/admin-sidebar.js" defer></script>
+    <script src="/js/admin-table-scroll.js?v=1" defer></script>
   </head>
   <body>
     <header class="dau-quan-tri">
       <div class="thanh-dau-quan-tri">
+        <button
+          class="nut-an-menu"
+          type="button"
+          aria-controls="menu-quan-tri"
+          aria-expanded="true"
+          aria-label="Ẩn menu"
+        >
+          <span class="bieu-tuong-menu" aria-hidden="true">☰</span
+          ><span class="nhan-nut-menu">Ẩn menu</span>
+        </button>
         <div>
           <p class="nhan-quan-tri">KARAOKE TOGETHER</p>
           <h1>Quản lý doanh thu</h1>
           <span>Các đơn đã ghi nhận khách đến và tình trạng thu tiền</span>
         </div>
-        <nav class="cntqlad" aria-label="Điều hướng quản trị">
-          <a class="nut-thoat" href="/">Về trang chủ</a>
-          <a class="nut-thoat" href="/quan-ly-don-hang">Quản lý đơn</a>
-          <a class="nut-thoat" href="/quan-ly-hoan-tien">Yêu cầu hoàn tiền</a>
-          <a class="nut-thoat" href="/quan-ly-doanh-thu" aria-current="page">Quản lý doanh thu</a>
-          <a class="nut-thoat" href="/admin">Quản lý quán</a>
+        <nav
+          class="cntqlad"
+          id="menu-quan-tri"
+          aria-label="&#272;i&#7873;u h&#432;&#7899;ng n&#7897;i b&#7897;"
+        >
+          <div
+            class="nhom-menu-noi-bo"
+            id="nhom-menu-nhan-vien"
+            data-menu-group="nhan-vien"
+          >
+            <button
+              class="nut-chon-nhom-menu"
+              type="button"
+              aria-controls="nhom-menu-nhan-vien"
+              aria-expanded="false"
+            >
+              Nh&#226;n vi&#234;n
+            </button>
+            <a class="nut-thoat" href="/quan-ly-don-hang"
+              >Qu&#7843;n l&#253; &#273;&#417;n</a
+            >
+          </div>
+          <div
+            class="nhom-menu-noi-bo menu-nhom-mo"
+            id="nhom-menu-manager"
+            data-menu-group="manager"
+          >
+            <button
+              class="nut-chon-nhom-menu"
+              type="button"
+              aria-controls="nhom-menu-manager"
+              aria-expanded="true"
+            >
+              Qu&#7843;n l&#253;
+            </button>
+            <a class="nut-thoat" href="/quan-ly-hoan-tien"
+              >Y&#234;u c&#7847;u ho&#224;n ti&#7873;n</a
+            >
+            <a class="nut-thoat" href="/quan-ly-doanh-thu" aria-current="page"
+              >Qu&#7843;n l&#253; doanh thu</a
+            >
+          </div>
+          <div
+            class="nhom-menu-noi-bo"
+            id="nhom-menu-admin"
+            data-menu-group="admin"
+          >
+            <button
+              class="nut-chon-nhom-menu"
+              type="button"
+              aria-controls="nhom-menu-admin"
+              aria-expanded="false"
+            >
+              Admin
+            </button>
+            <a class="nut-thoat" href="/admin">Qu&#7843;n l&#253; qu&#225;n</a>
+            <a
+              class="nut-thoat"
+              href="/admin-tai-khoan"
+              id="tab-quan-ly-tai-khoan"
+              hidden
+              >Qu&#7843;n l&#253; t&#224;i kho&#7843;n</a
+            >
+          </div>
         </nav>
       </div>
     </header>
 
     <main class="khung-quan-tri trang-doanh-thu">
-      <section class="khu-thong-ke-doanh-thu" aria-label="Tổng quan doanh thu">
-        <div class="loc-ngay-thong-ke">
-          <div><label for="thong-ke-tu-ngay">Từ ngày</label><input id="thong-ke-tu-ngay" type="date" /></div>
-          <div><label for="thong-ke-den-ngay">Đến ngày</label><input id="thong-ke-den-ngay" type="date" /></div>
-          <button class="nut-chung" id="ap-dung-loc-ngay" type="button">Lọc thống kê</button>
-          <button class="nut-chung nut-xoa-loc-ngay" id="xoa-loc-ngay" type="button">Tất cả thời gian</button>
+      <div class="bo-cuc-huong-dan-admin">
+        <div class="noi-dung-admin-co-huong-dan">
+          <section
+            class="khu-thong-ke-doanh-thu"
+            aria-label="Tổng quan doanh thu"
+          >
+            <div class="loc-ngay-thong-ke">
+              <div>
+                <label for="thong-ke-tu-ngay">Từ ngày</label
+                ><input id="thong-ke-tu-ngay" type="date" />
+              </div>
+              <div>
+                <label for="thong-ke-den-ngay">Đến ngày</label
+                ><input id="thong-ke-den-ngay" type="date" />
+              </div>
+              <button class="nut-chung" id="ap-dung-loc-ngay" type="button">
+                Lọc thống kê
+              </button>
+              <button
+                class="nut-chung nut-xoa-loc-ngay"
+                id="xoa-loc-ngay"
+                type="button"
+              >
+                Tất cả thời gian
+              </button>
+            </div>
+            <p class="ghi-chu-thong-ke">
+              Thống kê, biểu đồ và danh sách đều được lọc theo thời gian khách
+              đặt.
+            </p>
+            <div class="the-thong-ke-doanh-thu">
+              <article>
+                <span>Đơn khách đã đến</span><strong id="tong-don">0</strong>
+              </article>
+              <article>
+                <span>Tổng tiền đã thu</span
+                ><strong id="tong-tien-da-thu">0 ₫</strong>
+              </article>
+              <article>
+                <span>Đã thu tiền</span><strong id="don-da-thu">0</strong>
+              </article>
+              <article>
+                <span>Chưa thu tiền</span><strong id="don-chua-thu">0</strong>
+              </article>
+            </div>
+          </section>
+
+          <section
+            class="bieu-do-doanh-thu-wrap"
+            aria-labelledby="tieu-de-bieu-do-doanh-thu"
+          >
+            <div class="dau-bieu-do-doanh-thu">
+              <div>
+                <h2 id="tieu-de-bieu-do-doanh-thu">Tiền đã thu theo ngày</h2>
+                <p id="mo-ta-bieu-do-doanh-thu">
+                  Tiền ghi nhận mỗi ngày trong 7 ngày gần nhất.
+                </p>
+              </div>
+              <span class="chu-giai-doanh-thu"
+                ><i aria-hidden="true"></i>Đã thu tiền</span
+              >
+            </div>
+            <div
+              id="bieu-do-doanh-thu"
+              class="bieu-do-doanh-thu"
+              role="img"
+              aria-label="Biểu đồ tiền đã thu theo ngày"
+              aria-live="polite"
+            >
+              <p class="thong-bao-bieu-do-doanh-thu">Đang tải biểu đồ...</p>
+            </div>
+          </section>
         </div>
-        <p class="ghi-chu-thong-ke">Lượt khách tính theo ngày ghi nhận khách đến; tiền thu tính theo ngày xác nhận thu tiền.</p>
-        <div class="the-thong-ke-doanh-thu">
-        <article><span>Đơn khách đã đến</span><strong id="tong-don">0</strong></article>
-        <article><span>Tổng tiền đã thu</span><strong id="tong-tien-da-thu">0 ₫</strong></article>
-        <article><span>Đã thu tiền</span><strong id="don-da-thu">0</strong></article>
-        <article><span>Chưa thu tiền</span><strong id="don-chua-thu">0</strong></article>
-        </div>
-      </section>
+        <aside
+          class="the-huong-dan-admin"
+          aria-labelledby="huong-dan-doanh-thu"
+        >
+          <p class="nhan-huong-dan-admin">Quản lý · doanh thu</p>
+          <h2 id="huong-dan-doanh-thu">Xác nhận thu tiền</h2>
+          <ol>
+            <li>
+              <strong>Đối chiếu:</strong> kiểm tra số tiền thực nhận với chứng
+              từ.
+            </li>
+            <li>
+              <strong>Tải đủ:</strong> ảnh hóa đơn quán và chứng từ chuyển tiền.
+            </li>
+            <li>
+              <strong>Ghi nhận:</strong> nhập số tiền rồi xác nhận đã thu.
+            </li>
+          </ol>
+          <p class="luu-y-huong-dan-admin">
+            Danh sách và thống kê được lọc theo thời gian khách đặt.
+          </p>
+        </aside>
+      </div>
 
       <section class="bo-loc-doanh-thu" aria-label="Tìm kiếm doanh thu">
-        <input id="tu-khoa-doanh-thu" type="search" placeholder="Tìm mã đơn, khách hàng, quán hoặc số điện thoại..." />
+        <input
+          id="tu-khoa-doanh-thu"
+          type="search"
+          placeholder="Tìm mã đơn, khách hàng, quán hoặc số điện thoại..."
+        />
         <select id="loc-thu-tien" aria-label="Lọc tình trạng thu tiền">
           <option value="tat-ca">Tất cả tình trạng</option>
           <option value="chua-thu">Chưa thu tiền</option>
           <option value="da-thu">Đã thu tiền</option>
         </select>
-        <button class="nut-chung" id="tim-doanh-thu" type="button">Tìm kiếm</button>
-        <button class="nut-chung nut-lam-moi-doanh-thu" id="lam-moi-doanh-thu" type="button">Làm mới</button>
+        <button class="nut-chung" id="tim-doanh-thu" type="button">
+          Tìm kiếm
+        </button>
+        <button
+          class="nut-chung nut-lam-moi-doanh-thu"
+          id="lam-moi-doanh-thu"
+          type="button"
+        >
+          Làm mới
+        </button>
       </section>
-      <p id="thong-bao-doanh-thu" class="thong-bao-doanh-thu" role="status" aria-live="polite"></p>
+      <p
+        id="thong-bao-doanh-thu"
+        class="thong-bao-doanh-thu"
+        role="status"
+        aria-live="polite"
+      ></p>
 
       <section class="bang-doanh-thu-wrap" aria-label="Danh sách doanh thu">
         <table class="bang-doanh-thu">
-          <thead><tr><th>Mã đơn</th><th>Khách hàng</th><th>Quán</th><th>Thời gian đặt</th><th>Chiết khấu quán</th><th>Giảm giá khách</th><th>Thực nhận (%)</th><th>Số tiền đã thu</th><th>Trạng thái thu</th><th>Thao tác / chứng từ</th></tr></thead>
-          <tbody id="danh-sach-doanh-thu"><tr><td colspan="10">Đang tải dữ liệu...</td></tr></tbody>
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Mã đơn</th>
+              <th>Khách hàng</th>
+              <th>Quán</th>
+              <th>Thời gian đặt</th>
+              <th>Chiết khấu quán</th>
+              <th>Giảm giá khách</th>
+              <th>Thực nhận (%)</th>
+              <th>Số tiền đã thu</th>
+              <th>Trạng thái thu</th>
+              <th>Thao tác / chứng từ</th>
+            </tr>
+          </thead>
+          <tbody id="danh-sach-doanh-thu">
+            <tr>
+              <td colspan="11">Đang tải dữ liệu...</td>
+            </tr>
+          </tbody>
         </table>
       </section>
     </main>
@@ -67,22 +258,62 @@
     <dialog id="hop-thoai-thu-tien" class="hop-thoai-thu-tien">
       <form id="form-thu-tien">
         <div class="dau-hop-thoai">
-          <div><span class="nhan-quan-tri">XÁC NHẬN DOANH THU</span><h2>Đã thu tiền</h2></div>
-          <button class="nut-dong-hop-thoai" type="button" id="dong-hop-thoai" aria-label="Đóng">×</button>
+          <div>
+            <span class="nhan-quan-tri">XÁC NHẬN DOANH THU</span>
+            <h2>Đã thu tiền</h2>
+          </div>
+          <button
+            class="nut-dong-hop-thoai"
+            type="button"
+            id="dong-hop-thoai"
+            aria-label="Đóng"
+          >
+            ×
+          </button>
         </div>
         <p id="don-dang-xac-nhan"></p>
         <label for="so-tien-da-thu">Số tiền đã thu (₫) <span>*</span></label>
-        <input id="so-tien-da-thu" type="number" min="1" step="1" inputmode="numeric" placeholder="Nhập số tiền trên chứng từ" required />
-        <label for="anh-hoa-don-quan">Ảnh hóa đơn của quán <span>*</span></label>
-        <input id="anh-hoa-don-quan" type="file" accept="image/jpeg,image/png,image/webp" required />
+        <input
+          id="so-tien-da-thu"
+          type="number"
+          min="1"
+          step="1"
+          inputmode="numeric"
+          placeholder="Nhập số tiền trên chứng từ"
+          required
+        />
+        <label for="anh-hoa-don-quan"
+          >Ảnh hóa đơn của quán <span>*</span></label
+        >
+        <input
+          id="anh-hoa-don-quan"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          required
+        />
         <small>JPG, PNG hoặc WEBP, tối đa 2 MB.</small>
-        <label for="anh-hoa-don-chuyen-tien">Ảnh hóa đơn / xác nhận chuyển tiền <span>*</span></label>
-        <input id="anh-hoa-don-chuyen-tien" type="file" accept="image/jpeg,image/png,image/webp" required />
+        <label for="anh-hoa-don-chuyen-tien"
+          >Ảnh hóa đơn / xác nhận chuyển tiền <span>*</span></label
+        >
+        <input
+          id="anh-hoa-don-chuyen-tien"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          required
+        />
         <small>JPG, PNG hoặc WEBP, tối đa 2 MB.</small>
         <p id="loi-thu-tien" class="loi-thu-tien" role="alert"></p>
         <div class="nut-hop-thoai">
-          <button class="nut-huy-thu-tien" type="button" id="huy-thu-tien">Hủy</button>
-          <button class="nut-xac-nhan-thu-tien" type="submit" id="xac-nhan-thu-tien">Xác nhận đã thu tiền</button>
+          <button class="nut-huy-thu-tien" type="button" id="huy-thu-tien">
+            Hủy
+          </button>
+          <button
+            class="nut-xac-nhan-thu-tien"
+            type="submit"
+            id="xac-nhan-thu-tien"
+          >
+            Xác nhận đã thu tiền
+          </button>
         </div>
       </form>
     </dialog>

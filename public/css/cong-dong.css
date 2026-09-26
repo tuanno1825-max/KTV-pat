@@ -240,12 +240,17 @@ textarea {
   font-size: 0.84rem;
   color: #334155;
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 6px 12px;
 }
 
 .ho-so-diem strong {
+  max-width: 68%;
   color: #059669;
   font-weight: 800;
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 
 /* Danh mục chủ đề */
