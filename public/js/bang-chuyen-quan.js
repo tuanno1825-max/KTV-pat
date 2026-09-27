@@ -20,12 +20,14 @@ if (bangChuyen && daiAnh && cacCham.length) {
     const quanNoiBat = cacQuanNoiBat[viTri];
     const tuKhoa = quanNoiBat.tuKhoa.toLocaleLowerCase("vi");
     const quan = danhSachQuan.find((item) =>
-      String(item.ten || "").toLocaleLowerCase("vi").includes(tuKhoa),
+      String(item.ten || "")
+        .toLocaleLowerCase("vi")
+        .includes(tuKhoa),
     );
 
     tenQuanNoiBat.textContent = quan?.ten || quanNoiBat.ten;
     giaQuanNoiBat.textContent = quan
-      ? `${Number(quan.giaMin || 0).toLocaleString("vi-VN")} - ${Number(quan.giaMax || 0).toLocaleString("vi-VN")} ₫ / giờ`
+      ? `VIP: ${Number(quan.giaPhong?.vip?.gia ?? quan.giaMax ?? 0).toLocaleString("vi-VN")} ₫ / giờ`
       : "Liên hệ để biết giá";
   }
 
@@ -45,16 +47,22 @@ if (bangChuyen && daiAnh && cacCham.length) {
   });
 
   fetch("/api/quan-cong-khai")
-    .then((response) => response.ok ? response.json() : [])
+    .then((response) => (response.ok ? response.json() : []))
     .then((quan) => {
       danhSachQuan = quan;
       dongBoThongTinQuan();
     })
     .catch(() => {});
 
-  bangChuyen.addEventListener("pointerenter", () => { tamDung = true; });
-  bangChuyen.addEventListener("pointerleave", () => { tamDung = false; });
-  bangChuyen.addEventListener("focusin", () => { tamDung = true; });
+  bangChuyen.addEventListener("pointerenter", () => {
+    tamDung = true;
+  });
+  bangChuyen.addEventListener("pointerleave", () => {
+    tamDung = false;
+  });
+  bangChuyen.addEventListener("focusin", () => {
+    tamDung = true;
+  });
   bangChuyen.addEventListener("focusout", (event) => {
     if (!bangChuyen.contains(event.relatedTarget)) tamDung = false;
   });

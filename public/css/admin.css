@@ -185,6 +185,10 @@ button {
   gap: 10px 12px;
 }
 
+.bieu-mau-quan {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .nhom-truong-quan {
   display: grid;
   gap: 5px;
@@ -218,6 +222,30 @@ button {
 
 .truong-rong {
   grid-column: span 2;
+}
+
+.tieu-de-truong {
+  align-content: center;
+  min-height: 58px;
+  padding: 10px 12px;
+  border: 1px solid #e5ecef;
+  border-radius: 8px;
+  background: #f6fafb;
+}
+
+.tieu-de-truong h3,
+.tieu-de-truong p {
+  margin: 0;
+}
+
+.tieu-de-truong h3 {
+  color: #123047;
+  font-size: 0.95rem;
+}
+
+.tieu-de-truong p {
+  color: #607789;
+  font-size: 0.76rem;
 }
 
 .nhom-nut-quan,

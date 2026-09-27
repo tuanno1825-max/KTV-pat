@@ -1,0 +1,41 @@
+.menu-ngang {
+  list-style: none;
+}
+
+.menu-ngang > li {
+  position: relative;
+}
+
+.menu-ngang .menu-cha {
+  cursor: default;
+}
+
+.menu-ngang .menu-con {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  display: none;
+  min-width: 210px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+}
+
+.menu-ngang .co-menu-con:hover > .menu-con,
+.menu-ngang .co-menu-con:focus-within > .menu-con {
+  display: block;
+}
+
+.menu-ngang .menu-con a {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  white-space: nowrap;
+}
+
+.menu-ngang .menu-con a:hover,
+.menu-ngang .menu-con a:focus-visible {
+  color: #06283d;
+  background: #9be7f5;
+}

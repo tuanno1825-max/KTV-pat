@@ -66,6 +66,50 @@ textarea {
 .menu-ngang {
   display: flex;
   gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-ngang > li {
+  position: relative;
+}
+
+.menu-con {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  display: none;
+  min-width: 210px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  border: 1px solid #c8e4e8;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 16px 30px rgba(18, 59, 74, 0.2);
+}
+
+.co-menu-con:hover .menu-con,
+.co-menu-con:focus-within .menu-con {
+  display: block;
+}
+
+.menu-ngang .menu-con a {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 9px 11px;
+  color: #164e63;
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+.menu-ngang .menu-con a:hover,
+.menu-ngang .menu-con a:focus-visible {
+  color: #06283d;
+  background: #d9f5f7;
 }
 
 .menu-ngang a {
@@ -78,6 +122,21 @@ textarea {
 
 .menu-ngang a:hover,
 .menu-ngang a.dang-chon {
+  background: var(--xanh-nhat);
+  color: var(--xanh-dam);
+}
+
+.menu-ngang .menu-cha {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.menu-ngang .co-menu-con:hover > .menu-cha,
+.menu-ngang .co-menu-con:focus-within > .menu-cha {
   background: var(--xanh-nhat);
   color: var(--xanh-dam);
 }

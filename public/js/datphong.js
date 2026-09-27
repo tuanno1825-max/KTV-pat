@@ -13,12 +13,15 @@ const tenQuanChon = document.querySelector("#ten-quan-chon");
 const giaQuanChon = document.querySelector("#gia-quan-chon");
 const thongBaoDatPhong = document.querySelector("#thong-bao-dat-phong");
 const khuVucPhanHoiDeXuat = document.querySelector("#phan-hoi-de-xuat");
+const khuVucTuUrl = new URLSearchParams(window.location.search).get("khuVuc");
 let maDonDangTheoDoi = "";
 let soDienThoaiTheoDoi = "";
 let boDemTheoDoi = null;
 let trangThaiDaHien = "";
 try {
-  const theoDoiDaLuu = JSON.parse(sessionStorage.getItem("theoDoiDatPhong") || "null");
+  const theoDoiDaLuu = JSON.parse(
+    sessionStorage.getItem("theoDoiDatPhong") || "null",
+  );
   maDonDangTheoDoi = theoDoiDaLuu?.maDon || "";
   soDienThoaiTheoDoi = theoDoiDaLuu?.soDienThoai || "";
 } catch {}
@@ -96,7 +99,13 @@ async function capNhatPhanHoiKhach() {
               if (duLieu.chapNhan && ketQua.maDonMoi)
                 maDonDangTheoDoi = ketQua.maDonMoi;
               if (duLieu.chapNhan && ketQua.maDonMoi) {
-                sessionStorage.setItem("theoDoiDatPhong", JSON.stringify({ maDon: maDonDangTheoDoi, soDienThoai: soDienThoaiTheoDoi }));
+                sessionStorage.setItem(
+                  "theoDoiDatPhong",
+                  JSON.stringify({
+                    maDon: maDonDangTheoDoi,
+                    soDienThoai: soDienThoaiTheoDoi,
+                  }),
+                );
               } else {
                 sessionStorage.removeItem("theoDoiDatPhong");
                 maDonDangTheoDoi = "";
@@ -112,7 +121,8 @@ async function capNhatPhanHoiKhach() {
               bieuMauDatPhong.hidden = false;
               giaQuanChonElement.hidden = false;
               tieuDeDatPhong.firstChild.textContent = "Đặt phòng tại ";
-              moTaBieuMau.textContent = "Điền thông tin để quán chuẩn bị phòng cho bạn.";
+              moTaBieuMau.textContent =
+                "Điền thông tin để quán chuẩn bị phòng cho bạn.";
               khuVucPhanHoiDeXuat.replaceChildren();
               trangThaiDaHien = "";
               if (duLieu.chapNhan) await capNhatPhanHoiKhach();
@@ -133,7 +143,8 @@ async function capNhatPhanHoiKhach() {
         bieuMauDatPhong.hidden = false;
         giaQuanChonElement.hidden = false;
         tieuDeDatPhong.firstChild.textContent = "Đặt phòng tại ";
-        moTaBieuMau.textContent = "Điền thông tin để quán chuẩn bị phòng cho bạn.";
+        moTaBieuMau.textContent =
+          "Điền thông tin để quán chuẩn bị phòng cho bạn.";
       }
     }
     if (
@@ -162,24 +173,27 @@ function taoTheQuan(quan) {
   the.innerHTML = `
     <div class="khung-anh-quan" aria-label="Ảnh của ${quan.ten}">
       ${noiDungAnh}
+      <div class="noi-dung-anh-quan">
+        <div class="thong-tin-anh-quan">
+          <h3>${quan.ten}</h3>
+        </div>
+      </div>
     </div>
-    <div class="dau-the-quan">
+    <div class="hang-trang-thai-quan">
       <span class="nhan-trang-thai">${quan.trangThai || "Đang hoạt động"}</span>
+      ${mucGiamTrucTiep === null ? "" : `<div class="chi-tiet-quan"><div><span>Giảm trực tiếp</span><strong>${mucGiamTrucTiep}%</strong></div></div>`}
     </div>
-    <h3>${quan.ten}</h3>
-    <div class="hang-danh-gia">
-      <span class="sao-danh-gia">★ ${quan.diemTrungBinh ? Number(quan.diemTrungBinh).toFixed(1) : "5.0"}</span>
-      <span class="so-luot-danh-gia">(${Number(quan.soDanhGia || 0)} đánh giá)</span>
-      <button type="button" class="nut-mo-danh-gia" data-ma-quan="${quan.maQuan}" data-ten-quan="${quan.ten}">
-        ⭐ Xem đánh giá
-      </button>
+    <div class="thong-tin-the-quan">
+      <div class="hang-danh-gia">
+        <span class="sao-danh-gia">★ ${quan.diemTrungBinh ? Number(quan.diemTrungBinh).toFixed(1) : "5.0"}</span>
+        <span class="so-luot-danh-gia">(${Number(quan.soDanhGia || 0)} đánh giá)</span>
+      </div>
+      <p class="dia-chi">${quan.diaChi}</p>
     </div>
-    <p class="dia-chi">${quan.diaChi}</p>
-    <div class="chi-tiet-quan">
-      <div><span>Giá phòng / giờ</span><strong>${dinhDangTien(quan.giaMin)} - ${dinhDangTien(quan.giaMax)}</strong></div>
-      ${mucGiamTrucTiep === null ? "" : `<div><span>Giảm giá trực tiếp</span><strong>${mucGiamTrucTiep}%</strong></div>`}
+    <div class="hanh-dong-the-quan">
+      <button type="button" class="nut-xem-chi-tiet" data-ma-quan="${quan.maQuan}" data-ten-quan="${quan.ten}">Xem chi tiết</button>
+      <button class="nut-dat-phong" type="button" data-ma-quan="${quan.maQuan}" data-ten-quan="${quan.ten}" ${quanDangHoatDong ? "" : "disabled"}>${quanDangHoatDong ? "Chọn quán này" : "Quán tạm ngưng"} <span aria-hidden="true">→</span></button>
     </div>
-    <button class="nut-dat-phong" type="button" data-ten-quan="${quan.ten}" ${quanDangHoatDong ? "" : "disabled"}>${quanDangHoatDong ? "Chọn quán này" : "Quán tạm ngưng"} <span aria-hidden="true">→</span></button>
   `;
   return the;
 }
@@ -230,18 +244,33 @@ function capNhatDanhSachKhuVuc() {
   oKhuVuc.value = cacKhuVuc.includes(khuVucDangChon)
     ? khuVucDangChon
     : "tat-ca";
+  if (khuVucTuUrl && cacKhuVuc.includes(khuVucTuUrl)) {
+    oKhuVuc.value = khuVucTuUrl;
+  }
 }
 
-function moBieuMau(tenQuan) {
+function moBieuMau(tenQuan, loaiPhong = "", maQuan = "") {
   tenQuanChon.textContent = tenQuan;
-  const quan = danhSachQuan.find((item) => item.ten === tenQuan);
+  const quan =
+    danhSachQuan.find((item) => item.maQuan === maQuan) ||
+    danhSachQuan.find((item) => item.ten === tenQuan);
   const dinhDangTien = (gia) => `${Number(gia || 0).toLocaleString("vi-VN")} ₫`;
+  const cacPhong = [
+    ["Bé", quan?.giaPhong?.be?.gia ?? quan?.giaMin],
+    ["Thường", quan?.giaPhong?.thuong?.gia ?? quan?.giaMin],
+    ["Lớn", quan?.giaPhong?.lon?.gia ?? quan?.giaMax],
+    ["VIP", quan?.giaPhong?.vip?.gia ?? quan?.giaMax],
+  ];
   giaQuanChon.textContent = quan
-    ? `Giá phòng: ${dinhDangTien(quan.giaMin)} - ${dinhDangTien(quan.giaMax)} / giờ`
+    ? cacPhong
+        .map(([tenPhong, gia]) => `${tenPhong}: ${dinhDangTien(gia)}`)
+        .join(" · ") + " / giờ"
     : "";
-  bieuMauDatPhong.dataset.maQuan = quan?.maQuan || "";
+  bieuMauDatPhong.dataset.maQuan = maQuan || quan?.maQuan || "";
+  thongBaoDatPhong.classList.remove("thong-bao-loi");
   thongBaoDatPhong.textContent = "";
   bieuMauDatPhong.reset();
+  document.querySelector("#loai-phong-chon").value = loaiPhong;
   lopPhu.hidden = false;
   document.body.classList.add("khoa-cuon");
   document.querySelector("#so-dien-thoai-nguoi-dat").focus();
@@ -260,13 +289,14 @@ boLoc.addEventListener("submit", (suKien) => {
 oTuKhoa.addEventListener("input", hienThiDanhSach);
 oKhuVuc.addEventListener("change", hienThiDanhSach);
 noiDanhSach.addEventListener("click", (suKien) => {
-  const nutDanhGia = suKien.target.closest(".nut-mo-danh-gia");
+  const nutDanhGia = suKien.target.closest(".nut-xem-chi-tiet");
   if (nutDanhGia) {
     moModalDanhGia(nutDanhGia.dataset.maQuan, nutDanhGia.dataset.tenQuan);
     return;
   }
   const nutDatPhong = suKien.target.closest(".nut-dat-phong");
-  if (nutDatPhong) moBieuMau(nutDatPhong.dataset.tenQuan);
+  if (nutDatPhong)
+    moBieuMau(nutDatPhong.dataset.tenQuan, "", nutDatPhong.dataset.maQuan);
 });
 document.querySelector("#dong-bieu-mau").addEventListener("click", dongBieuMau);
 lopPhu.addEventListener("click", (suKien) => {
@@ -278,7 +308,32 @@ document.addEventListener("keydown", (suKien) => {
 bieuMauDatPhong.addEventListener("submit", async (suKien) => {
   suKien.preventDefault();
   const nutGui = bieuMauDatPhong.querySelector('[type="submit"]');
+  const duLieuDatPhong = {
+    maQuan: bieuMauDatPhong.dataset.maQuan,
+    tenKhach: bieuMauDatPhong.elements.tenKhach.value.trim(),
+    xungHo: bieuMauDatPhong.elements.xungHo.value,
+    soDienThoai: bieuMauDatPhong.elements.soDienThoai.value.trim(),
+    thoiGianCheckIn: bieuMauDatPhong.elements.thoiGianCheckIn.value,
+    loaiPhong: document.querySelector("#loai-phong-chon").value,
+  };
+  const tenTruong = {
+    maQuan: "quán",
+    tenKhach: "tên người đặt",
+    xungHo: "xưng hô",
+    soDienThoai: "số điện thoại",
+    thoiGianCheckIn: "giờ đến dự kiến",
+    loaiPhong: "loại phòng",
+  };
+  const truongThieu = Object.entries(duLieuDatPhong)
+    .filter(([, giaTri]) => !String(giaTri || "").trim())
+    .map(([truong]) => tenTruong[truong]);
+  if (truongThieu.length) {
+    thongBaoDatPhong.classList.add("thong-bao-loi");
+    thongBaoDatPhong.textContent = `Vui lòng bổ sung: ${truongThieu.join(", ")}.`;
+    return;
+  }
   nutGui.disabled = true;
+  thongBaoDatPhong.classList.remove("thong-bao-loi");
   thongBaoDatPhong.textContent = "Đang gửi yêu cầu...";
   if (boDemTheoDoi) clearInterval(boDemTheoDoi);
   maDonDangTheoDoi = "";
@@ -286,25 +341,25 @@ bieuMauDatPhong.addEventListener("submit", async (suKien) => {
     const phanHoi = await fetch("/api/don-hang", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        maQuan: bieuMauDatPhong.dataset.maQuan,
-        tenKhach: bieuMauDatPhong.elements.tenKhach.value.trim(),
-        xungHo: bieuMauDatPhong.elements.xungHo.value,
-        soDienThoai: bieuMauDatPhong.elements.soDienThoai.value.trim(),
-        thoiGianCheckIn: bieuMauDatPhong.elements.thoiGianCheckIn.value,
-        soNguoi: bieuMauDatPhong.elements.soNguoi.value,
-      }),
+      body: JSON.stringify(duLieuDatPhong),
     });
     const ketQua = await phanHoi.json();
     if (!phanHoi.ok)
       throw new Error(ketQua.message || "Không thể gửi yêu cầu.");
     maDonDangTheoDoi = ketQua.maDon;
     soDienThoaiTheoDoi = bieuMauDatPhong.elements.soDienThoai.value.trim();
-    sessionStorage.setItem("theoDoiDatPhong", JSON.stringify({ maDon: maDonDangTheoDoi, soDienThoai: soDienThoaiTheoDoi }));
+    sessionStorage.setItem(
+      "theoDoiDatPhong",
+      JSON.stringify({
+        maDon: maDonDangTheoDoi,
+        soDienThoai: soDienThoaiTheoDoi,
+      }),
+    );
     thongBaoDatPhong.textContent = `${ketQua.message} Mã đơn: ${ketQua.maDon}. Đang chờ nhân viên phản hồi...`;
     bieuMauDatPhong.reset();
     boDemTheoDoi = setInterval(capNhatPhanHoiKhach, 5000);
   } catch (error) {
+    thongBaoDatPhong.classList.add("thong-bao-loi");
     thongBaoDatPhong.textContent =
       error.message || "Không thể gửi yêu cầu, vui lòng thử lại.";
   } finally {
@@ -326,6 +381,11 @@ if (maDonDangTheoDoi && soDienThoaiTheoDoi) {
 
 // --- LOGIC ĐÁNH GIÁ VÀ NHẬN XÉT QUÁN ---
 const lopPhuDanhGia = document.querySelector("#lop-phu-danh-gia");
+const chiTietPhongEl = document.querySelector("#chi-tiet-phong");
+const lopPhuAnhPhong = document.querySelector("#lop-phu-anh-phong");
+const nutDongAnhPhong = document.querySelector("#dong-anh-phong");
+const anhPhongPhongTo = document.querySelector("#anh-phong-phong-to");
+const tenAnhPhongEl = document.querySelector("#ten-anh-phong");
 const dongModalDanhGiaBtn = document.querySelector("#dong-modal-danh-gia");
 const tenQuanDanhGiaEl = document.querySelector("#ten-quan-danh-gia");
 const diemSoToEl = document.querySelector("#diem-so-to");
@@ -381,10 +441,77 @@ function taoSaoText(diem) {
   );
 }
 
+function veChiTietPhong(quan) {
+  if (!chiTietPhongEl) return;
+  const cacPhong = [
+    ["Bé", quan.giaPhong?.be, quan.giaMin],
+    ["Thường", quan.giaPhong?.thuong, quan.giaMin],
+    ["Lớn", quan.giaPhong?.lon, quan.giaMax],
+    ["VIP", quan.giaPhong?.vip, quan.giaMax],
+  ];
+  const dinhDangTien = (gia) => `${Number(gia || 0).toLocaleString("vi-VN")} ₫`;
+  chiTietPhongEl.innerHTML = cacPhong
+    .map(([tenPhong, phong, giaCu]) => {
+      const gia = phong?.gia ?? giaCu ?? 0;
+      const anh = phong?.anh || quan.anhQuan;
+      const hinhAnh = anh
+        ? `<button type="button" class="nut-xem-anh-phong" data-src="../image/${anh}" data-alt="Ảnh phòng ${tenPhong}" aria-label="Phóng to ảnh phòng ${tenPhong}"><span class="anh-phong"><img src="../image/${anh}" alt="" /></span></button>`
+        : `<span class="anh-phong">Chưa có ảnh</span>`;
+      return `<article class="tuy-chon-phong" data-ma-quan="${quan.maQuan}" data-ten-quan="${quan.ten}" data-loai-phong="${tenPhong}">
+        ${hinhAnh}
+        <span class="ten-loai-phong">Phòng ${tenPhong}</span>
+        <strong>${dinhDangTien(gia)} / giờ</strong>
+        <button type="button" class="nhan-chon-phong">Chọn phòng</button>
+      </article>`;
+    })
+    .join("");
+}
+
+let nutMoAnhPhong = null;
+
+function moAnhPhong(nutAnh) {
+  if (!lopPhuAnhPhong || !anhPhongPhongTo || !tenAnhPhongEl) return;
+  nutMoAnhPhong = nutAnh;
+  anhPhongPhongTo.src = nutAnh.dataset.src;
+  anhPhongPhongTo.alt = nutAnh.dataset.alt;
+  tenAnhPhongEl.textContent = nutAnh.dataset.alt;
+  lopPhuAnhPhong.hidden = false;
+  nutDongAnhPhong?.focus();
+}
+
+function dongAnhPhong() {
+  if (!lopPhuAnhPhong) return;
+  lopPhuAnhPhong.hidden = true;
+  if (nutMoAnhPhong?.isConnected) nutMoAnhPhong.focus();
+  nutMoAnhPhong = null;
+}
+
+chiTietPhongEl?.addEventListener("click", (suKien) => {
+  const nutAnh = suKien.target.closest(".nut-xem-anh-phong");
+  if (nutAnh) {
+    moAnhPhong(nutAnh);
+    return;
+  }
+
+  const nutChon = suKien.target.closest(".nhan-chon-phong");
+  if (!nutChon) return;
+  const thePhong = nutChon.closest(".tuy-chon-phong");
+  if (!thePhong) return;
+  dongModalDanhGia();
+  moBieuMau(
+    thePhong.dataset.tenQuan,
+    thePhong.dataset.loaiPhong,
+    thePhong.dataset.maQuan,
+  );
+});
+
 async function moModalDanhGia(maQuan, tenQuan) {
   maQuanDangXemDanhGia = maQuan;
   tenQuanDangXemDanhGia = tenQuan;
   if (tenQuanDanhGiaEl) tenQuanDanhGiaEl.textContent = tenQuan;
+  veChiTietPhong(
+    danhSachQuan.find((quan) => quan.maQuan === maQuan) || { ten: tenQuan },
+  );
   if (thongBaoDanhGiaEl) {
     thongBaoDanhGiaEl.textContent = "";
     thongBaoDanhGiaEl.style.color = "";
@@ -403,6 +530,7 @@ async function moModalDanhGia(maQuan, tenQuan) {
 }
 
 function dongModalDanhGia() {
+  if (lopPhuAnhPhong && !lopPhuAnhPhong.hidden) dongAnhPhong();
   if (lopPhuDanhGia) lopPhuDanhGia.hidden = true;
   document.body.classList.remove("khoa-cuon");
 }
@@ -548,10 +676,18 @@ bieuMauDanhGia?.addEventListener("submit", async (e) => {
 });
 
 dongModalDanhGiaBtn?.addEventListener("click", dongModalDanhGia);
+nutDongAnhPhong?.addEventListener("click", dongAnhPhong);
+lopPhuAnhPhong?.addEventListener("click", (e) => {
+  if (e.target === lopPhuAnhPhong) dongAnhPhong();
+});
 lopPhuDanhGia?.addEventListener("click", (e) => {
   if (e.target === lopPhuDanhGia) dongModalDanhGia();
 });
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && lopPhuDanhGia && !lopPhuDanhGia.hidden)
-    dongModalDanhGia();
+  if (e.key !== "Escape") return;
+  if (lopPhuAnhPhong && !lopPhuAnhPhong.hidden) {
+    dongAnhPhong();
+    return;
+  }
+  if (lopPhuDanhGia && !lopPhuDanhGia.hidden) dongModalDanhGia();
 });

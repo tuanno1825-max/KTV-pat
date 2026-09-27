@@ -45,6 +45,10 @@ async function layMaQuanMoi() {
 }
 
 function layDuLieuForm() {
+  const layPhong = (loai) => ({
+    gia: Number(document.querySelector(`#gia-phong-${loai}`).value),
+    anh: document.querySelector(`#anh-phong-${loai}`).value.trim(),
+  });
   return {
     maQuan: document.querySelector("#ma-quan").value.trim(),
     tenQuan: document.querySelector("#ten-quan").value.trim(),
@@ -53,8 +57,12 @@ function layDuLieuForm() {
     quanHuyen: document.querySelector("#quan-huyen").value,
     anhQuan: document.querySelector("#anh-quan").value.trim(),
     chietKhau: Number(document.querySelector("#chiet-khau").value || 0),
-    giaMin: Number(document.querySelector("#gia-min").value),
-    giaMax: Number(document.querySelector("#gia-max").value),
+    giaPhong: {
+      be: layPhong("be"),
+      thuong: layPhong("thuong"),
+      lon: layPhong("lon"),
+      vip: layPhong("vip"),
+    },
     trangThai: document.querySelector("#trang-thai-quan").value,
   };
 }
@@ -67,8 +75,15 @@ function dienDuLieuForm(quan) {
   document.querySelector("#quan-huyen").value = quan.quanHuyen || "";
   document.querySelector("#anh-quan").value = quan.anhQuan || "";
   document.querySelector("#chiet-khau").value = quan.chietKhau ?? 0;
-  document.querySelector("#gia-min").value = quan.giaMin ?? 0;
-  document.querySelector("#gia-max").value = quan.giaMax ?? 0;
+  const giaPhong = quan.giaPhong || {};
+  const giaCu = [quan.giaMin, quan.giaMin, quan.giaMax, quan.giaMax];
+  ["be", "thuong", "lon", "vip"].forEach((loai) => {
+    const chiSo = ["be", "thuong", "lon", "vip"].indexOf(loai);
+    document.querySelector(`#gia-phong-${loai}`).value =
+      giaPhong[loai]?.gia || giaCu[chiSo] || 0;
+    document.querySelector(`#anh-phong-${loai}`).value =
+      giaPhong[loai]?.anh || quan.anhQuan || "";
+  });
   document.querySelector("#trang-thai-quan").value =
     quan.trangThai || "Đang hoạt động";
   maQuanDangChon = quan._id;
@@ -97,7 +112,7 @@ function hienThiBang(danhSach) {
   if (!danhSach.length) {
     const dongTrong = document.createElement("tr");
     const oTrong = taoO("Chưa có dữ liệu quán");
-    oTrong.colSpan = 11;
+    oTrong.colSpan = 13;
     dongTrong.append(oTrong);
     bangDanhSach.append(dongTrong);
     return;
@@ -114,8 +129,10 @@ function hienThiBang(danhSach) {
       taoO(quan.diaChiChiTiet),
       taoO(quan.quanHuyen),
       taoO(`${quan.chietKhau}%`),
-      taoO(dinhDangTien(quan.giaMin)),
-      taoO(dinhDangTien(quan.giaMax)),
+      taoO(dinhDangTien(quan.giaPhong?.be?.gia ?? quan.giaMin)),
+      taoO(dinhDangTien(quan.giaPhong?.thuong?.gia ?? quan.giaMin)),
+      taoO(dinhDangTien(quan.giaPhong?.lon?.gia ?? quan.giaMax)),
+      taoO(dinhDangTien(quan.giaPhong?.vip?.gia ?? quan.giaMax)),
     );
 
     const oTrangThai = document.createElement("td");
@@ -178,7 +195,12 @@ async function themQuan() {
       const maQuan = await layMaQuanMoi();
       if (!maQuan) throw new Error("Chưa lấy được mã quán tự động.");
     }
-    if (!window.confirm(`Thêm quán “${document.querySelector("#ten-quan").value.trim()}” vào hệ thống?`)) return;
+    if (
+      !window.confirm(
+        `Thêm quán “${document.querySelector("#ten-quan").value.trim()}” vào hệ thống?`,
+      )
+    )
+      return;
 
     const phanHoi = await fetch(API_QUAN, {
       method: "POST",
@@ -204,7 +226,12 @@ async function suaQuan() {
     hienThiThongBao("Hãy chọn một quán trong bảng để sửa.", true);
     return;
   }
-  if (!window.confirm(`Lưu các thay đổi cho quán “${document.querySelector("#ten-quan").value.trim()}”?`)) return;
+  if (
+    !window.confirm(
+      `Lưu các thay đổi cho quán “${document.querySelector("#ten-quan").value.trim()}”?`,
+    )
+  )
+    return;
 
   try {
     const phanHoi = await fetch(`${API_QUAN}/${maQuanDangChon}`, {
@@ -227,7 +254,12 @@ async function xoaQuan(id) {
     hienThiThongBao("Chỉ Admin mới được thực hiện thao tác này.", true);
     return;
   }
-  if (!window.confirm(`Xóa quán “${document.querySelector("#ten-quan").value.trim() || "đã chọn"}” khỏi hệ thống? Thao tác này không thể hoàn tác.`)) return;
+  if (
+    !window.confirm(
+      `Xóa quán “${document.querySelector("#ten-quan").value.trim() || "đã chọn"}” khỏi hệ thống? Thao tác này không thể hoàn tác.`,
+    )
+  )
+    return;
 
   try {
     const phanHoi = await fetch(`${API_QUAN}/${id}`, { method: "DELETE" });

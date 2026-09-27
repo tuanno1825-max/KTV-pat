@@ -11,6 +11,11 @@ const DonHangSchema = new mongoose.Schema(
     soDienThoai: { type: String, required: true, trim: true },
     thoiGianCheckIn: { type: String, required: true },
     soNguoi: { type: String, required: true },
+    loaiPhong: {
+      type: String,
+      enum: ["be", "thuong", "lon", "vip"],
+      default: "thuong",
+    },
     trangThai: {
       type: String,
       enum: [

@@ -1,4 +1,12 @@
 const mongoose = require("mongoose");
+const PhongSchema = new mongoose.Schema(
+  {
+    gia: { type: Number, min: 0, default: 0 },
+    anh: { type: String, trim: true, default: "" },
+  },
+  { _id: false },
+);
+
 const QuanSchema = new mongoose.Schema(
   {
     maQuan: { type: String, required: true, unique: true, trim: true },
@@ -7,19 +15,14 @@ const QuanSchema = new mongoose.Schema(
     diaChiChiTiet: { type: String, required: true, trim: true },
     khuVuc: { type: String, required: true, trim: true },
     anhQuan: { type: String, trim: true, default: "" },
-    giaMin: { type: Number, required: true, min: 0, default: 0 },
-    giaMax: {
-      type: Number,
-      required: true,
-      min: 0,
-      default: 0,
-      validate: {
-        validator(value) {
-          return value >= (this.giaMin ?? 0);
-        },
-        message: "Giá tối đa phải lớn hơn hoặc bằng giá tối thiểu.",
-      },
+    giaPhong: {
+      be: { type: PhongSchema, default: () => ({}) },
+      thuong: { type: PhongSchema, default: () => ({}) },
+      lon: { type: PhongSchema, default: () => ({}) },
+      vip: { type: PhongSchema, default: () => ({}) },
     },
+    giaMin: { type: Number, min: 0, select: false },
+    giaMax: { type: Number, min: 0, select: false },
     chietKhau: { type: Number, required: true, min: 0, max: 100 },
     trangThai: {
       type: String,

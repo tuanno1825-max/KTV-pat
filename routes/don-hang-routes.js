@@ -11,12 +11,39 @@ function escapeRegex(chuoi) {
 }
 router.post("/don-hang", async (req, res) => {
   try {
-    const { maQuan, tenKhach, xungHo, soDienThoai, thoiGianCheckIn, soNguoi } =
-      req.body;
+    const {
+      maQuan,
+      tenKhach,
+      xungHo,
+      soDienThoai,
+      thoiGianCheckIn,
+      loaiPhong,
+      soNguoi: soNguoiCu,
+    } = req.body;
+    const sucChuaTheoLoai = {
+      be: "2 - 4 người",
+      thuong: "5 - 8 người",
+      lon: "9 - 12 người",
+      vip: "Từ 13 người trở lên",
+    };
+    const loaiPhongCu = {
+      "2-4": "be",
+      "5-8": "thuong",
+      "9-12": "lon",
+      "13-20": "vip",
+      "20+": "vip",
+    };
+    const loaiPhongHopLe = loaiPhong || loaiPhongCu[soNguoiCu];
+    const soNguoi = sucChuaTheoLoai[loaiPhongHopLe];
     if (
-      ![maQuan, tenKhach, xungHo, soDienThoai, thoiGianCheckIn, soNguoi].every(
-        (v) => typeof v === "string" && v.trim(),
-      )
+      ![
+        maQuan,
+        tenKhach,
+        xungHo,
+        soDienThoai,
+        thoiGianCheckIn,
+        loaiPhongHopLe,
+      ].every((v) => typeof v === "string" && v.trim())
     ) {
       return res
         .status(400)
@@ -49,6 +76,7 @@ router.post("/don-hang", async (req, res) => {
       emailKhach:
         layPhien(req)?.vaiTro === "khach-hang" ? layPhien(req).taiKhoan : "",
       soNguoi,
+      loaiPhong: loaiPhongHopLe,
     });
     res.status(201).json({
       message: "Đã ghi nhận yêu cầu đặt phòng.",
@@ -185,6 +213,7 @@ router.post("/don-hang/phan-hoi", async (req, res) => {
       soDienThoai: donGoc.soDienThoai,
       thoiGianCheckIn: donGoc.thoiGianCheckIn,
       soNguoi: donGoc.soNguoi,
+      loaiPhong: donGoc.loaiPhong,
       trangThai: "Đang chờ xử lý",
     });
     donGoc.trangThai = "Khách đã chấp nhận đề xuất";
@@ -213,7 +242,7 @@ router.get("/don-hang", yeuCauDangNhap, async (req, res) => {
     }
     const donHangs = await DonHang.find(boLoc)
       .select(
-        "maDon maQuan tenQuan tenKhach emailKhach xungHo soDienThoai thoiGianCheckIn soNguoi trangThai maQuanDeXuat tenQuanDeXuat maDonGoc maDonTiepTheo daHuy diemCongDaXuLy diemTruDaXuLy thoiGianDat",
+        "maDon maQuan tenQuan tenKhach emailKhach xungHo soDienThoai thoiGianCheckIn soNguoi loaiPhong trangThai maQuanDeXuat tenQuanDeXuat maDonGoc maDonTiepTheo daHuy diemCongDaXuLy diemTruDaXuLy thoiGianDat",
       )
       .sort({ thoiGianDat: -1 })
       .lean();

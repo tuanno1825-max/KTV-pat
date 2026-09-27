@@ -10,8 +10,10 @@
     <title>Đặt phòng | Karaoke Together</title>
     <link rel="stylesheet" href="../css/datphong.css" />
     <link rel="stylesheet" href="../css/tai-khoan-menu.css?v=2" />
+    <link rel="stylesheet" href="../css/menu-chung.css?v=1" />
     <script src="../js/an-tai-khoan-khach.js?v=9" defer></script>
-    <script src="../js/datphong.js?v=9" defer></script>
+    <script src="../js/menu-chung.js?v=1" defer></script>
+    <script src="../js/datphong.js?v=12" defer></script>
   </head>
   <body>
     <header class="thanh-dau">
@@ -22,11 +24,88 @@
         </a>
 
         <nav class="menu-ngang" aria-label="Điều hướng chính">
-          <a href="/">Trang chủ</a>
-          <a class="dang-chon" href="datphong.html">Đặt phòng</a>
-          <a href="/html/uu-dai-vip.html">Ưu đãi</a>
-          <a href="/html/cong-dong.html">Cộng đồng</a>
-          <a href="/html/lien-he-hop-tac.html">Liên hệ</a>
+          <li><a href="/">Trang chủ</a></li>
+          <li class="co-menu-con">
+            <span class="menu-cha dang-chon">Đặt phòng</span>
+            <ul class="menu-con" aria-label="Chọn quận">
+              <li>
+                <a href="/html/datphong.html?khuVuc=Ba%20Đình">Ba Đình</a>
+              </li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Bắc%20Từ%20Liêm"
+                  >Bắc Từ Liêm</a
+                >
+              </li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Cầu%20Giấy">Cầu Giấy</a>
+              </li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Đống%20Đa">Đống Đa</a>
+              </li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Hà%20Đông">Hà Đông</a>
+              </li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Hai%20Bà%20Trưng"
+                  >Hai Bà Trưng</a
+                >
+              </li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Hoàn%20Kiếm">Hoàn Kiếm</a>
+              </li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Hoàng%20Mai">Hoàng Mai</a>
+              </li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Long%20Biên">Long Biên</a>
+              </li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Nam%20Từ%20Liêm"
+                  >Nam Từ Liêm</a
+                >
+              </li>
+              <li><a href="/html/datphong.html?khuVuc=Tây%20Hồ">Tây Hồ</a></li>
+              <li>
+                <a href="/html/datphong.html?khuVuc=Thanh%20Xuân">Thanh Xuân</a>
+              </li>
+            </ul>
+          </li>
+          <li><a href="/html/uu-dai-vip.html">Ưu đãi</a></li>
+          <li class="co-menu-con">
+            <span class="menu-cha">Cộng đồng</span>
+            <ul class="menu-con" aria-label="Chủ đề thảo luận">
+              <li>
+                <a href="/html/cong-dong.html?chuDe=Rủ%20hát%20%2F%20Bắt%20kèo"
+                  >Rủ hát / Bắt kèo</a
+                >
+              </li>
+              <li>
+                <a href="/html/cong-dong.html?chuDe=Review%20quán"
+                  >Review quán KTV</a
+                >
+              </li>
+              <li>
+                <a href="/html/cong-dong.html?chuDe=Giao%20lưu"
+                  >Giao lưu âm nhạc</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/html/cong-dong.html?chuDe=Hỏi%20đáp%20%26%20Kinh%20nghiệm"
+                  >Hỏi đáp &amp; Kinh nghiệm</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="co-menu-con">
+            <span class="menu-cha">Liên hệ</span>
+            <ul class="menu-con" aria-label="Liên hệ và khiếu nại">
+              <li><a href="/html/lien-he-hop-tac.html">Liên hệ đối tác</a></li>
+              <li>
+                <a href="/html/giai-quyet-khieu-nai.html">Xử lý khiếu nại</a>
+              </li>
+            </ul>
+          </li>
         </nav>
 
         <div class="tai-khoan">
@@ -171,16 +250,20 @@
           </div>
 
           <div class="nhom-truong-form">
-            <label for="so-nguoi">Phòng dành cho</label>
-            <select id="so-nguoi" name="soNguoi" required>
-              <option value="">Số lượng người</option>
-              <option value="2-4">2 - 4 người</option>
-              <option value="5-8">5 - 8 người</option>
-              <option value="9-12">9 - 12 người</option>
-              <option value="13-20">13 - 20 người</option>
-              <option value="20+">Trên 20 người</option>
+            <label for="loai-phong-chon">Loại phòng</label>
+            <select id="loai-phong-chon" name="loaiPhong" required>
+              <option value="">Chọn loại phòng</option>
+              <option value="be">Phòng Bé</option>
+              <option value="thuong">Phòng Thường</option>
+              <option value="lon">Phòng Lớn</option>
+              <option value="vip">Phòng VIP</option>
             </select>
           </div>
+
+          <small class="ghi-chu-loai-phong nhom-rong">
+            Bé: 2 - 4 người · Thường: 5 - 8 người · Lớn: 9 - 12 người · VIP: từ
+            13 người trở lên
+          </small>
 
           <button class="nut-xac-nhan" type="submit">Xác nhận đặt phòng</button>
         </form>
@@ -211,8 +294,14 @@
         </button>
         <p class="nhan-nho">ĐÁNH GIÁ & TRẢI NGHIỆM THỰC TẾ</p>
         <h2 id="tieu-de-hop-danh-gia">
-          Đánh giá quán <span id="ten-quan-danh-gia"></span>
+          Chi tiết quán <span id="ten-quan-danh-gia"></span>
         </h2>
+
+        <div
+          id="chi-tiet-phong"
+          class="chi-tiet-phong"
+          aria-label="Các loại phòng"
+        ></div>
 
         <!-- Khung thống kê điểm sao -->
         <div class="khung-thong-ke-danh-gia">
@@ -336,6 +425,26 @@
         <div id="danh-sach-nhan-xet" class="danh-sach-nhan-xet-quan">
           <!-- Các nhận xét sẽ được load vào đây -->
         </div>
+      </section>
+    </div>
+
+    <div class="lop-phu lop-phu-anh-phong" id="lop-phu-anh-phong" hidden>
+      <section
+        class="hop-xem-anh-phong"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="ten-anh-phong"
+      >
+        <button
+          class="nut-dong"
+          id="dong-anh-phong"
+          type="button"
+          aria-label="Đóng ảnh phòng"
+        >
+          ×
+        </button>
+        <h2 id="ten-anh-phong"></h2>
+        <img id="anh-phong-phong-to" class="anh-phong-phong-to" alt="" />
       </section>
     </div>
 

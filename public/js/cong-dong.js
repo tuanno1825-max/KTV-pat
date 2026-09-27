@@ -1,4 +1,11 @@
-let chuDeHienTai = "Tất cả";
+const cacChuDeHopLe = [
+  "Rủ hát / Bắt kèo",
+  "Review quán",
+  "Giao lưu",
+  "Hỏi đáp & Kinh nghiệm",
+];
+const chuDeTuUrl = new URLSearchParams(window.location.search).get("chuDe");
+let chuDeHienTai = cacChuDeHopLe.includes(chuDeTuUrl) ? chuDeTuUrl : "Tất cả";
 let sapXepHienTai = "moi-nhat";
 let tuKhoaHienTai = "";
 let thongTinNguoiDung = null;
@@ -439,6 +446,7 @@ formDangBai?.addEventListener("submit", async (e) => {
 
 // Sự kiện chọn chủ đề bên sidebar
 document.querySelectorAll(".nut-chu-de").forEach((btn) => {
+  btn.classList.toggle("dang-chon", btn.dataset.chuDe === chuDeHienTai);
   btn.addEventListener("click", () => {
     document
       .querySelectorAll(".nut-chu-de")

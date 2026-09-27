@@ -296,6 +296,16 @@ async function taiDonHang() {
         oLienHeQuan,
         taoO(new Date(don.thoiGianDat).toLocaleString("vi-VN")),
         taoO(don.thoiGianCheckIn || "—"),
+        taoO(
+          {
+            be: "Phòng Bé",
+            thuong: "Phòng Thường",
+            lon: "Phòng Lớn",
+            vip: "Phòng VIP",
+          }[don.loaiPhong] ||
+            don.soNguoi ||
+            "—",
+        ),
         taoO(don.soDienThoai),
       );
       const oTrangThai = taoO("");

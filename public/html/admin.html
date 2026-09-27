@@ -6,7 +6,7 @@
     <title>Quản lý quán | Karaoke Together</title>
     <link rel="stylesheet" href="../css/admin.css" />
     <link rel="stylesheet" href="../css/admin-sidebar.css?v=2" />
-    <script src="../js/quan-ly-quan.js?v=3" defer></script>
+    <script src="../js/quan-ly-quan.js?v=4" defer></script>
     <script src="/js/admin-sidebar.js" defer></script>
     <script src="/js/admin-table-scroll.js?v=1" defer></script>
   </head>
@@ -165,27 +165,80 @@
             />
           </div>
 
+          <div class="nhom-truong-quan truong-rong tieu-de-truong">
+            <h3>Giá và ảnh từng loại phòng</h3>
+            <p>Nhập tên file ảnh đã có trong thư mục public/image.</p>
+          </div>
           <div class="nhom-truong-quan">
-            <label for="gia-min">Giá tối thiểu (VNĐ/giờ)</label>
+            <label for="gia-phong-be">Phòng bé - giá (VNĐ/giờ)</label>
             <input
-              id="gia-min"
+              id="gia-phong-be"
               type="number"
               min="0"
               step="1000"
-              placeholder="Ví dụ: 100000"
               required
             />
           </div>
-
           <div class="nhom-truong-quan">
-            <label for="gia-max">Giá tối đa (VNĐ/giờ)</label>
+            <label for="anh-phong-be">Phòng bé - ảnh</label>
             <input
-              id="gia-max"
+              id="anh-phong-be"
+              type="text"
+              placeholder="Vi du: phong-be.jpg"
+            />
+          </div>
+          <div class="nhom-truong-quan">
+            <label for="gia-phong-thuong">Phòng thường - giá (VNĐ/giờ)</label>
+            <input
+              id="gia-phong-thuong"
               type="number"
               min="0"
               step="1000"
-              placeholder="Ví dụ: 500000"
               required
+            />
+          </div>
+          <div class="nhom-truong-quan">
+            <label for="anh-phong-thuong">Phòng thường - ảnh</label>
+            <input
+              id="anh-phong-thuong"
+              type="text"
+              placeholder="Vi du: phong-thuong.jpg"
+            />
+          </div>
+          <div class="nhom-truong-quan">
+            <label for="gia-phong-lon">Phòng lớn - giá (VNĐ/giờ)</label>
+            <input
+              id="gia-phong-lon"
+              type="number"
+              min="0"
+              step="1000"
+              required
+            />
+          </div>
+          <div class="nhom-truong-quan">
+            <label for="anh-phong-lon">Phòng lớn - ảnh</label>
+            <input
+              id="anh-phong-lon"
+              type="text"
+              placeholder="Vi du: phong-lon.jpg"
+            />
+          </div>
+          <div class="nhom-truong-quan">
+            <label for="gia-phong-vip">Phòng VIP - giá (VNĐ/giờ)</label>
+            <input
+              id="gia-phong-vip"
+              type="number"
+              min="0"
+              step="1000"
+              required
+            />
+          </div>
+          <div class="nhom-truong-quan">
+            <label for="anh-phong-vip">Phòng VIP - ảnh</label>
+            <input
+              id="anh-phong-vip"
+              type="text"
+              placeholder="Vi du: phong-vip.jpg"
             />
           </div>
           <div class="nhom-truong-quan truong-rong">
@@ -277,8 +330,10 @@
                 <th>Địa chỉ</th>
                 <th>Khu vực</th>
                 <th>Chiết khấu</th>
-                <th>Giá tối thiểu</th>
-                <th>Giá tối đa</th>
+                <th>Phòng bé</th>
+                <th>Phòng thường</th>
+                <th>Phòng lớn</th>
+                <th>Phòng VIP</th>
                 <th>Trạng thái</th>
                 <th>Chức năng</th>
               </tr>
